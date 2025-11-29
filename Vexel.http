@@ -1,0 +1,6 @@
+@Vexel_HostAddress = http://localhost:5155
+
+GET {{Vexel_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
