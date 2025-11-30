@@ -1,18 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Npgsql;
-using Supabase.Postgrest.Attributes;
+﻿using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
-using System.Data;
-using System.Reflection;
 
-namespace Vexel
+namespace Vexel.tables
 {
     [Table("Users")]
     public class Users : BaseModel
     {
-        [PrimaryKey("id", true)]
-        int Id { get; set; }
-
         [Column("name")]
         public string Name { get; set; } = null!;
 
@@ -20,6 +13,13 @@ namespace Vexel
         public string Email { get; set; } = null!;
 
         [Column("password_hash")]
+        public string PasswordHash { get; set; } = null!;
+    }
+
+    public class UserDto // Data Transfer Obcject
+    {
+        public string Name { get; set; } = null!;
+        public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
     }
 }
