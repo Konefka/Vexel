@@ -1,5 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Supabase;
+using Supabase.Functions;
+using Supabase.Postgrest;
+using Supabase.Postgrest.Responses;
+using System;
 using Vexel.tables;
 using static Supabase.Postgrest.Constants;
 
@@ -21,21 +27,26 @@ namespace Vexel
         public async Task<IActionResult> Register([FromBody] UserDto dto)
         {
             if (dto.Name == "" || dto.Email == "" || dto.Password == "")
-            {
-                return NoContent();
-            }
+                return BadRequest("Nie wpisano poprawnych danych");
 
             var user = new Users
             {
                 Name = dto.Name,
-                Email = dto.Email,
+                Email = dto.Email.ToLower(),
                 PasswordHash = _hasher.HashPassword(null!, dto.Password)
             };
 
-            var response = await _client.From<Users>().Insert(user);
+            try
+            {
+                ModeledResponse<Users>  response = await _client.From<Users>().Insert(user);
+                if (response.Models.Count == 0)
+                    return BadRequest("Nie udało się zarejestrować");
 
-            if (response.Models.Count == 0)
-                return BadRequest("Nie udało się zarejestrować");
+            } catch (Supabase.Postgrest.Exceptions.PostgrestException ex)
+            {
+                if (ex.Message.Contains("\"code\":\"23505\""))
+                    return Ok(Login(dto).Result);
+            }
 
             return Ok(new { message = "Zarejestrowano!"});
         }
@@ -43,19 +54,20 @@ namespace Vexel
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserDto dto)
         {
-            var response = await _client.From<Users>().Filter("email", Operator.Equals, dto.Email).Get();
+            var response = await _client.From<Users>().Filter("email", Operator.Equals, dto.Email.ToLower()).Get();
 
             var dbUser = response.Models.FirstOrDefault();
-            if (dbUser == null) return Unauthorized("Nie znaleziono użytkownika");
+            if (dbUser == null)
+                return BadRequest("Zły email");
 
-            var result = _hasher.VerifyHashedPassword(dbUser, dbUser.PasswordHash, dto.Password);
+            var result = _hasher.VerifyHashedPassword(null!, dbUser.PasswordHash, dto.Password);
             if (result == PasswordVerificationResult.Success)
             {
                 // Here will be JWT generating or Supabase Auth Session
-                return Ok(new { message = "Zalogowano!" });
+                return Ok("Zalogowano!");
             }
 
-            return Unauthorized("Błędne hasło");
+            return BadRequest("Błędne hasło");
         }
     }
 }

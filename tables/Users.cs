@@ -16,7 +16,7 @@ namespace Vexel.tables
         public string PasswordHash { get; set; } = null!;
     }
 
-    public class UserDto // Data Transfer Obcject
+    public class UserDto // Data Transfer Object
     {
         public string Name { get; set; } = null!;
         public string Email { get; set; } = null!;
