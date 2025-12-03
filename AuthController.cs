@@ -26,14 +26,14 @@ namespace Vexel
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserDto dto)
         {
-            if (dto.Name == "" || dto.Email == "" || dto.Password == "")
+            if (dto.Username == "" || dto.Email == "" || dto.Password == "")
                 return BadRequest("Nie wpisano poprawnych danych");
 
             var user = new Users
             {
-                Name = dto.Name,
+                Name = dto.Username,
                 Email = dto.Email.ToLower(),
-                PasswordHash = _hasher.HashPassword(null!, dto.Password)
+                PasswordHash = _hasher.HashPassword(null!, dto.Password),
             };
 
             try
@@ -45,10 +45,14 @@ namespace Vexel
             } catch (Supabase.Postgrest.Exceptions.PostgrestException ex)
             {
                 if (ex.Message.Contains("\"code\":\"23505\""))
+                {
+                    if (ex.Message.Contains("Users_username_key"))
+                        return Unauthorized("Już jest ktoś z takim username");
                     return Ok(Login(dto).Result);
+                }
+                    return BadRequest(ex.ToString());
             }
-
-            return Ok(new { message = "Zarejestrowano!"});
+            return Ok("Zarejestrowano!");
         }
 
         [HttpPost("login")]
