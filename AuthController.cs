@@ -1,11 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.BearerToken;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Supabase;
 using Supabase.Functions;
+using Supabase.Gotrue;
 using Supabase.Postgrest;
 using Supabase.Postgrest.Responses;
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.Reactive;
+using System.Text.Json;
 using Vexel.tables;
 using static Supabase.Postgrest.Constants;
 
@@ -16,7 +21,7 @@ namespace Vexel
     public class AuthController : ControllerBase
     {
         private readonly Supabase.Client _client;
-        private readonly PasswordHasher<Users> _hasher = new PasswordHasher<Users>();
+        protected string jwt_token = null!;
 
         public AuthController(Supabase.Client client)
         {
@@ -26,52 +31,59 @@ namespace Vexel
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserDto dto)
         {
-            if (dto.Username == "" || dto.Email == "" || dto.Password == "")
-                return BadRequest("Nie wpisano poprawnych danych");
-
-            var user = new Users
-            {
-                Name = dto.Username,
-                Email = dto.Email.ToLower(),
-                PasswordHash = _hasher.HashPassword(null!, dto.Password),
-            };
-
             try
             {
-                ModeledResponse<Users>  response = await _client.From<Users>().Insert(user);
-                if (response.Models.Count == 0)
-                    return BadRequest("Nie udało się zarejestrować");
+                var passwords = await _client.From<Accounts>()
+                    .Where(x => x.Name == dto.Username)
+                    .Get();
 
-            } catch (Supabase.Postgrest.Exceptions.PostgrestException ex)
+                if (passwords.Model != null)
+                {
+                    return BadRequest("Już ktoś ma takie username");
+                }
+
+                Session? signUpResponse = await _client.Auth.SignUp(dto.Email, dto.Password);
+
+                var account = new Accounts { Id = signUpResponse!.User!.Id!, Name = dto.Username };
+
+                ModeledResponse<Accounts> response = await _client.From<Accounts>().Insert(account);
+            }
+            catch (Supabase.Postgrest.Exceptions.PostgrestException ex)
             {
                 if (ex.Message.Contains("\"code\":\"23505\""))
                 {
-                    if (ex.Message.Contains("Users_username_key"))
-                        return Unauthorized("Już jest ktoś z takim username");
                     return Ok(Login(dto).Result);
                 }
-                    return BadRequest(ex.ToString());
+
+                return BadRequest(ex.Message);
             }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+
+            jwt_token = _client.Auth.CurrentSession!.AccessToken!;
             return Ok("Zarejestrowano!");
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserDto dto)
         {
-            var response = await _client.From<Users>().Filter("email", Operator.Equals, dto.Email.ToLower()).Get();
-
-            var dbUser = response.Models.FirstOrDefault();
-            if (dbUser == null)
-                return BadRequest("Zły email");
-
-            var result = _hasher.VerifyHashedPassword(null!, dbUser.PasswordHash, dto.Password);
-            if (result == PasswordVerificationResult.Success)
+            try
             {
-                // Here will be JWT generating or Supabase Auth Session
-                return Ok("Zalogowano!");
+                var signInResponse = await _client.Auth.SignInWithPassword(dto.Email, dto.Password);
+
+                if (signInResponse!.User == null)
+                    return NotFound("Email nie został potwierdzony. Sprawdź swoją skrzynkę pocztową.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
-            return BadRequest("Błędne hasło");
+            jwt_token = _client.Auth.CurrentSession!.AccessToken!;
+            return Ok("Zalogowano!");
         }
     }
 }
