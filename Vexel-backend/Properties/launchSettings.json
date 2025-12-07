@@ -21,8 +21,7 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "launchUrl": "swagger"
+      }
     }
   },
   "$schema": "https://json.schemastore.org/launchsettings.json",

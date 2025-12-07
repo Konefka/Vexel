@@ -1,3 +1,4 @@
+using Supabase.Gotrue;
 using Vexel;
 using Vexel.tables;
 class Program
@@ -13,7 +14,7 @@ class Program
             .AddUserSecrets<Program>()
             .AddEnvironmentVariables();
 
-        InitializeSwagger(await InitializeClient());
+        InitializeSignalR(await InitializeClient());
     }
 
     static async Task<Supabase.Client> InitializeClient()
@@ -25,31 +26,37 @@ class Program
 
         Supabase.Client client = new Supabase.Client(url, key, options);
         await client.InitializeAsync();
-        return client;
-    }
 
-    static void InitializeSwagger(Supabase.Client client)
-    {
         builder.Services.AddSingleton(client);
 
+        //await client.AdminAuth("service key").DeleteUser("user id");
+
+        return client;
+    }
+    static void InitializeSignalR(Supabase.Client client)
+    {
+        builder.Services.AddSingleton<AuthService>();
         builder.Services.AddControllers();
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSignalR();
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("cors", policy =>
+            {
+                policy.WithOrigins("http://localhost:5173")
+                      .AllowAnyHeader()
+                      .AllowAnyMethod()
+                      .AllowCredentials();
+            });
+        });
 
         var app = builder.Build();
 
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+        app.UseCors("cors");
 
-        app.UseHttpsRedirection();
-        app.UseAuthorization();
         app.MapControllers();
+        app.MapHub<AuthHub>("/AuthHub");
 
         app.Run();
-
-        //await client.AdminAuth("tutaj service key").DeleteUser("tu user id");
     }
 }

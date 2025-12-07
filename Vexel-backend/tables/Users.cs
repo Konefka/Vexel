@@ -5,7 +5,7 @@ using System.Reactive;
 namespace Vexel.tables
 {
     [Table("Accounts")]
-    public class Accounts : BaseModel
+    public class Account : BaseModel
     {
         [Column("id")]
         public string Id { get; set; } = null!;
@@ -26,7 +26,7 @@ namespace Vexel.tables
         //public string Status { get; set; } = null!;
     }
 
-    public class UserDto // Data Transfer Object
+    public class AccountDto // Data Transfer Object
     {
         public string Username { get; set; } = null!;
         public string Email { get; set; } = null!;
