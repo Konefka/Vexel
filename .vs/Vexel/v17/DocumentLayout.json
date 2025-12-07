@@ -17,10 +17,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{0897E87A-4D6C-4913-895A-A9126B5C62FF}|Vexel-backend\\Vexel.csproj|e:\\visual_studio_repos\\vexel\\vexel-backend\\authhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0897E87A-4D6C-4913-895A-A9126B5C62FF}|Vexel-backend\\Vexel.csproj|solutionrelative:vexel-backend\\authhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0897E87A-4D6C-4913-895A-A9126B5C62FF}|Vexel-backend\\Vexel.csproj|e:\\visual_studio_repos\\vexel\\vexel-backend\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{0897E87A-4D6C-4913-895A-A9126B5C62FF}|Vexel-backend\\Vexel.csproj|solutionrelative:vexel-backend\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -39,18 +35,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "launchSettings.json",
-              "DocumentMoniker": "E:\\Visual_Studio_repos\\Vexel\\Vexel-backend\\Properties\\launchSettings.json",
-              "RelativeDocumentMoniker": "Vexel-backend\\Properties\\launchSettings.json",
-              "ToolTip": "E:\\Visual_Studio_repos\\Vexel\\Vexel-backend\\Properties\\launchSettings.json",
-              "RelativeToolTip": "Vexel-backend\\Properties\\launchSettings.json",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAABFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-12-07T16:13:58.202Z"
             },
             {
               "$type": "Document",
@@ -96,7 +80,7 @@
               "RelativeDocumentMoniker": "Vexel-backend\\Program.cs",
               "ToolTip": "E:\\Visual_Studio_repos\\Vexel\\Vexel-backend\\Program.cs",
               "RelativeToolTip": "Vexel-backend\\Program.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAkwCQAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAABAAAAAAAAAAAAAkwBsAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-07T13:22:49.429Z",
               "EditorCaption": ""
