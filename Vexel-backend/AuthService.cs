@@ -30,7 +30,7 @@ namespace Vexel
 
                 await _client.Auth.SetSession(loginResponse!.AccessToken!, loginResponse.RefreshToken!);
 
-                var account = new Account { Id = Guid.Parse(_client.Auth.CurrentUser!.Id!), Name = dto.Username };
+                var account = new Account { Id = Guid.Parse(_client.Auth.CurrentUser!.Id!), Name = dto.Username, Status = "offline" };
 
                 ModeledResponse<Account> response = await _client.From<Account>().Insert(account);
 
@@ -40,7 +40,16 @@ namespace Vexel
             {
                 if (ex.Message.Contains("\"code\":\"23505\""))
                 {
-                    return await Login(dto);
+                    //return await Login(dto);
+                }
+
+                return ex.Message;
+            }
+            catch (Supabase.Gotrue.Exceptions.GotrueException ex)
+            {
+                if (ex.Message.Contains("\"code\":\"23505\""))
+                {
+                    //return await Login(dto);
                 }
 
                 return ex.Message;
