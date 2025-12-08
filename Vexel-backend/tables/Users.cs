@@ -8,7 +8,7 @@ namespace Vexel.tables
     public class Account : BaseModel
     {
         [Column("id")]
-        public string Id { get; set; } = null!;
+        public Guid Id { get; set; }
 
         [Column("username")]
         public string Name { get; set; } = null!;

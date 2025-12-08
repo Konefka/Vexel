@@ -22,17 +22,19 @@ namespace Vexel
                     .Get();
 
                 if (usernames.Model != null)
-                {
                     return "Ten username jest zajęty";
-                }
 
-                Session? signUpResponse = await _client.Auth.SignUp(dto.Email, dto.Password);
+                await _client.Auth.SignUp(dto.Email, dto.Password);
 
-                var account = new Account { Id = signUpResponse!.User!.Id!, Name = dto.Username };
+                var loginResponse = await _client.Auth.SignInWithPassword(dto.Email, dto.Password);
+
+                await _client.Auth.SetSession(loginResponse!.AccessToken!, loginResponse.RefreshToken!);
+
+                var account = new Account { Id = Guid.Parse(_client.Auth.CurrentUser!.Id!), Name = dto.Username };
 
                 ModeledResponse<Account> response = await _client.From<Account>().Insert(account);
 
-                return signUpResponse.AccessToken;
+                return loginResponse.AccessToken;
             }
             catch (Supabase.Postgrest.Exceptions.PostgrestException ex)
             {
@@ -56,7 +58,9 @@ namespace Vexel
                 Session? signInResponse = await _client.Auth.SignInWithPassword(dto.Email, dto.Password);
 
                 if (signInResponse!.User == null)
-                    return "Email nie został potwierdzony lub złe hasło";
+                    return "Złe hasło";
+
+                await _client.Auth.SetSession(signInResponse!.AccessToken!, signInResponse.RefreshToken!);
 
                 return signInResponse.AccessToken;
             }

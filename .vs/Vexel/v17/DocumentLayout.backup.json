@@ -3,14 +3,6 @@
   "WorkspaceRootPath": "E:\\Visual_Studio_repos\\Vexel\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0897E87A-4D6C-4913-895A-A9126B5C62FF}|Vexel-backend\\Vexel.csproj|e:\\visual_studio_repos\\vexel\\vexel-backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0897E87A-4D6C-4913-895A-A9126B5C62FF}|Vexel-backend\\Vexel.csproj|solutionrelative:vexel-backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0897E87A-4D6C-4913-895A-A9126B5C62FF}|Vexel-backend\\Vexel.csproj|e:\\visual_studio_repos\\vexel\\vexel-backend\\tables\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0897E87A-4D6C-4913-895A-A9126B5C62FF}|Vexel-backend\\Vexel.csproj|solutionrelative:vexel-backend\\tables\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{0897E87A-4D6C-4913-895A-A9126B5C62FF}|Vexel-backend\\Vexel.csproj|e:\\visual_studio_repos\\vexel\\vexel-backend\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0897E87A-4D6C-4913-895A-A9126B5C62FF}|Vexel-backend\\Vexel.csproj|solutionrelative:vexel-backend\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -19,8 +11,15 @@
       "RelativeMoniker": "D:0:0:{0897E87A-4D6C-4913-895A-A9126B5C62FF}|Vexel-backend\\Vexel.csproj|solutionrelative:vexel-backend\\authhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0897E87A-4D6C-4913-895A-A9126B5C62FF}|Vexel-backend\\Vexel.csproj|e:\\visual_studio_repos\\vexel\\vexel-backend\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{0897E87A-4D6C-4913-895A-A9126B5C62FF}|Vexel-backend\\Vexel.csproj|solutionrelative:vexel-backend\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{0897E87A-4D6C-4913-895A-A9126B5C62FF}|Vexel-backend\\Vexel.csproj|e:\\visual_studio_repos\\vexel\\vexel-backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0897E87A-4D6C-4913-895A-A9126B5C62FF}|Vexel-backend\\Vexel.csproj|solutionrelative:vexel-backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Tymek\\AppData\\Roaming\\Microsoft\\UserSecrets\\e6f0bb03-db77-438a-bd51-beff6bfc20ee\\secrets.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0897E87A-4D6C-4913-895A-A9126B5C62FF}|Vexel-backend\\Vexel.csproj|e:\\visual_studio_repos\\vexel\\vexel-backend\\tables\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0897E87A-4D6C-4913-895A-A9126B5C62FF}|Vexel-backend\\Vexel.csproj|solutionrelative:vexel-backend\\tables\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +29,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -42,61 +41,63 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "launchSettings.json",
-              "DocumentMoniker": "E:\\Visual_Studio_repos\\Vexel\\Vexel-backend\\Properties\\launchSettings.json",
-              "RelativeDocumentMoniker": "Vexel-backend\\Properties\\launchSettings.json",
-              "ToolTip": "E:\\Visual_Studio_repos\\Vexel\\Vexel-backend\\Properties\\launchSettings.json",
-              "RelativeToolTip": "Vexel-backend\\Properties\\launchSettings.json",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAABFAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "secrets.json",
+              "DocumentMoniker": "C:\\Users\\Tymek\\AppData\\Roaming\\Microsoft\\UserSecrets\\e6f0bb03-db77-438a-bd51-beff6bfc20ee\\secrets.json",
+              "ToolTip": "C:\\Users\\Tymek\\AppData\\Roaming\\Microsoft\\UserSecrets\\e6f0bb03-db77-438a-bd51-beff6bfc20ee\\secrets.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-12-07T16:13:58.202Z"
+              "WhenOpened": "2025-12-08T14:10:00.178Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "AuthService.cs",
               "DocumentMoniker": "E:\\Visual_Studio_repos\\Vexel\\Vexel-backend\\AuthService.cs",
               "RelativeDocumentMoniker": "Vexel-backend\\AuthService.cs",
               "ToolTip": "E:\\Visual_Studio_repos\\Vexel\\Vexel-backend\\AuthService.cs",
               "RelativeToolTip": "Vexel-backend\\AuthService.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAA5wCEAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABYAAAAAAAAAAAAswB8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-07T13:17:42.161Z"
+              "WhenOpened": "2025-12-07T13:17:42.161Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "AuthHub.cs",
               "DocumentMoniker": "E:\\Visual_Studio_repos\\Vexel\\Vexel-backend\\AuthHub.cs",
               "RelativeDocumentMoniker": "Vexel-backend\\AuthHub.cs",
               "ToolTip": "E:\\Visual_Studio_repos\\Vexel\\Vexel-backend\\AuthHub.cs",
               "RelativeToolTip": "Vexel-backend\\AuthHub.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAowB8AAABTAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAgAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-07T12:38:43.531Z"
+              "WhenOpened": "2025-12-07T12:38:43.531Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "Users.cs",
               "DocumentMoniker": "E:\\Visual_Studio_repos\\Vexel\\Vexel-backend\\tables\\Users.cs",
               "RelativeDocumentMoniker": "Vexel-backend\\tables\\Users.cs",
               "ToolTip": "E:\\Visual_Studio_repos\\Vexel\\Vexel-backend\\tables\\Users.cs",
               "RelativeToolTip": "Vexel-backend\\tables\\Users.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAiwAgAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAABIAAAAAAAAAAAAowA0AAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-07T15:44:06.146Z"
+              "WhenOpened": "2025-12-07T15:44:06.146Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "E:\\Visual_Studio_repos\\Vexel\\Vexel-backend\\Program.cs",
               "RelativeDocumentMoniker": "Vexel-backend\\Program.cs",
               "ToolTip": "E:\\Visual_Studio_repos\\Vexel\\Vexel-backend\\Program.cs",
               "RelativeToolTip": "Vexel-backend\\Program.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAkwCQAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAABgAAAAAAAAAAAAswCQAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-07T13:22:49.429Z",
               "EditorCaption": ""
