@@ -13,46 +13,21 @@ namespace Vexel
             _client = client;
         }
 
-        public async Task<string?> Register(AccountDto dto)
+        public async Task<string> Register(AccountDto dto)
         {
             try
             {
-                var usernames = await _client.From<Account>()
-                    .Where(x => x.Name == dto.Username)
-                    .Get();
+                Session? signUpSession = await _client.Auth.SignUp(dto.Email, dto.Password);
 
-                if (usernames.Model != null)
-                    return "Ten username jest zajęty";
+                await _client.Auth.SetSession(signUpSession!.AccessToken!, signUpSession.RefreshToken!);
 
-                await _client.Auth.SignUp(dto.Email, dto.Password);
+                await _client.From<Account>().Insert(new Account { Id = Guid.Parse(_client.Auth.CurrentUser!.Id!), Status = default! });
 
-                var loginResponse = await _client.Auth.SignInWithPassword(dto.Email, dto.Password);
-
-                await _client.Auth.SetSession(loginResponse!.AccessToken!, loginResponse.RefreshToken!);
-
-                var account = new Account { Id = Guid.Parse(_client.Auth.CurrentUser!.Id!), Name = dto.Username, Status = "offline" };
-
-                ModeledResponse<Account> response = await _client.From<Account>().Insert(account);
-
-                return loginResponse.AccessToken;
+                return _client.Auth.CurrentSession!.AccessToken!;
             }
-            catch (Supabase.Postgrest.Exceptions.PostgrestException ex)
+            catch (Supabase.Gotrue.Exceptions.GotrueException ex) when (ex.StatusCode == 422 && ex.Message.Contains("user_already_exists"))
             {
-                if (ex.Message.Contains("\"code\":\"23505\""))
-                {
-                    //return await Login(dto);
-                }
-
-                return ex.Message;
-            }
-            catch (Supabase.Gotrue.Exceptions.GotrueException ex)
-            {
-                if (ex.Message.Contains("\"code\":\"23505\""))
-                {
-                    //return await Login(dto);
-                }
-
-                return ex.Message;
+                return "Email już istnieje. Zaloguj się!";
             }
             catch (Exception ex)
             {
@@ -60,7 +35,7 @@ namespace Vexel
             }
         }
 
-        public async Task<string?> Login(AccountDto dto)
+        public async Task<string> Login(AccountDto dto)
         {
             try
             {
@@ -71,7 +46,7 @@ namespace Vexel
 
                 await _client.Auth.SetSession(signInResponse!.AccessToken!, signInResponse.RefreshToken!);
 
-                return signInResponse.AccessToken;
+                return signInResponse.AccessToken!;
             }
             catch (Exception ex)
             {

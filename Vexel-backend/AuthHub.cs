@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.IdentityModel.Tokens;
 using Vexel.tables;
 
 namespace Vexel
@@ -13,32 +14,29 @@ namespace Vexel
             _authService = authService;
         }
 
-        public async Task<object> Register(string username, string email, string password)
+        public async Task<object> Register(string email, string password)
         {
-            AccountDto dto = new AccountDto { Username = username, Email = email, Password = password };
-            var result = await _authService.Register(dto);
+            if (email.IsNullOrEmpty() || password.IsNullOrEmpty())
+            {
+                return new { error = "Niepoprawne dane rejestracji." };
+            }
 
-            if (string.IsNullOrEmpty(result))
-                return new { error = "Nieznany błąd podczas rejestracji" };
+            string registerResult = await _authService.Register(new AccountDto { Email = email, Password = password });
 
-            if (result.StartsWith("ey"))
-                return new { token = result };
+            if (registerResult!.StartsWith("ey"))
+                return new { token = registerResult };
 
-            return new { error = result };
+            return new { error = registerResult };
         }
 
         public async Task<object> Login(string email, string password)
         {
-            AccountDto dto = new AccountDto { Email = email, Password = password };
-            var result = await _authService.Login(dto);
+            string loginResult = await _authService.Login(new AccountDto { Email = email, Password = password });
 
-            if (string.IsNullOrEmpty(result))
-                return new { error = "Nieznany błąd podczas logowania" };
+            if (loginResult.StartsWith("ey"))
+                return new { token = loginResult };
 
-            if (result.StartsWith("ey"))
-                return new { token = result };
-
-            return new { error = result };
+            return new { error = loginResult };
         }
     }
 }
