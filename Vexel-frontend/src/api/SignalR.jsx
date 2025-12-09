@@ -26,9 +26,9 @@ export async function startConnection() {
   }
 }
 
-export async function register(username, email, password) {
+export async function register(email, password) {
   await startConnection();
-  return await connection.invoke("Register", username, email, password);
+  return await connection.invoke("Register", email, password);
 }
 
 export async function login(email, password) {

@@ -1,11 +1,13 @@
-import Register from "./components/auth/Register.jsx";
-import Login from "./components/auth/Login.jsx";
+import Register from "./modules/auth/Register.jsx";
+import Login from "./modules/auth/Login.jsx";
+import Cover from "./modules/reusable/cover.jsx";
 
 function App() {
   return (
     <>
-      <Register/>
-      <Login/>
+      {/* <Register/> */}
+      {/* <Login/> */}
+      <Cover/>
     </>
   );
 }

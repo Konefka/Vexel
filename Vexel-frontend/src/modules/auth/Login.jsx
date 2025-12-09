@@ -9,7 +9,7 @@ export default function Login() {
     const result = await login(email, password);
 
     if (result.error) {
-      alert("Błąd: " + result.error);
+      alert(result.error);
       return;
     }
 
@@ -17,7 +17,7 @@ export default function Login() {
   }
 
   return (
-    <div>
+    <div className="login">
         <h2>Logowanie</h2>
         <input placeholder="email" value={email} onChange={e => setEmail(e.target.value)}/>
         <input type="password" placeholder="hasło" value={password} onChange={e => setPassword(e.target.value)}/>

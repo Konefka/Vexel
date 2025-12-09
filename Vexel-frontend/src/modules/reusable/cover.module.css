@@ -1,0 +1,10 @@
+@import url(./src/colors.css);
+
+.sixty_cover {
+    background-color: var(--bg);
+    height: 100vh;
+    width: 60vw;
+    border: 1px solid var(--border);
+    border-radius: 0 1rem 1rem 0;
+    /* box-shadow: 0 0 150px 600px var(--transition); */
+}
