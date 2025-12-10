@@ -1,7 +1,7 @@
 using Supabase.Gotrue;
 using Vexel;
 using Vexel.tables;
-class Program
+internal class Program
 {
     static WebApplicationBuilder builder = null!;
     static async Task Main(string[] args)
@@ -35,7 +35,7 @@ class Program
     }
     static void InitializeSignalR(Supabase.Client client)
     {
-        builder.Services.AddSingleton<AuthService>();
+        builder.Services.AddSingleton<AccountService>();
         builder.Services.AddControllers();
         builder.Services.AddSignalR();
 

@@ -1,12 +1,13 @@
 ﻿using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Reactive;
 
 namespace Vexel.tables
 {
     [Table("Accounts")]
-    public class Account : BaseModel
+    internal class Account : BaseModel
     {
         [Column("id")]
         public Guid Id { get; set; }
@@ -24,13 +25,13 @@ namespace Vexel.tables
         public string? Avatar_url { get; set; }
 
         [Column("status")]
-        public string Status { get; set; } = null!;
+        public string Status { get; set; } = "offline";
 
         [Column("last_seen_at")]
-        public DateTimeOffset? LastSeenAt { get; set; }
+        public DateTimeOffset LastSeenAt { get; set; }
 
         [Column("created_at")]
-        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
 
         [Column("updated_at")]
         public DateTimeOffset? UpdatedAt { get; set; }

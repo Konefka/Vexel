@@ -5,23 +5,23 @@ using Vexel.tables;
 
 namespace Vexel
 {
-    public class AuthHub : Hub
+    internal class AuthHub : Hub
     {
-        private readonly AuthService _authService;
+        private readonly AccountService _accountService;
 
-        public AuthHub(AuthService authService)
+        public AuthHub(AccountService accountService)
         {
-            _authService = authService;
+            _accountService = accountService;
         }
 
         public async Task<object> Register(string email, string password)
         {
-            if (email.IsNullOrEmpty() || password.IsNullOrEmpty())
+            if (email.IsNullOrEmpty() || password.IsNullOrEmpty() || email.Contains(' ') || password.Contains(' '))
             {
                 return new { error = "Niepoprawne dane rejestracji." };
             }
 
-            string registerResult = await _authService.Register(new AccountDto { Email = email, Password = password });
+            string registerResult = await _accountService.Register(new AccountDto { Email = email, Password = password });
 
             if (registerResult!.StartsWith("ey"))
                 return new { token = registerResult };
@@ -31,7 +31,7 @@ namespace Vexel
 
         public async Task<object> Login(string email, string password)
         {
-            string loginResult = await _authService.Login(new AccountDto { Email = email, Password = password });
+            string loginResult = await _accountService.Login(new AccountDto { Email = email, Password = password });
 
             if (loginResult.StartsWith("ey"))
                 return new { token = loginResult };
