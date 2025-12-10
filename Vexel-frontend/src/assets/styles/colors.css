@@ -4,4 +4,9 @@
   --middle: #70A9A1;
   --transition: #9EC1A3;
   --highlight: #CFE0C3;
+  --black: hsl(0, 0%, 7%);
+
+  /* Test */
+  --color1: hsl(153, 60%, 53%);
+  --color2: hsl(155, 100%, 19%);
 }

@@ -1,19 +1,47 @@
 * {
-  font-family: JetBrainsMono-Medium, system-ui;
-  box-sizing: border-box;
+  font-family: var(--font-main), Helvetica;
+  color: var(--highlight);
   line-height: 1.5;
-  margin: 0;
-  padding: 0;
-  font-family: var(--font-main);
-  scrollbar-color: var(--highlight) var(--bg);
-  scrollbar-width: thick;
+
   text-decoration: none;
   list-style: none;
+
+  /* Firefox */
+  scrollbar-color: var(--highlight) var(--bg);
+  scrollbar-width: thin;
+}
+
+/* Chrome, Edge, Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--highlight);
+  border-radius: .5rem;
+  border: 3px solid var(--bg);
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body, h1, h2, h3, h4, h5, h6, p, ul, ol, figure, blockquote, dl, dd {
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  background-color: var(--highlight);
-  color: var(--middle);
+  background-color: hsl(0, 0%, 7%);
+  font-size: 1rem;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -26,25 +54,24 @@ img, .image {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  background-size: cover;
-  background-position-y: center;
-  background-position-x: center;
+  object-fit: cover;
+  object-position: center;
 }
 
 .linked-text {
   color: var(--highlight);
   text-decoration: underline;
   white-space: nowrap;
+  transition: var(--transition) 0.2s;
 }
 
 .linked-text:hover {
-  color: var(--transition);
   text-decoration: underline;
 }
 
 hr {
   margin-block: 5px;
-  border: 1px solid var(--highlight);
+  border: 1px solid var(--middle);
 }
 
 h1 {
@@ -67,10 +94,25 @@ h5 {
   font-size: 1.5rem;
 }
 
-h6, p, br, input, button {
+h6 {
   font-size: 1rem;
 }
 
-.onclick {
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+}
+
+input, button {
+  border: none;
+  background: none;
+  outline: none;
+  appearance: none; /* Safari */
+}
+
+input, button, textarea, select {
+  font-size: inherit;
+}
+
+.cursor-pointer {
   cursor: pointer;
 }
