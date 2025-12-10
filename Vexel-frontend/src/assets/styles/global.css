@@ -1,0 +1,76 @@
+* {
+  font-family: JetBrainsMono-Medium, system-ui;
+  box-sizing: border-box;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+  scrollbar-color: var(--highlight) var(--bg);
+  scrollbar-width: thick;
+  text-decoration: none;
+  list-style: none;
+}
+
+body {
+  background-color: var(--highlight);
+  color: var(--middle);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, .image {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-size: cover;
+  background-position-y: center;
+  background-position-x: center;
+}
+
+.linked-text {
+  color: var(--highlight);
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.linked-text:hover {
+  color: var(--transition);
+  text-decoration: underline;
+}
+
+hr {
+  margin-block: 5px;
+  border: 1px solid var(--highlight);
+}
+
+h1 {
+  font-size: 3.5rem;
+}
+
+h2 {
+  font-size: 3rem;
+}
+
+h3 {
+  font-size: 2.5rem;
+}
+
+h4 {
+  font-size: 2rem;
+}
+
+h5 {
+  font-size: 1.5rem;
+}
+
+h6, p, br, input, button {
+  font-size: 1rem;
+}
+
+.onclick {
+  cursor: pointer;
+}

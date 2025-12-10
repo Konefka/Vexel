@@ -1,5 +1,3 @@
-@import url(./src/colors.css);
-
 .sixty_cover {
     background-color: var(--bg);
     height: 100vh;
