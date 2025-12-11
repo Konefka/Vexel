@@ -1,8 +1,18 @@
 @font-face {
   font-family: JetBrainsMono-Regular;
-  src: url(assets/fonts/JetBrainsMono-Regular.ttf);
+  src: url(../fonts/JetBrainsMono-Regular.woff2);
+}
+
+@font-face {
+  font-family: JetBrainsMono-Medium;
+  src: url(../fonts/JetBrainsMono-Medium.woff2);
+}
+
+@font-face {
+  font-family: JetBrainsMono-SemiBold;
+  src: url(../fonts/JetBrainsMono-SemiBold.woff2);
 }
 
 :root {
-  --font-main: JetBrainsMono-Regular;
+  --font-main: JetBrainsMono-Medium;
 }

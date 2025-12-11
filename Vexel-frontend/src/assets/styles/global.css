@@ -1,13 +1,13 @@
 * {
   font-family: var(--font-main), Helvetica;
-  color: var(--highlight);
+  color: var(--fg);
   line-height: 1.5;
 
   text-decoration: none;
   list-style: none;
 
   /* Firefox */
-  scrollbar-color: var(--highlight) var(--bg);
+  scrollbar-color: var(--fg) var(--bg);
   scrollbar-width: thin;
 }
 
@@ -21,7 +21,7 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: var(--highlight);
+  background-color: var(--fg);
   border-radius: .5rem;
   border: 3px solid var(--bg);
 }
@@ -40,7 +40,7 @@ body, h1, h2, h3, h4, h5, h6, p, ul, ol, figure, blockquote, dl, dd {
 }
 
 body {
-  background-color: hsl(0, 0%, 7%);
+  background-color: var(--bg);
   font-size: 1rem;
 
   font-synthesis: none;
@@ -71,35 +71,7 @@ img, .image {
 
 hr {
   margin-block: 5px;
-  border: 1px solid var(--middle);
-}
-
-h1 {
-  font-size: 3.5rem;
-}
-
-h2 {
-  font-size: 3rem;
-}
-
-h3 {
-  font-size: 2.5rem;
-}
-
-h4 {
-  font-size: 2rem;
-}
-
-h5 {
-  font-size: 1.5rem;
-}
-
-h6 {
-  font-size: 1rem;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 500;
+  border: 1px solid var(--border);
 }
 
 input, button {

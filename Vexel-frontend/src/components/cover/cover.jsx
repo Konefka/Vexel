@@ -1,4 +1,4 @@
-import styles from './cover.module.css'
+import styles from "./cover.module.css";
 
 export default function Cover () {
     return (

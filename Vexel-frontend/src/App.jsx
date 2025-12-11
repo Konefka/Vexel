@@ -1,4 +1,4 @@
-import Header from "./components/Header/header.jsx"
+import Header from "./components/header/header.jsx";
 import Cover from "./components/cover/cover.jsx";
 import Register from "./features/auth/Register.jsx";
 import Login from "./features/auth/Login.jsx";

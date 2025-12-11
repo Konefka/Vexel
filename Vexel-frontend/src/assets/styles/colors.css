@@ -1,12 +1,13 @@
 :root {
-  --bg: #1F363D;
-  --fg: #40798C;
-  --middle: #70A9A1;
-  --transition: #9EC1A3;
-  --highlight: #CFE0C3;
-  --black: hsl(0, 0%, 7%);
+  --brand-default: hsl(153.1 60.2% 52.7%);
+  --brand-700: hsl(154.9 59.5% 70%);
+  --brand-600: hsl(154.9 100% 25%);
+  --brand-500: hsl(154.9 100% 19.2%);
+  --brand-400: hsl(155.5 100% 9.6%);
+  --brand-300: hsl(155.1 100% 8%);
+  --brand-200: hsl(162 100% 2%);
 
-  /* Test */
-  --color1: hsl(153, 60%, 53%);
-  --color2: hsl(155, 100%, 19%);
+  --bg: hsl(0, 0%, 7.1%);
+  --fg: hsl(0, 0%, 98%);
+  --border: hsl(0, 0%, 18%);
 }

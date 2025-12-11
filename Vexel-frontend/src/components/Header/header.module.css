@@ -1,12 +1,57 @@
 .header {
-    /* background-color: var(--black); */
-    background-color: none;
-    height: fit-content;
-    padding-block: .5rem;
-    padding-inline: 20%;
+    position: sticky;
 
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-between;
+    align-items: center;
+
+    background-color: var(--bg);
+    top: 0;
+
+    padding-block: .5rem;
+    padding-inline: 14%;
+    border-bottom: 1px solid var(--border);
+}
+
+.header > div, .header a{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .5rem;
+}
+
+.header > div:first-child {
+    gap: 1.5rem;
+}
+
+.header h1 {
+    color: var(--brand-default);
+    margin-right: .5rem;
+}
+
+.header p:hover {
+    color: var(--brand-default);
+    transition: color .2s ease-in-out;
+}
+
+.header button {
+    background-color: var(--brand-500);
+    border: 1px solid var(--brand-600);
+
+    border-radius: .35rem;
+    padding: .3rem .7rem;
+}
+
+.header button:hover {
+    transition: all .15s ease-out;
+    background-color: var(--brand-600);
+    border: 1px solid var(--brand-700);
+}
+
+.header .githubLogo {
+    width: 29px;
+    height: 29px;
+    margin: .2rem;
 }
