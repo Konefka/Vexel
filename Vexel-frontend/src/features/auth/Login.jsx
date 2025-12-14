@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { login, saveToken } from "/src/api/SignalR.jsx";
 
-export default function Login() {
+import styles from "./auth.module.scss";
+
+export default function Login(functions) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -17,11 +19,14 @@ export default function Login() {
   }
 
   return (
-    <div className="login">
-        <h2>Logowanie</h2>
-        <input placeholder="email" value={email} onChange={e => setEmail(e.target.value)}/>
-        <input type="password" placeholder="hasło" value={password} onChange={e => setPassword(e.target.value)}/>
-        <button onClick={handleLogin}>Zaloguj</button>
+    <div className={styles.login}>
+        <h2>Welcome!</h2>
+        <p>Please login to your account.</p>
+        <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)}/>
+        <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}/>
+        <input type="button" className="cursor-pointer" onClick={handleLogin} value="Login"/>
+        <hr />
+        <p>If you don't have an account, please <span className="linked-text" onClick={functions.register}>register</span>.</p>
     </div>
   );
 }

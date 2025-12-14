@@ -32,13 +32,12 @@ export default function Cover ({ active = false, onClose, show }) {
         document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [onClose]);
-
-    // <div><h1>Witaj w Cover!</h1><p>Ten panel wysuwa się płynnie po kliknięciu przycisku.</p></div>
     
     return (
         <section ref={coverRef} className={`${styles.cover} ${active ? styles.active : ""}`}>
-            <img src={xSymbol} onClick={onClose} alt="return button" styles="cursor-pointer"/>
-            {show}
+            <img src={xSymbol} onClick={onClose} alt="return button" className="image cursor-pointer"/>
+            {show ? show : <div><h1>Witaj w Cover!</h1><p>Ten panel wysuwa się płynnie po kliknięciu przycisku.</p></div>}
+            <div className="linked-text">Reset Password</div>
         </section>
     );
 }
@@ -46,4 +45,5 @@ export default function Cover ({ active = false, onClose, show }) {
 Cover.propTypes = {
   active: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
+  show: PropTypes.element
 };

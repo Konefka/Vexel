@@ -1,31 +1,31 @@
 * {
-  font-family: var(--font-main), Helvetica;
+  font-family: var(--font-main), monospace;
   color: var(--fg);
   line-height: 1.5;
 
   text-decoration: none;
   list-style: none;
 
-  /* Firefox */
+  // Firefox
   scrollbar-color: var(--fg) var(--bg);
   scrollbar-width: thin;
 
-  /* Chrome, Edge, Safari */
-  ::-webkit-scrollbar {
+  // Chrome, Edge, Safari
+  &::-webkit-scrollbar {
     width: 12px;
   }
 
-  ::-webkit-scrollbar-track {
+  &::-webkit-scrollbar-track {
     background: var(--bg);
   }
 
-  ::-webkit-scrollbar-thumb {
+  &::-webkit-scrollbar-thumb {
     background-color: var(--fg);
     border-radius: .5rem;
     border: 3px solid var(--bg);
   }
 
-  ::before, ::after {
+  &::before, &::after {
     box-sizing: inherit;
   }
 }
@@ -59,18 +59,18 @@ img, .image {
 }
 
 .linked-text {
-  color: var(--highlight);
-  text-decoration: underline;
   white-space: nowrap;
-  transition: var(--transition) 0.2s;
+  overflow: hidden;
+  width: fit-content;
+  @extend .cursor-pointer;
 
-  :hover {
+  &:hover {
     text-decoration: underline;
   }
 }
 
 hr {
-  margin-block: 5px;
+  width: 85%;
   border: 1px solid var(--border);
 }
 
@@ -78,7 +78,7 @@ input, button {
   border: none;
   background: none;
   outline: none;
-  appearance: none; /* Safari */
+  appearance: none; // Safari
 }
 
 input, button, textarea, select {

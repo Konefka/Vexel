@@ -4,9 +4,13 @@ import Cover from "../cover/cover.jsx";
 import styles from "./header.module.scss";
 import githubIcon from "/src/assets/svg/github-mark-white.svg";
 import Login from "/src/features/auth/Login.jsx";
+import Register from "/src/features/auth/Register.jsx";
 
 export default function Header() {
     const [active, setActive] = useState(false);
+    const [card, setCard] = useState(0);
+
+    const cards = [<Login register={() => setCard(1)}/>, <Register login={() => setCard(0)}/>];
 
     return (
         <>
@@ -26,7 +30,7 @@ export default function Header() {
                     </a>
                 </div>
             </header>
-            <Cover active={active} onClose={() => setActive(false)} show={<Login/>}/>
+            <Cover active={active} onClose={() => setActive(false)} show={cards[card]}/>
         </>
     );
 }

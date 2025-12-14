@@ -1,0 +1,21 @@
+.login, .register {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    background-color: var(--bg);
+
+    border-radius: 1rem;
+    padding: 2rem;
+
+    input {
+        padding: .2rem .5rem;
+        border: 1px solid var(--border);
+        border-radius: .25rem;
+        letter-spacing: 1px;
+    }
+
+    > p {
+        color: var(--secondary-fg);
+    }
+}
