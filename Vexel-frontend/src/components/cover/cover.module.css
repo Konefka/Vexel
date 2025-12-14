@@ -1,8 +1,33 @@
-.sixty_cover {
-    background-color: var(--fg);
-    height: 100vh;
-    width: 60vw;
-    border: 1px solid var(--border);
-    border-radius: 0 1rem 1rem 0;
-    /* box-shadow: 0 0 150px 600px var(--transition); */
+.cover {
+  position: fixed;
+  top: 0;
+  right: 0;
+  /* width: 60vw; */
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  background-color: var(--brand-200);
+  box-shadow: 0 0 1000px 3vw var(--brand-200);
+
+  transform: translateX(100%);
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  padding: 2rem;
+  opacity: 0;
+}
+
+.active {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.cover img {
+    width: 1.5rem;
+    transition: transform .5s ease;
+}
+
+.cover img:hover {
+    transform: rotateZ(-180deg) scale(1.1);
 }

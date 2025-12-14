@@ -88,3 +88,7 @@ input, button, textarea, select {
 .cursor-pointer {
   cursor: pointer;
 }
+
+.no-scroll {
+  overflow: hidden;
+}

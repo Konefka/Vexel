@@ -1,9 +1,49 @@
-import styles from "./cover.module.css";
+import { act, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 
-export default function Cover () {
+import styles from "./cover.module.css";
+import xSymbol from "/src/assets/svg/x-symbol-white.svg";
+
+export default function Cover ({ active = false, onClose }) {
+    const coverRef = useRef(null);
+
+    useEffect(() => {
+        if (active) {
+            document.body.classList.add("no-scroll");
+        } else {
+            document.body.classList.remove("no-scroll");
+        }
+
+        return () => {
+            document.body.classList.remove("no-scroll");
+        };
+    }, [active]);
+    
+    useEffect(() => {
+        function handleClickOutside(e) {
+            if (coverRef.current && !coverRef.current.contains(e.target)) {
+                onClose();
+            }
+        }
+    
+        document.addEventListener("mousedown", handleClickOutside);
+    
+        return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [onClose]);
+    
     return (
-        <section className={styles.sixty_cover}>
-            Test test test
+        <section ref={coverRef} className={`${styles.cover} ${active ? styles.active : ""}`}>
+            <img src={xSymbol} onClick={onClose} alt="return button" styles="cursor-pointer"/>
+            <div>
+                <h1>Witaj w Cover!</h1>
+                <p>Ten panel wysuwa się płynnie po kliknięciu przycisku.</p>
+            </div>
         </section>
     );
 }
+
+Cover.propTypes = {
+  active: PropTypes.bool
+};
