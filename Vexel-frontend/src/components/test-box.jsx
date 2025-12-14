@@ -1,6 +1,6 @@
-import styles from "./test-box.module.css";
+import styles from "./test-box.module.scss";
 
-export default function box () {
+export default function Box () {
     return (
         <>
             <div className={styles.box}></div>

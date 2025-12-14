@@ -9,25 +9,25 @@
   /* Firefox */
   scrollbar-color: var(--fg) var(--bg);
   scrollbar-width: thin;
-}
 
-/* Chrome, Edge, Safari */
-*::-webkit-scrollbar {
-  width: 12px;
-}
+  /* Chrome, Edge, Safari */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
 
-*::-webkit-scrollbar-track {
-  background: var(--bg);
-}
+  ::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
 
-*::-webkit-scrollbar-thumb {
-  background-color: var(--fg);
-  border-radius: .5rem;
-  border: 3px solid var(--bg);
-}
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--fg);
+    border-radius: .5rem;
+    border: 3px solid var(--bg);
+  }
 
-*, *::before, *::after {
-  box-sizing: inherit;
+  ::before, ::after {
+    box-sizing: inherit;
+  }
 }
 
 html {
@@ -63,10 +63,10 @@ img, .image {
   text-decoration: underline;
   white-space: nowrap;
   transition: var(--transition) 0.2s;
-}
 
-.linked-text:hover {
-  text-decoration: underline;
+  :hover {
+    text-decoration: underline;
+  }
 }
 
 hr {
@@ -86,7 +86,7 @@ input, button, textarea, select {
 }
 
 .cursor-pointer {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 .no-scroll {

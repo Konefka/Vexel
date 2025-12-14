@@ -5,6 +5,7 @@
 cd .../Vexel/Vexel-frontend
 npm install
 npm install --save prop-types
+npm install -D sass-embedded
 ```
 > [!WARNING]
 > **prop-types** is required to run the frontend, as it is used for prop type validation in React.

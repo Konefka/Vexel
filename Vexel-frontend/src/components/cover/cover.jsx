@@ -1,10 +1,10 @@
 import { act, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
-import styles from "./cover.module.css";
+import styles from "./cover.module.scss";
 import xSymbol from "/src/assets/svg/x-symbol-white.svg";
 
-export default function Cover ({ active = false, onClose }) {
+export default function Cover ({ active = false, onClose, show }) {
     const coverRef = useRef(null);
 
     useEffect(() => {
@@ -32,18 +32,18 @@ export default function Cover ({ active = false, onClose }) {
         document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [onClose]);
+
+    // <div><h1>Witaj w Cover!</h1><p>Ten panel wysuwa się płynnie po kliknięciu przycisku.</p></div>
     
     return (
         <section ref={coverRef} className={`${styles.cover} ${active ? styles.active : ""}`}>
             <img src={xSymbol} onClick={onClose} alt="return button" styles="cursor-pointer"/>
-            <div>
-                <h1>Witaj w Cover!</h1>
-                <p>Ten panel wysuwa się płynnie po kliknięciu przycisku.</p>
-            </div>
+            {show}
         </section>
     );
 }
 
 Cover.propTypes = {
-  active: PropTypes.bool
+  active: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
 };

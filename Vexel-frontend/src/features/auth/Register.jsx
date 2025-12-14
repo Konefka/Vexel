@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { register, saveToken } from "../../api/SignalR.jsx";
+import { register, saveToken } from "/src/api/SignalR.jsx";
 
 export default function Register() {
   const [email, setEmail] = useState("");
