@@ -26,9 +26,9 @@
   img:hover {
     transform: rotateZ(-180deg) scale(1.1);
   }
-}
 
-.active {
-  transform: translateX(0);
-  opacity: 1;
+  &.active {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }

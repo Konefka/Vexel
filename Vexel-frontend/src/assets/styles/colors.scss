@@ -9,10 +9,10 @@
   --brand-300: hsl(37, 11%, 33%);
   --brand-200: hsl(37, 11%, 23%);
   --brand-100: hsl(37, 11%, 13%);
-  --brand-000: hsl(0, 100%, 2%); // - initial
+  --brand-000: 0, 100%, 2%; // - initial
 
   --bg: hsl(216, 18%, 16%);
   --fg: hsl(0, 0%, 98%);
-  // --secondary-fg: hsl(0, 0%, 68%);
+  --secondary-fg: hsl(0, 0%, 68%);
   --border: hsl(217, 10%, 25%);
 }

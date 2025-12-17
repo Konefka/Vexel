@@ -2,6 +2,11 @@ import * as signalR from "@microsoft/signalr";
 
 const BASE_URL = "http://localhost:5155";
 let connection = null;
+let errorHandler = null;
+
+export function setErrorHandler(functions) {
+  errorHandler = functions;
+}
 
 export function createConnection() {
   if (connection) return connection;
@@ -20,9 +25,10 @@ export async function startConnection() {
 
   try {
     await connection.start();
-    console.log("SignalR połączony");
+    console.log("SignalR connected");
   } catch (err) {
     console.error("SignalR error: ", err);
+    if (errorHandler) errorHandler(err.toString());
   }
 }
 
