@@ -22,10 +22,10 @@ export default function Login(functions) {
     <div className={styles.login}>
         <h2>Welcome!</h2>
         <p>Please login to your account.</p>
-        <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)}/>
-        <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}/>
+        <input name="email" type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} autoComplete="email"/>
+        <input name="password" type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} autoComplete="off"/>
         <input type="button" className="cursor-pointer" onClick={handleLogin} value="Login"/>
-        <hr />
+        <hr/>
         <p>If you don't have an account, please <span className="linked-text" onClick={functions.register}>register</span>.</p>
     </div>
   );

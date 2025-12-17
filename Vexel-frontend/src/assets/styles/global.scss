@@ -7,8 +7,10 @@
   list-style: none;
 
   // Firefox
-  scrollbar-color: var(--fg) var(--bg);
-  scrollbar-width: thin;
+  @supports (scrollbar-color: var(--fg) var(--bg)) {
+    scrollbar-color: var(--fg) var(--bg);
+    scrollbar-width: thin;
+  }
 
   // Chrome, Edge, Safari
   &::-webkit-scrollbar {

@@ -24,7 +24,7 @@ export default function Header() {
                     </nav>
                 </div>
                 <div>
-                    <button className="cursor-pointer" onClick={() => setActive(true)}><h6>Login</h6></button>
+                    <button type="button" className="cursor-pointer" onClick={() => setActive(true)}><h6>Login</h6></button>
                     <a href="https://github.com/Konefka/Vexel" target="_blank" rel="noopener noreferrer">
                         <img className={`${styles.githubLogo} cursor-pointer`} src={githubIcon} alt="icon"/>
                     </a>

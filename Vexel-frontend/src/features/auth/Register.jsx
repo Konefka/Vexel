@@ -23,8 +23,8 @@ export default function Register(functions) {
       <h2>Welcome!</h2>
       <p>Please register to your account.</p>
       {/* <input placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} /> */}
-      <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-      <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+      <input name="email" type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} autoComplete="email"/>
+      <input name="password" type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} autocomplete="off"/>
       <input type="button" className="cursor-pointer" onClick={handleRegister} value="Register"/>
       <hr/>
       <p>If you already have an account, please <span className="linked-text" onClick={functions.login}>login</span>.</p>
