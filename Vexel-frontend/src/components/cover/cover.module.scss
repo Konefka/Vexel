@@ -3,19 +3,19 @@
   top: 0;
   bottom: 0;
   right: 0;
-  // width: 40vw;
+  width: 538px;
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 2rem;
 
-  background-color: var(--brand-200);
-  box-shadow: 0 0 1000px 3vw var(--brand-200);
+  background-color: var(--brand-600);
+  box-shadow: 0 0 1000px 5vw var(--brand-400);
 
   transform: translateX(100%);
-  transition: transform 0.5s ease, opacity 0.5s ease;
-  padding: 1.5rem 3rem;
+  transition: transform 0.5s ease, opacity 0.3s;
+  padding: 1.5rem;
   opacity: 0;
 
   img {

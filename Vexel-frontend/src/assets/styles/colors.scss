@@ -1,14 +1,18 @@
 :root {
-  --brand-default: hsl(153.1 60.2% 52.7%);
-  --brand-700: hsl(154.9 59.5% 70%);
-  --brand-600: hsl(154.9 100% 25%);
-  --brand-500: hsl(154.9 100% 19.2%);
-  --brand-400: hsl(155.5 100% 9.6%);
-  --brand-300: hsl(155.1 100% 8%);
-  --brand-200: hsl(162 100% 2%);
+  --brand-default: hsl(37, 38%, 80%); // - initial
+  --brand-900: hsl(37, 33%, 74%);
+  --brand-800: hsl(37, 28%, 68%);
+  --brand-700: hsl(37, 22%, 61%);
+  --brand-600: hsl(37, 16%, 54%);
+  --brand-500: hsl(37, 11%, 53%); // - initial
+  --brand-400: hsl(37, 11%, 43%);
+  --brand-300: hsl(37, 11%, 33%);
+  --brand-200: hsl(37, 11%, 23%);
+  --brand-100: hsl(37, 11%, 13%);
+  --brand-000: hsl(0, 100%, 2%); // - initial
 
-  --bg: hsl(0, 0%, 7.1%);
+  --bg: hsl(216, 18%, 16%);
   --fg: hsl(0, 0%, 98%);
-  --secondary-fg: hsl(0, 0%, 68%);
-  --border: hsl(0, 0%, 18%);
+  // --secondary-fg: hsl(0, 0%, 68%);
+  --border: hsl(217, 10%, 25%);
 }

@@ -1,4 +1,4 @@
-import { act, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
 import styles from "./cover.module.scss";
@@ -36,7 +36,7 @@ export default function Cover ({ active = false, onClose, show }) {
     return (
         <section ref={coverRef} className={`${styles.cover} ${active ? styles.active : ""}`}>
             <img src={xSymbol} onClick={onClose} alt="return button" className="image cursor-pointer"/>
-            {show ? show : <div><h1>Witaj w Cover!</h1><p>Ten panel wysuwa się płynnie po kliknięciu przycisku.</p></div>}
+            {show != null ? show : <div><h1>Witaj w Cover!</h1><p>Ten panel wysuwa się płynnie po kliknięciu przycisku.</p></div>}
             <div className="linked-text">Reset Password</div>
         </section>
     );
