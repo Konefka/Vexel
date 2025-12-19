@@ -16,7 +16,7 @@ export default function Modal({active = false, onClose, message}) {
         document.addEventListener("mousedown", handleClickOutside);
     
         return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [onClose]);
 

@@ -29,7 +29,7 @@ export default function Cover ({ active = false, onClose, show }) {
         document.addEventListener("mousedown", handleClickOutside);
     
         return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [onClose]);
     

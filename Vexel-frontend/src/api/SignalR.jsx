@@ -34,17 +34,28 @@ export async function startConnection() {
 
 export async function register(email, password) {
   await startConnection();
-  return await connection.invoke("Register", email, password);
+  const result = await connection.invoke("Register", email, password);
+  if (result.error) {
+    errorHandler(result.error.toString());
+  } else {
+    saveToken(result.token);
+  }
 }
 
 export async function login(email, password) {
   await startConnection();
-  return await connection.invoke("Login", email, password);
+  const result = await connection.invoke("Login", email, password);
+  if (result.error) {
+    errorHandler(result.error.toString());
+  } else {
+    saveToken(result.token);
+  }
 }
 
 export function saveToken(token) {
   sessionStorage.setItem("jwt", token);
-  alert("Udało się! Zapisano token!");
+  console.log("Token saved");
+  window.location.reload();
 }
 
 export function getToken() {
