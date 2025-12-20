@@ -45,5 +45,5 @@ export default function Cover ({ active = false, onClose, show }) {
 Cover.propTypes = {
   active: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
-  show: PropTypes.element
+  show: PropTypes.element.isRequired
 };

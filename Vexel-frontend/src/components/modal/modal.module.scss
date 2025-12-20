@@ -25,15 +25,17 @@
 
     div, p {
         width: 25vw;
+
         display: flex;
+        gap: .5rem;
+
         padding: 1rem;
         border-radius: 1rem;
         background-color: var(--fg);
         border: 1px solid var(--secondary-fg);
+        box-shadow: 0 0 100px -30px var(--secondary-fg);
         scrollbar-color: var(--bg) var(--fg);
         overflow-wrap: break-word;
-        gap: .5rem;
-        box-shadow: 0 0 100px -30px var(--secondary-fg);
     }
 
     > div {

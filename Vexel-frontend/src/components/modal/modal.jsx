@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 
 import styles from "./modal.module.scss";
 import xSymbol from "/src/assets/svg/x-symbol-black.svg";
@@ -31,4 +32,10 @@ export default function Modal({active = false, onClose, message}) {
             </div>
         </section>
     )
+}
+
+Modal.propTypes = {
+    active: PropTypes.bool,
+    onClose: PropTypes.func.isRequired,
+    message: PropTypes.string.isRequired
 }

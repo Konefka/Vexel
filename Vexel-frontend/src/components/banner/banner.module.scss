@@ -1,0 +1,68 @@
+.banner {
+    left: 0;
+    right: 0;
+
+    display: flex;
+    justify-content: center;
+    z-index: 100;
+
+    > div {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        gap: .5rem;
+
+        margin: 10rem;
+        padding: 2rem 2.5rem;
+        border-radius: 1rem;
+        background-color: var(--bg);
+        border: 1px solid var(--border);
+    }
+
+    h1 {
+        font-size: 3.5rem;
+        letter-spacing: -1px;
+        word-spacing: -5px;
+    }
+
+    h1 span:last-child {
+        color: var(--brand-default);
+    }
+
+    p * {
+        font-size: 1.1rem;
+        color: var(--secondary-fg);
+    }
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: .5rem;
+
+    button {
+        background-color: var(--brand-500);
+        border: 1px solid var(--brand-800);
+
+        border-radius: .35rem;
+        padding: .4rem 1rem;
+        margin-top: .5rem;
+    }
+
+    button:hover {
+        transition: all .15s ease-out;
+        background-color: var(--brand-600);
+        border: 1px solid var(--brand-900);
+    }
+
+    button:last-child {
+        background-color: var(--brand-100);
+        border: 1px solid var(--brand-200);
+    }
+
+    button:last-child:hover {
+        background-color: var(--brand-100);
+        border: 1px solid var(--brand-300);
+    }
+}

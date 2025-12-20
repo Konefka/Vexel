@@ -14,13 +14,14 @@ export function createConnection() {
   connection = new signalR.HubConnectionBuilder()
     .withUrl(`${BASE_URL}/AuthHub`)
     .withAutomaticReconnect()
+    .configureLogging(signalR.LogLevel.None)
     .build();
 
   return connection;
 }
 
 export async function startConnection() {
-  if (!connection) createConnection();
+  if (!connection) await createConnection();
   if (connection.state === "Connected") return;
 
   try {
