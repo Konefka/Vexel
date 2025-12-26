@@ -7,13 +7,13 @@ Vexel is a real-time chat app focused on fast messaging, user accounts, and grou
 If you find any errors, please open a new `Issue`, describe the error, and explain when the error occurs.<br>
 Thank you :)
 
-## Planned Features
+### Planned Features
 - Real-time messaging
 - Group chats
 - Message persistence
 - Images as messages
 
-## Requirements
+### Requirements
 - Node.js 18+
 - npm (comes with Node.js)
 - .NET 9.0+ (for backend development)

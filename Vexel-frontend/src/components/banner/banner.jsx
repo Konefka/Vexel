@@ -17,7 +17,8 @@ export default function Banner({bigText, message, buttons = null}) {
     
     return (
         <section className={styles.banner}>
-            <div>
+            <fieldset>
+                <legend>banner</legend>
                 <h1>
                     {bigText.split("\n").map((line, index) => (
                         <span key={index}>{line}<br/></span>
@@ -27,7 +28,7 @@ export default function Banner({bigText, message, buttons = null}) {
                     <span key={index}>{sentence}<br/></span>
                 ))}</p>
                 {showButtons}
-            </div>
+            </fieldset>
         </section>
     );
 }

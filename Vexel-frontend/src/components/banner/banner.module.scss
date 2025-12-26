@@ -6,7 +6,7 @@
     justify-content: center;
     z-index: 100;
 
-    > div {
+    > * {
         display: flex;
         flex-direction: column;
         text-align: center;
@@ -14,7 +14,7 @@
 
         margin: 10rem;
         padding: 2rem 2.5rem;
-        border-radius: 1rem;
+        border-radius: var(--border-radius-m);
         background-color: var(--bg);
         border: 1px solid var(--border);
     }
@@ -45,8 +45,8 @@
         background-color: var(--brand-500);
         border: 1px solid var(--brand-800);
 
-        border-radius: .35rem;
-        padding: .4rem 1rem;
+        border-radius: var(--border-radius-s);
+        padding: .3rem .9rem;
         margin-top: .5rem;
     }
 

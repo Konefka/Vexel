@@ -25,9 +25,11 @@ export default function Header() {
                 </div>
                 <div>
                     <button type="button" className="cursor-pointer" onClick={() => setActive(true)}><h6>Login</h6></button>
-                    <a href="https://github.com/Konefka/Vexel" target="_blank" rel="noopener noreferrer">
-                        <img className={`${styles.githubLogo} cursor-pointer`} src={githubIcon} alt="icon"/>
-                    </a>
+                    <abbr data-tooltip="github" aria-label="github">
+                        <a href="https://github.com/Konefka/Vexel" target="_blank" rel="noopener noreferrer">
+                            <img className={`${styles.githubLogo} cursor-pointer`} src={githubIcon} alt="icon"/>
+                        </a>
+                    </abbr>
                 </div>
             </header>
             <Cover active={active} onClose={() => setActive(false)} show={cards[card]}/>
