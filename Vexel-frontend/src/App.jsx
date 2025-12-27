@@ -10,7 +10,7 @@ import Banner from "/src/components/banner/banner.jsx";
 import Box from "/src/components/test-box.jsx";
 
 
-export default function App() {
+export default function App () {
   // ERROR -> modal
   const [error, setError] = useState(null);
 
@@ -22,16 +22,19 @@ export default function App() {
   const [authOpen, setAuthOpen] = useState(false);
   const [authCard, setAuthCard] = useState(0); // 0 = login, 1 = register
 
-  const show = [<Login register={() => setCard(1)}/>, <Register login={() => setCard(0)}/>];
-
-  // Logged in or not
+  // Check if logged in and what to show
   function WhatToShow() {
     if (getToken()) {
-      return <Box/>
+      return (
+        <>
+          <Header buttonText="Account" onButtonClick={() => {}}/>
+          <Box/>
+        </>
+      );
     } else {
       return (
         <>
-          <Header openAuth={() => setAuthOpen(true)}/>
+          <Header buttonText="Login" onButtonClick={() => setAuthOpen(true)}/>
           <Banner
             bigText={"All your private messages\nIn one place"}
             message="Secure, fast and reliable messages. So that you don't have to worry about anyone stealing your data"
@@ -39,7 +42,7 @@ export default function App() {
             whatToDoOnClick = {() => setAuthOpen(true)}
           />
         </>
-      )  
+      );
     }
   }
 

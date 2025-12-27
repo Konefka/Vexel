@@ -11,12 +11,11 @@
   gap: 2rem;
 
   background-color: var(--brand-800);
-  box-shadow: 0 0 150px 5vw var(--brand-400);
+  box-shadow: none;
 
   transform: translateX(100%);
-  transition: transform 0.5s ease, opacity 0.3s;
+  transition: transform .4s, box-shadow .4s;
   padding: 1.5rem;
-  opacity: 0;
 
   img {
     width: 1.5rem;
@@ -29,6 +28,6 @@
 
   &.active {
     transform: translateX(0);
-    opacity: 1;
+    box-shadow: 0 0 300px 0 var(--brand-800);
   }
 }
