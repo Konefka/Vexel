@@ -1,10 +1,10 @@
 # Vexel
 Vexel is a real-time chat app focused on fast messaging, user accounts, and group conversations. Built as a modern web app with scalability in mind.
 
-<img width="1920" height="919" alt="obraz" src="https://github.com/user-attachments/assets/070de58f-9d2b-4bb7-a3bc-f01279d058cb" />
+<img width="1920" height="919" alt="obraz" src="https://github.com/user-attachments/assets/ed7f27ad-3203-40eb-b5ee-eea33d8506a9" />
 
 **The app is in early development, and far from a final release.**<br>
-If you find any errors, please open a new `Issue`, describe the error, and explain when the error occurs.<br>
+If you find any errors, please open a new `Issue`, describe the error, and explain when it occurs.<br>
 Thank you :)
 
 ### Planned Features

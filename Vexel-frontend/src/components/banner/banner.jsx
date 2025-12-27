@@ -2,17 +2,24 @@ import PropTypes from "prop-types";
 
 import styles from "./banner.module.scss";
 
-export default function Banner({bigText, message, buttons = null}) {
+export default function Banner({bigText, message, buttons = null, whatToDoOnClick}) {
 
-    let showButtons = null;
-    if (buttons != null) {
-        showButtons = (
+    function showButtons() {
+        if (buttons == null) {
+            return
+        }
+
+        return (
             <div className={styles.buttons}>
                 {buttons.map((button, index) => (
-                    <button key={index}><h5>{button}</h5></button>
+                    index == 0 ? (
+                        <button key={index} className="cursor-pointer" onClick={() => whatToDoOnClick()}><h5>{button}</h5></button>
+                    ) : (
+                        <button key={index} className="cursor-pointer"><h5>{button}</h5></button>
+                    )
                 ))}
             </div>
-        );
+        )
     }
     
     return (
@@ -27,7 +34,7 @@ export default function Banner({bigText, message, buttons = null}) {
                 <p>{message.split(". ").map((sentence, index) => (
                     <span key={index}>{sentence}<br/></span>
                 ))}</p>
-                {showButtons}
+                {showButtons()}
             </fieldset>
         </section>
     );

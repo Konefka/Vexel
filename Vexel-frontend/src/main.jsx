@@ -16,7 +16,12 @@ createRoot(document.getElementById('root')).render(
         width: '100%',
         height: '100%',
         zIndex: -1
-      }} color="hsl(0, 0%, 98%)" snowflakeCount={150} speed={[0.5, 2]} wind={[-1, 1]}/>
+      }}
+      
+      color="hsl(0, 0%, 98%)"
+      snowflakeCount={150}
+      speed={[0.5, 2]}
+      wind={[-1, 1.1]}/>
     <App />
   </StrictMode>,
 )
