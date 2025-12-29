@@ -1,15 +1,15 @@
 import styles from "./header.module.scss";
 import githubIcon from "/src/assets/svg/github-mark-white.svg";
 
-export default function Header ({buttonText, onButtonClick}) {
+export default function Header ({nav, buttonText, onButtonClick}) {
   return (
     <header>
       <div>
         <a href="/home" className={styles.logo}><h2 className="cursor-pointer">Vexel</h2></a>
         <nav>
-          <p className="cursor-pointer">Product</p>
-          <p className="cursor-pointer">About</p>
-          <p className="cursor-pointer">FAQ</p>
+          {nav.map((navHeader, index) => (
+            <a href={`/${navHeader.toLowerCase()}`} className="cursor-pointer" key={index}>{navHeader}</a>
+          ))}
         </nav>
       </div>
       <div>

@@ -1,24 +1,19 @@
 import { Navigate } from "react-router-dom";
-import { getToken } from "./api/SignalR.jsx";
 
-const PrivateRoute = ({ children }) => {
-  const isLoggedIn = !!getToken();
+export function PrivateRoute({isLoggedIn, redirectTo, children}) {
 
   if (!isLoggedIn) {
-    return <Navigate to="/home" />;
+    return <Navigate to={redirectTo || "/"} replace />;
   }
 
-  return <>{children}</>;
-};
+  return <>{children}</>
+}
 
-const PublicRoute = ({ children }) => {
-  const isLoggedIn = !!getToken();
+export function PublicRoute({isLoggedIn, redirectTo, children}) {
 
   if (isLoggedIn) {
-    return <Navigate to="/message-dashboard" />;
+    return <Navigate to={redirectTo || "/message-dashboard"} replace />;
   }
 
-  return <>{children}</>;
-};
-
-export { PrivateRoute, PublicRoute };
+  return <>{children}</>
+}
