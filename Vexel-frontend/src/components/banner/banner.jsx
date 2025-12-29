@@ -9,11 +9,7 @@ export default function Banner ({bigText, message, buttons = null, whatToDoOnCli
     return (
       <div className={styles.buttons}>
         { buttons.map((button, index) => (
-          index == 0 ? (
-            <button key={index} className="cursor-pointer" onClick={() => whatToDoOnClick()}><h5>{button}</h5></button>
-          ) : (
-            <button key={index} className="cursor-pointer"><h5>{button}</h5></button>
-          )
+            <button key={index} className="cursor-pointer" onClick={() => whatToDoOnClick[index]()}><h5>{button}</h5></button>
         ))}
       </div>
     );
@@ -29,7 +25,7 @@ export default function Banner ({bigText, message, buttons = null, whatToDoOnCli
             ))}
           </h1>
           <p>
-            { message.split(". ").map((sentence, index) => (
+            { message.split("\n").map((sentence, index) => (
               <span key={index}>{sentence}<br/></span>
             ))}
           </p>

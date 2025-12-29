@@ -30,6 +30,10 @@
         color: var(--brand-default);
     }
 
+    h1 span:only-child {
+        color: var(--fg);
+    }
+
     p * {
         font-size: 1.1rem;
         color: var(--secondary-fg);
@@ -45,8 +49,8 @@
     margin-top: .5rem;
 
     button {
-        background-color: var(--brand-500);
-        border: 1px solid var(--brand-800);
+        background-color: var(--brand-100);
+        border: 1px solid var(--brand-200);
 
         border-radius: var(--border-radius-s);
         padding: .3rem .9rem;
@@ -55,17 +59,17 @@
 
     button:hover {
         transition: all .15s ease-out;
-        background-color: var(--brand-600);
-        border: 1px solid var(--brand-900);
-    }
-
-    button:last-child {
-        background-color: var(--brand-100);
-        border: 1px solid var(--brand-200);
-    }
-
-    button:last-child:hover {
         background-color: var(--brand-100);
         border: 1px solid var(--brand-300);
+    }
+
+    button:first-child {
+        background-color: var(--brand-500);
+        border: 1px solid var(--brand-800);
+    }
+
+    button:first-child:hover {
+        background-color: var(--brand-600);
+        border: 1px solid var(--brand-900);
     }
 }

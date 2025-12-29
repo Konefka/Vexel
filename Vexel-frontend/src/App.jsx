@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { getToken, setErrorHandler } from "./api/SignalR.jsx";
+import { PrivateRoute, PublicRoute } from "./Guard.jsx";
 import Register from "/src/features/auth/Register.jsx";
 import Login from "/src/features/auth/Login.jsx";
 
@@ -22,39 +24,53 @@ export default function App () {
   const [authOpen, setAuthOpen] = useState(false);
   const [authCard, setAuthCard] = useState(0); // 0 = login, 1 = register
 
-  // Check if logged in and what to show
-  function WhatToShow() {
-    if (getToken()) {
-      return (
-        <>
-          <Header buttonText="Account" onButtonClick={() => {}}/>
-          <Box/>
-        </>
-      );
-    } else {
-      return (
-        <>
-          <Header buttonText="Login" onButtonClick={() => setAuthOpen(true)}/>
-          <Banner
-            bigText={"All your private messages\nIn one place"}
-            message="Secure, fast and reliable messages. So that you don't have to worry about anyone stealing your data"
-            buttons={["Join us", "Our capabilities"]}
-            whatToDoOnClick = {() => setAuthOpen(true)}
-          />
-        </>
-      );
-    }
-  }
+  // Set usable navigation buttons
+  const navigate = useNavigate();
 
   return (
     <>
       <Modal active={!!error} message={error} onClose={() => setError(null)} />
-      {WhatToShow()}
-      <Cover active={authOpen} onClose={() => setAuthOpen(false)}
-        show={
-          authCard === 0 ? <Login register={() => setAuthCard(1)}/> : <Register login={() => setAuthCard(0)}/>
-        }
-      />
+      <Routes>
+        <Route path="/" element={<Navigate to="/home"/>}/>
+        <Route path="/home"
+          element={
+            <PublicRoute>
+              <Header buttonText="Login" onButtonClick={() => setAuthOpen(true)}/>
+              <Banner
+                bigText={"All your private messages\nIn one place"}
+                message={"Secure, fast and reliable messages\nSo that you don't have to worry about anyone stealing your data"}
+                buttons={["Join us", "About us"]}
+                whatToDoOnClick = {[() => setAuthOpen(true)]}
+              />
+              <Cover active={authOpen} onClose={() => setAuthOpen(false)}
+                show={
+                  authCard === 0 ? <Login register={() => setAuthCard(1)}/> : <Register login={() => setAuthCard(0)}/>
+                }
+              />
+            </PublicRoute>
+          }
+        />
+        <Route path="/message-dashboard"
+          element={
+            <PrivateRoute>
+              <Header buttonText="Account" onButtonClick={() => {}}/>
+              <Box/>
+            </PrivateRoute>
+          }
+        />
+        <Route path="*"
+        element={
+          <>
+            <Header buttonText="Return to home" onButtonClick={() => navigate("/home")}/>
+            <Banner
+              bigText={"Something went wrong\n404 not found"} // \n404 not found
+              message="The page you were looking for doesn't exist"
+              buttons={["Return to home", "Try again"]}
+              whatToDoOnClick = {[() => navigate("/home"), () => window.location.reload()]}
+            />
+          </>
+        }/>
+      </Routes>
     </>
   );
 }

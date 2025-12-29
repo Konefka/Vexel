@@ -5,7 +5,7 @@ export default function Header ({buttonText, onButtonClick}) {
   return (
     <header>
       <div>
-        <a href="" className={styles.logo}><h2 className="cursor-pointer">Vexel</h2></a>
+        <a href="/home" className={styles.logo}><h2 className="cursor-pointer">Vexel</h2></a>
         <nav>
           <p className="cursor-pointer">Product</p>
           <p className="cursor-pointer">About</p>
