@@ -96,6 +96,9 @@ namespace Vexel
                     }
 
                     break;
+
+                case 521:
+                    return "Sorry, the providers' db servers are unavailable.";
             }
 
             return ex.Message;
