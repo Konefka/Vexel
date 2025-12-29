@@ -4,7 +4,6 @@
 
     display: flex;
     justify-content: center;
-    z-index: 100;
 
     > * {
         display: flex;
@@ -26,6 +25,8 @@
     }
 
     h1 span:last-child {
+        position: relative;
+        top: -.7rem;
         color: var(--brand-default);
     }
 
@@ -40,6 +41,8 @@
     flex-direction: row;
     justify-content: center;
     gap: .5rem;
+
+    margin-top: .5rem;
 
     button {
         background-color: var(--brand-500);

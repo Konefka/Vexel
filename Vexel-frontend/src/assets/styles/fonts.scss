@@ -1,18 +1,24 @@
 @font-face {
-  font-family: JetBrainsMono-Regular;
+  font-family: JetBrainsMono;
   src: url(../fonts/JetBrainsMono-Regular.woff2);
+  font-weight: 400;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: JetBrainsMono-Medium;
+  font-family: JetBrainsMono;
   src: url(../fonts/JetBrainsMono-Medium.woff2);
+  font-weight: 500;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: JetBrainsMono-SemiBold;
+  font-family: JetBrainsMono;
   src: url(../fonts/JetBrainsMono-SemiBold.woff2);
+  font-weight: 600;
+  font-style: normal;
 }
 
 :root {
-  --font-main: JetBrainsMono-Medium;
+  --font-main: JetBrainsMono;
 }
