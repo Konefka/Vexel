@@ -59,12 +59,31 @@ namespace Vexel
             }
         }
 
+        public string? Logout()
+        {
+            try
+            {
+                _client.Auth.SignOut();
+
+                return null;
+            }
+            catch (Supabase.Gotrue.Exceptions.GotrueException ex)
+            {
+                return CheckTypeOfAuthException(ex);
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
         async Task UpdateLastSeenAt(Guid userId)
         {
-            await _client.From<Account>()
-                    .Where(x => x.Id == userId)
-                    .Set(x => x.LastSeenAt, DateTimeOffset.UtcNow)
-                    .Update();
+            await _client
+                .From<Account>()
+                .Where(x => x.Id == userId)
+                .Set(x => x.LastSeenAt, DateTimeOffset.UtcNow)
+                .Update();
         }
 
         string CheckTypeOfAuthException(Supabase.Gotrue.Exceptions.GotrueException ex)
@@ -72,7 +91,6 @@ namespace Vexel
             switch (ex.StatusCode)
             {
                 case 400:
-                    // Rejestracja + Login
                     if (ex.Message.Contains("validation_failed"))
                     {
                         return "Wpisz poprawny email.";
@@ -85,7 +103,6 @@ namespace Vexel
                     break;
 
                 case 422:
-                    // Rejestracja
                     if (ex.Message.Contains("user_already_exists"))
                     {
                         return "Email już istnieje. Zaloguj się!";

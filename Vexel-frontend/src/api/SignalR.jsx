@@ -53,6 +53,16 @@ export async function login(email, password) {
   }
 }
 
+export async function logout() {
+  await startConnection();
+  const result= await connection.invoke("Logout");
+  if (!!result) {
+    errorHandler(result.error.toString());
+  } else {
+    removeToken();
+  }
+}
+
 export function saveToken(token) {
   sessionStorage.setItem("jwt", token);
   console.log("Token saved");
@@ -65,4 +75,5 @@ export function getToken() {
 
 export function removeToken() {
   sessionStorage.removeItem("jwt");
+  window.location.reload();
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 using Vexel.tables;
@@ -37,6 +38,13 @@ namespace Vexel
                 return new { token = loginResult };
 
             return new { error = loginResult };
+        }
+
+        public string? Logout()
+        {
+            string? logoutResult = _accountService.Logout();
+
+            return logoutResult;
         }
     }
 }

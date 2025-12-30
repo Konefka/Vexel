@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import { getToken, setErrorHandler } from "./api/SignalR.jsx";
+import { getToken, setErrorHandler, logout } from "./api/SignalR.jsx";
 import { PrivateRoute, PublicRoute } from "./Guard.jsx";
 import Register from "/src/features/auth/Register.jsx";
 import Login from "/src/features/auth/Login.jsx";
@@ -34,7 +34,7 @@ export default function App () {
         <Route path="/" element={<Navigate to="/home"/>}/>
         <Route path="/home"
           element={
-            <PublicRoute isLoggedIn={getToken()} redirectTo="/home-logged">
+            <PublicRoute isLoggedIn={getToken()}>
               <Header nav={["Application", "About", "FAQ"]} buttonText="Login" onButtonClick={() => setAuthOpen(true)}/>
               <Banner
                 bigText={"All your private messages\nIn one place"}
@@ -53,7 +53,7 @@ export default function App () {
         <Route path="/message-dashboard"
           element={
             <PrivateRoute isLoggedIn={getToken()}>
-              <Header nav={["Messages", "Profile"]} buttonText="Account" onButtonClick={() => {}}/>
+              <Header nav={["Messages", "Profile"]} buttonText="Logout" onButtonClick={() => logout()}/>
               <Box/>
             </PrivateRoute>
           }

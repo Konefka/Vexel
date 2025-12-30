@@ -1,4 +1,5 @@
 using Supabase.Gotrue;
+using System.Reflection.Metadata;
 using Vexel;
 using Vexel.tables;
 internal class Program
@@ -14,10 +15,11 @@ internal class Program
             .AddUserSecrets<Program>()
             .AddEnvironmentVariables();
 
-        InitializeSignalR(await InitializeClient());
+        await InitializeSignalR();
+        InitializeClient();
     }
 
-    static async Task<Supabase.Client> InitializeClient()
+    static async Task InitializeSignalR()
     {
         string url = builder.Configuration["Supabase:Url"] ?? throw new Exception("Supabase URL is missing");
         string key = builder.Configuration["Supabase:Key"] ?? throw new Exception("Supabase Key is missing");
@@ -30,10 +32,8 @@ internal class Program
         builder.Services.AddSingleton(client);
 
         //await client.AdminAuth("service key").DeleteUser("user id");
-
-        return client;
     }
-    static void InitializeSignalR(Supabase.Client client)
+    static void InitializeClient()
     {
         builder.Services.AddSingleton<AccountService>();
         builder.Services.AddControllers();
