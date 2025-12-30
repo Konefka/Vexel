@@ -1,5 +1,5 @@
-import PropTypes from "prop-types"
-import styles from "./banner.module.scss"
+import PropTypes from "prop-types";
+import styles from "./banner.module.scss";
 
 export default function Banner ({bigText, message, buttons = null, whatToDoOnClick}) {
 

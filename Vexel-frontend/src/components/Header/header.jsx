@@ -1,7 +1,9 @@
+import PropTypes from "prop-types";
+
 import styles from "./header.module.scss";
 import githubIcon from "/src/assets/svg/github-mark-white.svg";
 
-export default function Header ({nav, buttonText, onButtonClick}) {
+export default function Header ({nav = [], buttonText, onButtonClick}) {
   return (
     <header>
       <div>
@@ -22,4 +24,10 @@ export default function Header ({nav, buttonText, onButtonClick}) {
       </div>
     </header>
   );
+}
+
+Header.propTypes = {
+  nav: PropTypes.arrayOf(PropTypes.string).isRequired,
+  buttonText: PropTypes.string.isRequired,
+  onButtonClick: PropTypes.func.isRequired
 }

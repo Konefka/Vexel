@@ -35,7 +35,7 @@ export default function App () {
         <Route path="/home"
           element={
             <PublicRoute isLoggedIn={getToken()} redirectTo="/home-logged">
-              <Header nav={["Product", "About", "FAQ"]} buttonText="Login" onButtonClick={() => setAuthOpen(true)}/>
+              <Header nav={["Application", "About", "FAQ"]} buttonText="Login" onButtonClick={() => setAuthOpen(true)}/>
               <Banner
                 bigText={"All your private messages\nIn one place"}
                 message={"Secure, fast and reliable messages\nSo that you don't have to worry about anyone stealing your data"}
@@ -61,7 +61,7 @@ export default function App () {
         <Route path="*"
         element={
           <>
-            <Header nav={["Product", "About", "FAQ"]} buttonText="Return to home" onButtonClick={() => navigate("/home")}/>
+            <Header buttonText="Return to home" onButtonClick={() => navigate("/home")}/>
             <Banner
               bigText={"Something went wrong\n404 not found"}
               message="The page you were looking for doesn't exist"
