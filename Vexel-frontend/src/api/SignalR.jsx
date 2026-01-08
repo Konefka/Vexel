@@ -19,7 +19,10 @@ export function createConnection() {
 
   connection.on("Welcome", (userId) => {
     console.log("Zalogowany user ID:", userId);
-    saveToken("token");
+  });
+
+  connection.on("ReceiveMessage", ({ userId, message }) => {
+    console.log(userId, message);
   });
 
   return connection;
@@ -48,7 +51,7 @@ export async function register(email, password) {
   }
 }
 
-export async function login(email, password) {
+export async function login_old(email, password) {
   await startConnection();
   const result = await connection.invoke("Login", email, password);
   if (result.error) {

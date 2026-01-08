@@ -4,7 +4,7 @@ using Vexel.tables;
 
 namespace Vexel
 {
-    internal class AccountService
+    public class AccountService
     {
         private readonly Supabase.Client _client;
 
@@ -13,7 +13,7 @@ namespace Vexel
             _client = client;
         }
 
-        public async Task<string> Register(AccountDto dto)
+        public async Task<string> SignUp(AccountDto dto)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace Vexel
             }
         }
 
-        public async Task<string> Login(AccountDto dto)
+        public async Task<string> SignIn(AccountDto dto)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace Vexel
 
                 await UpdateLastSeenAt(Guid.Parse(signInResponse.User!.Id!));
 
-                return signInResponse.AccessToken!;
+                return _client.Auth.CurrentSession!.AccessToken!;
             }
             catch (Supabase.Gotrue.Exceptions.GotrueException ex)
             {
@@ -59,7 +59,7 @@ namespace Vexel
             }
         }
 
-        public string? Logout()
+        public string? SignOut()
         {
             try
             {

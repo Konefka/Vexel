@@ -15,11 +15,11 @@ internal class Program
             .AddUserSecrets<Program>()
             .AddEnvironmentVariables();
 
-        await InitializeSignalR();
+        await InitializeSupabase();
         InitializeClient();
     }
 
-    static async Task InitializeSignalR()
+    static async Task InitializeSupabase()
     {
         string url = builder.Configuration["Supabase:Url"] ?? throw new Exception("Supabase URL is missing");
         string key = builder.Configuration["Supabase:Key"] ?? throw new Exception("Supabase Key is missing");
@@ -50,18 +50,29 @@ internal class Program
             });
         });
 
-        builder.Services.AddAuthentication();
+        builder.Services
+            .AddAuthentication("Cookies")
+            .AddCookie("Cookies", options =>
+            {
+                options.Cookie.Name = "access_token";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
+
+        builder.Services.AddAuthorization();
+
         builder.Services.AddAuthorization();
 
         var app = builder.Build();
 
         app.UseCors("cors");
 
-        app.MapControllers();
-        app.MapHub<AuthHub>("/AuthHub");
-
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.MapControllers();
+        //app.MapHub<AuthHub>("/AuthHub");
 
         app.Run();
     }
