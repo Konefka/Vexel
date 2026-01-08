@@ -50,12 +50,18 @@ internal class Program
             });
         });
 
+        builder.Services.AddAuthentication();
+        builder.Services.AddAuthorization();
+
         var app = builder.Build();
 
         app.UseCors("cors");
 
         app.MapControllers();
         app.MapHub<AuthHub>("/AuthHub");
+
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         app.Run();
     }

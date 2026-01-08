@@ -17,6 +17,11 @@ export function createConnection() {
     .configureLogging(signalR.LogLevel.None)
     .build();
 
+  connection.on("Welcome", (userId) => {
+    console.log("Zalogowany user ID:", userId);
+    saveToken("token");
+  });
+
   return connection;
 }
 
@@ -47,9 +52,18 @@ export async function login(email, password) {
   await startConnection();
   const result = await connection.invoke("Login", email, password);
   if (result.error) {
-    errorHandler(result.error.toString());
+    // errorHandler(result.error.toString());
+    console.log(result.error);
+  } else if (result.success) {
+    console.log("udało się?");
+    await connection.stop();
+    await new Promise(resolve => setTimeout(resolve, 2500));
+    await startConnection();
+    console.log("login reload");
+    // window.location.reload();
   } else {
-    saveToken(result.token);
+    console.log("nie udało się");
+    // saveToken(result.token);
   }
 }
 
@@ -65,8 +79,8 @@ export async function logout() {
 
 export function saveToken(token) {
   sessionStorage.setItem("jwt", token);
-  console.log("Token saved");
-  window.location.reload();
+  console.log("Token reload");
+  // window.location.reload();
 }
 
 export function getToken() {
