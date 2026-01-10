@@ -13,7 +13,9 @@ namespace Vexel
             _client = client;
         }
 
-        public async Task<string> SignUp(AccountDto dto)
+        public record AuthResult(bool Success, string? Token, string? Error);
+
+        public async Task<AuthResult> SignUp(AccountDto dto)
         {
             try
             {
@@ -25,19 +27,19 @@ namespace Vexel
 
                 await UpdateLastSeenAt(Guid.Parse(signUpResponse.User!.Id!));
 
-                return _client.Auth.CurrentSession!.AccessToken!;
+                return new AuthResult(true, _client.Auth.CurrentSession!.AccessToken!, null);
             }
             catch (Supabase.Gotrue.Exceptions.GotrueException ex)
             {
-                return CheckTypeOfAuthException(ex);
+                return new AuthResult(false, null, CheckTypeOfAuthException(ex));
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                return new AuthResult(false, null, ex.Message);
             }
         }
 
-        public async Task<string> SignIn(AccountDto dto)
+        public async Task<AuthResult> SignIn(AccountDto dto)
         {
             try
             {
@@ -47,15 +49,17 @@ namespace Vexel
 
                 await UpdateLastSeenAt(Guid.Parse(signInResponse.User!.Id!));
 
-                return _client.Auth.CurrentSession!.AccessToken!;
+                Console.WriteLine("aaaaaaaaaaaaaa: " + _client.Auth.CurrentSession!.AccessToken);
+
+                return new AuthResult(true, _client.Auth.CurrentSession!.AccessToken!, null);
             }
             catch (Supabase.Gotrue.Exceptions.GotrueException ex)
             {
-                return CheckTypeOfAuthException(ex);
+                return new AuthResult(false, null, CheckTypeOfAuthException(ex));
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                return new AuthResult(false, null, ex.Message);
             }
         }
 

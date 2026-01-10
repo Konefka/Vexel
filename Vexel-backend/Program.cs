@@ -1,7 +1,8 @@
-using Supabase.Gotrue;
-using System.Reflection.Metadata;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using Vexel;
-using Vexel.tables;
 internal class Program
 {
     static WebApplicationBuilder builder = null!;
@@ -15,11 +16,10 @@ internal class Program
             .AddUserSecrets<Program>()
             .AddEnvironmentVariables();
 
-        await InitializeSupabase();
-        InitializeClient();
+        InitializeClient(await InitializeSupabase());
     }
 
-    static async Task InitializeSupabase()
+    static async Task<Supabase.Client> InitializeSupabase()
     {
         string url = builder.Configuration["Supabase:Url"] ?? throw new Exception("Supabase URL is missing");
         string key = builder.Configuration["Supabase:Key"] ?? throw new Exception("Supabase Key is missing");
@@ -32,8 +32,10 @@ internal class Program
         builder.Services.AddSingleton(client);
 
         //await client.AdminAuth("service key").DeleteUser("user id");
+
+        return client;
     }
-    static void InitializeClient()
+    static void InitializeClient(Supabase.Client client)
     {
         builder.Services.AddSingleton<AccountService>();
         builder.Services.AddControllers();
@@ -50,17 +52,59 @@ internal class Program
             });
         });
 
-        builder.Services
-            .AddAuthentication("Cookies")
-            .AddCookie("Cookies", options =>
-            {
-                options.Cookie.Name = "access_token";
-                options.Cookie.HttpOnly = true;
-                options.Cookie.SameSite = SameSiteMode.None;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            });
+        //builder.Services
+        //    .AddAuthentication("Cookies")
+        //    .AddCookie("Cookies", options =>
+        //    {
+        //        options.Cookie.Name = "access_token";
+        //        options.Cookie.HttpOnly = true;
+        //        options.Cookie.SameSite = SameSiteMode.None;
+        //        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        //    });
 
-        builder.Services.AddAuthorization();
+        IdentityModelEventSource.ShowPII = true;
+
+        builder.Services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidIssuer = builder.Configuration["Supabase:Url"],
+                    ValidateAudience = false,
+                    ValidAudience = "authenticated",
+                    ValidateLifetime = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(builder.Configuration["Supabase:JwtSecret"]!)
+                    ),
+
+                    ClockSkew = TimeSpan.FromSeconds(30)
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (context.Request.Cookies.TryGetValue("access_token", out var token))
+                        {
+                            context.Token = token;
+                            Console.WriteLine("Token odebrany: " + token);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Brak tokena w cookie!");
+                        }
+                        return Task.CompletedTask;
+                    },
+                    OnAuthenticationFailed = context =>
+                    {
+                        Console.WriteLine("JWT walidacja nie przesz³a: " + context.Exception.Message);
+                        return Task.CompletedTask;
+                    }
+                };
+            });
 
         builder.Services.AddAuthorization();
 
