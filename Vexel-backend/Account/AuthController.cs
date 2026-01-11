@@ -1,18 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Vexel.tables;
-using static Vexel.AccountService;
+using static Vexel.Account.AccountService;
 
-namespace Vexel
+namespace Vexel.Account
 {
     [ApiController]
     [Route("/auth")]
@@ -57,32 +49,11 @@ namespace Vexel
                 return new { error = "Błędne dane loginu" };
             }
 
-            //return HandleAuthResult(
-            //    await _accountService.SignIn(
-            //        new AccountDto { Email = request.Email, Password = request.Password }
-            //    )
-            //);
-
-            var result = await _accountService.SignIn(
-                new AccountDto { Email = request.Email, Password = request.Password }
+            return HandleAuthResult(
+                await _accountService.SignIn(
+                    new AccountDto { Email = request.Email, Password = request.Password }
+                )
             );
-
-            if (!result.Success)
-                return new { error = result.Error };
-
-            Response.Cookies.Append(
-                "access_token",
-                result.Token!,
-                new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = false,
-                    SameSite = SameSiteMode.Lax,
-                    Expires = DateTimeOffset.UtcNow.AddDays(1)
-                }
-            );
-
-            return new { success = true };
         }
         private bool CheckForEmptyValues(string email, string password)
         {

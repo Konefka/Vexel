@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Vexel;
+using Vexel.Account;
 internal class Program
 {
     static WebApplicationBuilder builder = null!;
@@ -52,17 +51,7 @@ internal class Program
             });
         });
 
-        //builder.Services
-        //    .AddAuthentication("Cookies")
-        //    .AddCookie("Cookies", options =>
-        //    {
-        //        options.Cookie.Name = "access_token";
-        //        options.Cookie.HttpOnly = true;
-        //        options.Cookie.SameSite = SameSiteMode.None;
-        //        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        //    });
-
-        IdentityModelEventSource.ShowPII = true;
+        //IdentityModelEventSource.ShowPII = true;
 
         builder.Services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -70,11 +59,11 @@ internal class Program
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = false,
-                    ValidIssuer = builder.Configuration["Supabase:Url"],
-                    ValidateAudience = false,
+                    ValidateIssuer = true,
+                    ValidIssuer = builder.Configuration["Supabase:Url"] + "/auth/v1",
+                    ValidateAudience = true,
                     ValidAudience = "authenticated",
-                    ValidateLifetime = false,
+                    ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(builder.Configuration["Supabase:JwtSecret"]!)
@@ -88,14 +77,8 @@ internal class Program
                     OnMessageReceived = context =>
                     {
                         if (context.Request.Cookies.TryGetValue("access_token", out var token))
-                        {
                             context.Token = token;
-                            Console.WriteLine("Token odebrany: " + token);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Brak tokena w cookie!");
-                        }
+
                         return Task.CompletedTask;
                     },
                     OnAuthenticationFailed = context =>

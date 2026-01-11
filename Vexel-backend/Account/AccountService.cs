@@ -1,8 +1,7 @@
 ﻿using Supabase.Gotrue;
-using Supabase.Postgrest.Responses;
 using Vexel.tables;
 
-namespace Vexel
+namespace Vexel.Account
 {
     public class AccountService
     {
@@ -23,7 +22,7 @@ namespace Vexel
 
                 await _client.Auth.SetSession(signUpResponse!.AccessToken!, signUpResponse.RefreshToken!);
 
-                await _client.From<Account>().Upsert(new Account { Id = Guid.Parse(_client.Auth.CurrentUser!.Id!)});
+                await _client.From<tables.Account>().Upsert(new tables.Account { Id = Guid.Parse(_client.Auth.CurrentUser!.Id!)});
 
                 await UpdateLastSeenAt(Guid.Parse(signUpResponse.User!.Id!));
 
@@ -48,8 +47,6 @@ namespace Vexel
                 await _client.Auth.SetSession(signInResponse!.AccessToken!, signInResponse.RefreshToken!);
 
                 await UpdateLastSeenAt(Guid.Parse(signInResponse.User!.Id!));
-
-                Console.WriteLine("aaaaaaaaaaaaaa: " + _client.Auth.CurrentSession!.AccessToken);
 
                 return new AuthResult(true, _client.Auth.CurrentSession!.AccessToken!, null);
             }
@@ -84,7 +81,7 @@ namespace Vexel
         async Task UpdateLastSeenAt(Guid userId)
         {
             await _client
-                .From<Account>()
+                .From<tables.Account>()
                 .Where(x => x.Id == userId)
                 .Set(x => x.LastSeenAt, DateTimeOffset.UtcNow)
                 .Update();
