@@ -1,4 +1,5 @@
 ﻿using Supabase.Gotrue;
+using Supabase.Gotrue.Interfaces;
 using Vexel.tables;
 
 namespace Vexel.Account
@@ -20,11 +21,11 @@ namespace Vexel.Account
             {
                 Session? signUpResponse = await _client.Auth.SignUp(dto.Email, dto.Password);
 
-                await _client.Auth.SetSession(signUpResponse!.AccessToken!, signUpResponse.RefreshToken!);
+                await _client.Auth.SetSession(signUpResponse!.AccessToken!, signUpResponse.AccessToken!);
 
-                await _client.From<tables.Account>().Upsert(new tables.Account { Id = Guid.Parse(_client.Auth.CurrentUser!.Id!)});
+                await _client.From<tables.Account>().Upsert(new tables.Account { Id = Guid.Parse(_client.Auth.CurrentSession!.User!.Id!)});
 
-                await UpdateLastSeenAt(Guid.Parse(signUpResponse.User!.Id!));
+                await UpdateLastSeenAt(Guid.Parse(signUpResponse!.User!.Id!));
 
                 return new AuthResult(true, _client.Auth.CurrentSession!.AccessToken!, null);
             }
@@ -44,9 +45,7 @@ namespace Vexel.Account
             {
                 Session? signInResponse = await _client.Auth.SignInWithPassword(dto.Email, dto.Password);
 
-                await _client.Auth.SetSession(signInResponse!.AccessToken!, signInResponse.RefreshToken!);
-
-                await UpdateLastSeenAt(Guid.Parse(signInResponse.User!.Id!));
+                await UpdateLastSeenAt(Guid.Parse(signInResponse!.User!.Id!));
 
                 return new AuthResult(true, _client.Auth.CurrentSession!.AccessToken!, null);
             }
@@ -60,21 +59,21 @@ namespace Vexel.Account
             }
         }
 
-        public string? SignOut()
+        public AuthResult SignOut()
         {
             try
             {
                 _client.Auth.SignOut();
 
-                return null;
+                return new AuthResult(false, null, null);
             }
             catch (Supabase.Gotrue.Exceptions.GotrueException ex)
             {
-                return CheckTypeOfAuthException(ex);
+                return new AuthResult(false, null, CheckTypeOfAuthException(ex));
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                return new AuthResult(false, null, ex.Message);
             }
         }
 

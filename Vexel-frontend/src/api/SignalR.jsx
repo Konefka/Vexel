@@ -51,7 +51,7 @@ export async function register(email, password) {
   }
 }
 
-export async function login_old(email, password) {
+export async function login(email, password) {
   await startConnection();
   const result = await connection.invoke("Login", email, password);
   if (result.error) {

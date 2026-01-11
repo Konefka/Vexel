@@ -1,6 +1,6 @@
 import { useState } from "react";
 // import { login } from "/src/api/SignalR.jsx";
-import { login, test } from "/src/api/Auth.jsx";
+import { login } from "/src/api/Auth.jsx";
 
 import styles from "./auth.module.scss";
 
@@ -15,7 +15,6 @@ export default function Login(functions) {
       <input name="email" type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} autoComplete="email"/>
       <input name="password" type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} autoComplete="off"/>
       <input type="button" className="cursor-pointer" onClick={async () => await login(email, password)} value="Login"/>
-      <input type="button" className="cursor-pointer" onClick={() => test(email, password)} value="test"/>
       <hr/>
       <p>If you don't have an account, please <span className="linked-text" onClick={functions.register}>register</span>.</p>
     </div>

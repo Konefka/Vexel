@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import { getToken, setErrorHandler, logout } from "./api/SignalR.jsx";
+// import { getToken, setErrorHandler, logout } from "./api/SignalR.jsx";
+import { setErrorHandler, checkAuth, logout } from "./api/Auth.jsx";
 import { PrivateRoute, PublicRoute } from "./Guard.jsx";
 import Register from "/src/features/auth/Register.jsx";
 import Login from "/src/features/auth/Login.jsx";
@@ -27,6 +28,22 @@ export default function App () {
   // Set usable navigation buttons
   const navigate = useNavigate();
 
+  //test
+
+  const [isLogged, setIsLogged] = useState(false);
+
+  useEffect(() => {
+      checkAuth().then(logged => {
+        setIsLogged(logged);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (isLogged) {
+      navigate("/message-dashboard");
+    }
+  }, [isLogged]);
+
   return (
     <>
       <Modal active={!!error} message={error} onClose={() => setError(null)} />
@@ -34,7 +51,7 @@ export default function App () {
         <Route path="/" element={<Navigate to="/home"/>}/>
         <Route path="/home"
           element={
-            <PublicRoute isLoggedIn={getToken()}>
+            <PublicRoute isLoggedIn={isLogged}>
               <Header nav={["Application", "About", "FAQ"]} buttonText="Login" onButtonClick={() => setAuthOpen(true)}/>
               <Banner
                 bigText={"All your private messages\nIn one place"}
@@ -52,7 +69,7 @@ export default function App () {
         />
         <Route path="/message-dashboard"
           element={
-            <PrivateRoute isLoggedIn={getToken()}>
+            <PrivateRoute isLoggedIn={isLogged}>
               <Header nav={["Messages", "Profile"]} buttonText="Logout" onButtonClick={() => logout()}/>
               <Box/>
             </PrivateRoute>

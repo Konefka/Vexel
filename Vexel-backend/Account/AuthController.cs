@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Vexel.tables;
 using static Vexel.Account.AccountService;
 
@@ -18,12 +19,10 @@ namespace Vexel.Account
         }
 
         [Authorize]
-        [HttpPost("test")]
-        public object Test([FromBody] LoginRequest request)
+        [HttpPost("status")]
+        public object CheckStatus()
         {
-            Console.WriteLine("UDAŁO SIĘ! " + request.Email + request.Password);
-
-            return new { success = "UDAŁO SIĘ!" + request.Email + request.Password };
+            return new { success = true };
         }
 
         [HttpPost("register")]
@@ -55,6 +54,16 @@ namespace Vexel.Account
                 )
             );
         }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public object Logout()
+        {
+            return HandleAuthResult(
+                _accountService.SignOut()
+            );
+        }
+
         private bool CheckForEmptyValues(string email, string password)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password) || email.Contains(' ') || password.Contains(' '))
@@ -65,11 +74,13 @@ namespace Vexel.Account
             return false;
         }
 
-
         private object HandleAuthResult(AuthResult tokenOrError)
         {
             if (!tokenOrError.Success)
+            {
+                Response.Cookies.Delete("access_token");
                 return new { error = tokenOrError.Error };
+            }
             else
                 return SetAuthCookie(tokenOrError.Token!);
         }
@@ -84,7 +95,7 @@ namespace Vexel.Account
                     HttpOnly = true,
                     Secure = true,
                     SameSite = SameSiteMode.None,
-                    Expires = DateTimeOffset.UtcNow.AddDays(1)
+                    Expires = DateTimeOffset.UtcNow.AddMinutes(30)
                 }
             );
 
