@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 // import { getToken, setErrorHandler, logout } from "./api/SignalR.jsx";
 import { setErrorHandler, logout } from "./api/Auth.jsx";
 import { MyRouteHandler } from "./Guard.jsx";
+import Messages from "/src/features/message-system-main.jsx";
 import Register from "/src/features/auth/Register.jsx";
 import Login from "/src/features/auth/Login.jsx";
 
@@ -41,7 +42,7 @@ export default function App () {
                 bigText={"All your private messages\nIn one place"}
                 message={"Secure, fast and reliable messages\nSo that you don't have to worry about anyone stealing your data"}
                 buttons={["Join us", "About us"]}
-                whatToDoOnClick = {[() => setAuthOpen(true)]}
+                whatToDoOnClick = {[() => setAuthOpen(true), () => navigate("about")]}
               />
               <Cover active={authOpen} onClose={() => setAuthOpen(false)}
                 show={
@@ -55,7 +56,7 @@ export default function App () {
           element={
             <MyRouteHandler isPrivate={true}>
               <Header nav={["Messages", "Profile"]} buttonText="Logout" onButtonClick={() => logout().then(() => navigate("/home"))}/>
-              <Box/>
+              <Messages/>
             </MyRouteHandler>
           }
         />

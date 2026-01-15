@@ -16,7 +16,7 @@ export async function checkAuth() {
     
   } catch (err) {
     if (errorHandler)
-      if (err.toString().includes("TypeError: NetworkError when attempting to fetch resource."))
+      if (err.toString().includes("TypeError: NetworkError when attempting to fetch resource.") || err.toString().includes("TypeError: Failed to fetch"))
         errorHandler("Backend server is not running right now. We apologize for the inconvenience");
       else if (err.toString().includes("SyntaxError")) {} else errorHandler(err.toString());
     return false;
