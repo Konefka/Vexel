@@ -44,24 +44,6 @@ export default function App () {
                 buttons={["Join us", "About us"]}
                 whatToDoOnClick = {[() => setAuthOpen(true), () => navigate("about")]}
               />
-              <Banner
-                bigText={"All your private messages\nIn one place"}
-                message={"Secure, fast and reliable messages\nSo that you don't have to worry about anyone stealing your data"}
-                buttons={["Join us", "About us"]}
-                whatToDoOnClick = {[() => setAuthOpen(true), () => navigate("about")]}
-              />
-              <Banner
-                bigText={"All your private messages\nIn one place"}
-                message={"Secure, fast and reliable messages\nSo that you don't have to worry about anyone stealing your data"}
-                buttons={["Join us", "About us"]}
-                whatToDoOnClick = {[() => setAuthOpen(true), () => navigate("about")]}
-              />
-              <Banner
-                bigText={"All your private messages\nIn one place"}
-                message={"Secure, fast and reliable messages\nSo that you don't have to worry about anyone stealing your data"}
-                buttons={["Join us", "About us"]}
-                whatToDoOnClick = {[() => setAuthOpen(true), () => navigate("about")]}
-              />
               <Cover active={authOpen} onClose={() => setAuthOpen(false)} isModalOn={!!error}
                 show={
                   authCard === 0 ? <Login register={() => setAuthCard(1)} then={() => navigate("/message-dashboard")}/> : <Register login={() => setAuthCard(0)} then={() => navigate("/message-dashboard")}/>
