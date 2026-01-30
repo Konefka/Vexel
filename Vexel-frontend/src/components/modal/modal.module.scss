@@ -1,17 +1,22 @@
 .modal {
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
 
-    display: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    background-color: hsla(var(--brand-000), 0.25);
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity .1s ease;
+
+    background-color: hsla(var(--brand-000), .25);
 
     * {
         color: var(--bg);
+        cursor: auto;
     }
 
     img {
@@ -51,14 +56,15 @@
     }
 
     > div > p {
+        overflow-y: auto;
         display: block;
         height: 100%;
     }
     
     &.active {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        opacity: 1;
+        pointer-events: auto;
+        cursor: pointer;
     }
 }
 

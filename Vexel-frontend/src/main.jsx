@@ -6,14 +6,14 @@ import Snowfall from "react-snowfall";
 import App from "./App.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  // <StrictMode>
+  <>
     <Snowfall
       style={{
         pointerEvents: "none",
         backgroundColor: "transparent",
         position: "absolute",
-        top: 0,
-        left: 0,
+        inset: 0,
         width: "100%",
         height: "100%",
         zIndex: -1
@@ -26,5 +26,6 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <App/>
     </BrowserRouter>
-  </StrictMode>,
+  </>
+  // </StrictMode>,
 )

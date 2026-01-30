@@ -5,6 +5,7 @@
 
     background-color: var(--bg);
 
+    box-shadow: 0 0 50px -25px var(--bg);
     border-radius: var(--border-radius-l);
     margin: 1rem;
     padding: 2rem;
@@ -18,5 +19,9 @@
 
     > p {
         color: var(--secondary-fg);
+    }
+
+    > p:last-child {
+        text-align: center;
     }
 }

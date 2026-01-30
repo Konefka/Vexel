@@ -4,35 +4,33 @@ import PropTypes from "prop-types";
 import styles from "./cover.module.scss";
 import xSymbol from "/src/assets/svg/x-symbol-white.svg";
 
-export default function Cover ({ active = false, onClose, show }) {
+export default function Cover ({ active = false, onClose, show, isModalOn }) {
   const coverRef = useRef(null);
 
   useEffect(() => {
-    if (active) {
-      document.body.classList.add("no-scroll");
-    } else {
-      document.body.classList.remove("no-scroll");
-    }
-
-    return () => {
-      document.body.classList.remove("no-scroll");
-    };
-  }, [active]);
-
-  useEffect(() => {
     function handleClickOutside(e) {
-      if (coverRef.current && !coverRef.current.contains(e.target)) {
+      if (active && coverRef.current && !coverRef.current.contains(e.target)) {
         onClose();
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    if (active && !isModalOn) {
+      console.log("add");
+      document.addEventListener("mouseup", handleClickOutside);
+      console.log("add scroll")
+      document.documentElement.classList.add("no-scroll");
+    }
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      if (active && !isModalOn) {
+        console.log("del");
+        document.removeEventListener("mouseup", handleClickOutside);
+        console.log("del scroll")
+        document.documentElement.classList.remove("no-scroll");
+      }
     };
-  }, [onClose]);
-
+  }, [active, isModalOn]);
+  
   return (
     <section ref={coverRef} className={`${styles.cover} ${active ? styles.active : ""}`}>
       <img src={xSymbol} onClick={onClose} alt="return button" className="image cursor-pointer"/>

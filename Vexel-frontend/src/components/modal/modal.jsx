@@ -4,26 +4,32 @@ import PropTypes from "prop-types";
 import styles from "./modal.module.scss";
 import xSymbol from "/src/assets/svg/x-symbol-black.svg";
 
-export default function Modal ({active = false, onClose, message}) {
-  const coverRef = useRef(null);
+export default function Modal ({ active = false, onClose, message }) {
+  const modalRef = useRef(null);
 
   useEffect(() => {
     function handleClickOutside(e) {
-      if (coverRef.current && !coverRef.current.contains(e.target)) {
+      if (active && modalRef.current && !modalRef.current.contains(e.target)) {
         onClose();
       }
     }
     
-    document.addEventListener("mousedown", handleClickOutside);
+    if (active) {
+      document.addEventListener("mouseup", handleClickOutside);
+      document.documentElement.classList.add("no-scroll");
+    }
     
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      if (active) {
+        document.removeEventListener("mouseup", handleClickOutside);
+        document.documentElement.classList.remove("no-scroll");
+      }
     };
-  }, [onClose]);
+  }, [active]);
 
   return (
     <section className={`${styles.modal} ${active ? styles.active : ""}`}>
-      <div ref={coverRef}>
+      <div ref={modalRef}>
         <div>
           <h1>ERROR:</h1>
           <img src={xSymbol} onClick={onClose} alt="return button" className="image cursor-pointer"/>
