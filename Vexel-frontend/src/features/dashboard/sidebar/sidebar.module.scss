@@ -1,0 +1,113 @@
+.sidebar {
+    position: fixed;
+    height: 100%;
+    width: 250px;
+
+    display: flex;
+    flex-direction: column;
+    
+    background-color: var(--bg);
+    border-right: 2px solid var(--border);
+
+    * {
+        transition: all .125s ease;
+    }
+
+    .profile {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        align-content: center;
+        gap: 1rem;
+
+        margin: 1rem;
+        padding: .2rem .4rem;
+        border-radius: var(--border-radius-m);
+
+        img {
+            width: 1.6rem;
+            height: 1.6rem;
+            padding: .4rem;
+            background-color: var(--border);
+            border-radius: var(--border-radius-m);
+        }
+
+        > div {
+            display: flex;
+            flex-direction: column;
+            
+            overflow: hidden;
+
+            > * {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            > *:first-child {
+                margin-block: -.4rem;
+            }
+
+            > *:last-child {
+                color: var(--secondary-fg);
+            }
+        }
+
+        &:hover {
+            background-color: var(--border);
+
+            img {
+                background-color: var(--bg);
+            }
+        }
+    }
+
+    > nav {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-content: center;
+        height: 100%;
+
+        img {
+            width: 1.4rem;
+        }
+
+        > div {
+            display: flex;
+            flex-direction: column;
+
+            padding-block: .8rem;
+
+            border-top: 2px solid var(--border);
+
+            > * {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                align-content: center;
+                gap: .5rem;
+
+                padding: .5rem;
+                margin: .3rem .9rem;
+                border-radius: var(--border-radius-m);
+
+                height: 24px; // This blocks the height change but also ensures that the hover animation is good
+
+                &:hover {
+                    background-color: var(--border);
+
+                    img {
+                        width: 1.7rem;
+                    }
+                }
+
+                &:hover:active {
+                    img {
+                        width: 1.5rem;
+                    }
+                }
+            }
+        }
+    }
+}

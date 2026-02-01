@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 // import { getToken, setErrorHandler, logout } from "./api/SignalR.jsx";
 import { setErrorHandler, logout } from "./api/Auth.jsx";
 import { MyRouteHandler } from "./Guard.jsx";
-import Messages from "/src/features/message-system-main.jsx";
+import Sidebar from "/src/features/dashboard/sidebar/sidebar.jsx";
 import Register from "/src/features/auth/Register.jsx";
 import Login from "/src/features/auth/Login.jsx";
 
@@ -55,23 +55,23 @@ export default function App () {
         <Route path="/message-dashboard"
           element={
             <MyRouteHandler isPrivate={true}>
-              <Header nav={["Messages", "Profile"]} buttonText="Logout" onButtonClick={() => logout().then(() => navigate("/home"))}/>
-              <Messages/>
+              <Sidebar/>
             </MyRouteHandler>
           }
         />
         <Route path="*"
-        element={
-          <>
-            <Header buttonText="Return to home" onButtonClick={() => navigate("/home")}/>
-            <Banner
-              bigText={"Something went wrong\n404 not found"}
-              message="The page you were looking for doesn't exist"
-              buttons={["Return to home", "Try again"]}
-              whatToDoOnClick = {[() => navigate("/home"), () => window.location.reload()]}
-            />
-          </>
-        }/>
+          element={
+            <>
+              <Header buttonText="Return to home" onButtonClick={() => navigate("/home")}/>
+              <Banner
+                bigText={"Something went wrong\n404 not found"}
+                message="The page you were looking for doesn't exist"
+                buttons={["Return to home", "Try again"]}
+                whatToDoOnClick = {[() => navigate("/home"), () => window.location.reload()]}
+              />
+            </>
+          }
+        />
       </Routes>
     </>
   );

@@ -53,10 +53,7 @@ body {
 }
 
 img, .image {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  @extend .no-select;
   object-fit: cover;
   object-position: center;
 }
@@ -121,4 +118,11 @@ abbr:hover::after {
 
 .no-scroll {
   overflow: hidden;
+}
+
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
