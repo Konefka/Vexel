@@ -15,17 +15,13 @@ export default function Cover ({ active = false, onClose, show, isModalOn }) {
     }
 
     if (active && !isModalOn) {
-      console.log("add");
       document.addEventListener("mouseup", handleClickOutside);
-      console.log("add scroll")
       document.documentElement.classList.add("no-scroll");
     }
 
     return () => {
       if (active && !isModalOn) {
-        console.log("del");
         document.removeEventListener("mouseup", handleClickOutside);
-        console.log("del scroll")
         document.documentElement.classList.remove("no-scroll");
       }
     };

@@ -11,6 +11,8 @@ import Modal from "/src/components/modal/modal.jsx";
 import Cover from "/src/components/cover/cover.jsx";
 import Header from "/src/components/header/header.jsx";
 import Banner from "/src/components/banner/banner.jsx";
+
+import Spotify from "/src/components/spotify/spotify.jsx";
 import Box from "/src/components/test-box.jsx";
 
 
@@ -57,6 +59,17 @@ export default function App () {
             <MyRouteHandler isPrivate={true}>
               <Sidebar/>
             </MyRouteHandler>
+          }
+        />
+        <Route path="/Who decided that?"
+          element={
+            <Banner
+              bigText={"My attacks have no effect on you?\nWho decided that?"}
+              message={"Your darkness swallowed up my sun? Who decided that?"}
+              buttons={["Who decided that?", "Who decided that?"]}
+              whatToDoOnClick = {[() => navigate("/home"), () => navigate("/home")]}
+            ><Spotify link="https://open.spotify.com/embed/track/6XNUWMNQxPkOSPOyCpQSM3?utm_source=generator&theme=0"/>
+            </Banner>
           }
         />
         <Route path="*"

@@ -1,17 +1,19 @@
 import PropTypes from "prop-types";
 import styles from "./banner.module.scss";
 
-export default function Banner ({bigText, message, buttons = null, whatToDoOnClick}) {
+export default function Banner ({bigText, message, buttons = null, whatToDoOnClick, children}) {
 
   function showButtons() {
-    if (buttons == null) return;
-
     return (
-      <div className={styles.buttons}>
-        { buttons.map((button, index) => (
-            <button key={index} className="cursor-pointer" onClick={() => whatToDoOnClick[index]()}><h5>{button}</h5></button>
-        ))}
-      </div>
+      buttons != null ?
+      <>
+        {children}
+        <div className={styles.buttons}>
+          { buttons.map((button, index) => (
+              <button key={index} className="cursor-pointer" onClick={() => whatToDoOnClick[index]()}><h5>{button}</h5></button>
+          ))}
+        </div>
+      </> : children
     );
   }
 
