@@ -1,7 +1,8 @@
 .sidebar {
     position: fixed;
     height: 100%;
-    width: 250px;
+    width: fit-content;
+    // width: 250px;
 
     display: flex;
     flex-direction: column;
@@ -22,6 +23,7 @@
 
         margin: 1rem;
         padding: .2rem .4rem;
+        padding-right: .8rem;
         border-radius: var(--border-radius-m);
 
         img {
@@ -109,5 +111,18 @@
                 }
             }
         }
+    }
+
+    .grabTool {
+        position: absolute;
+        right: -1px;
+        width: 8px;
+        height: 100%;
+        transform: translateX(50%);
+        cursor: grab;
+    }
+
+    &:has(.grabTool:hover) {
+        border-right-color: var(--secondary-fg);
     }
 }

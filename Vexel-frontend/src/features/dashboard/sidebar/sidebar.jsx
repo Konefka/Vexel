@@ -30,6 +30,7 @@ export default function Sidebar() {
           <h4 className="cursor-pointer"><img src={settingsSymbol}/>settings</h4>
         </div>
       </nav>
+      <div className={styles.grabTool}></div>
     </section>
   )
 }
