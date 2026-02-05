@@ -2,7 +2,8 @@
     position: fixed;
     height: 100%;
     width: fit-content;
-    // width: 250px;
+    min-width: calc(2rem + 1.6rem + .8rem + .5rem);
+    max-width: 300px;
 
     display: flex;
     flex-direction: column;
@@ -47,6 +48,7 @@
             }
 
             > *:first-child {
+                max-width: fit-content;
                 margin-block: -.4rem;
             }
 
@@ -124,5 +126,58 @@
 
     &:has(.grabTool:hover) {
         border-right-color: var(--secondary-fg);
+    }
+
+    &.thin {
+        max-width: calc(2rem + 1.6rem + .8rem + .5rem);
+        .profile {
+            padding: 0;
+            padding-right: .8rem;
+
+            img {
+                width: 2rem;
+                height: 2rem;
+            }
+
+            > div {
+                visibility: hidden;
+            }
+
+            &:hover {
+                background-color: var(--bg);
+            }
+        }
+
+        > nav {
+
+            img {
+                width: 1.6rem;
+            }
+
+            > div {
+
+                > * {
+
+                    height: 27.2px;
+                    width: min-content;
+
+                    &:hover {
+                        img {
+                            width: 1.9rem;
+                        }
+                    }
+
+                    &:hover:active {
+                        img {
+                            width: 1.7rem;
+                        }
+                    }
+                }
+
+                h4 {
+                    display: none;
+                }
+            }
+        }
     }
 }
