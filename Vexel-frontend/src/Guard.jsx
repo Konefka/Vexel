@@ -26,7 +26,7 @@ export function MyRouteHandler({isPrivate, redirectTo, children}) {
   if (isLogged === isPrivate) {
     return <>{children}</>;
   } else {
-    if (isLogged) return <Navigate to={redirectTo || "/message-dashboard"} replace />;
+    if (isLogged) return <Navigate to={redirectTo || "/dashboard/home"} replace />;
     else return <Navigate to={redirectTo || "/home"} replace />;
   }
 

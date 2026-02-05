@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, Outlet, Navigate, useNavigate } from "react-router-dom";
 // import { getToken, setErrorHandler, logout } from "./api/SignalR.jsx";
 import { setErrorHandler, logout } from "./api/Auth.jsx";
 import { MyRouteHandler } from "./Guard.jsx";
-import Sidebar from "/src/features/dashboard/sidebar/sidebar.jsx";
 import Register from "/src/features/auth/Register.jsx";
 import Login from "/src/features/auth/Login.jsx";
 
@@ -11,6 +10,9 @@ import Modal from "/src/components/modal/modal.jsx";
 import Cover from "/src/components/cover/cover.jsx";
 import Header from "/src/components/header/header.jsx";
 import Banner from "/src/components/banner/banner.jsx";
+
+import Dashboard from "./features/dashboard/dashboard.jsx";
+import Sidebar from "/src/features/dashboard/sidebar/sidebar.jsx";
 
 import Spotify from "/src/components/spotify/spotify.jsx";
 import Box from "/src/components/test-box.jsx";
@@ -54,13 +56,24 @@ export default function App () {
             </MyRouteHandler>
           }
         />
-        <Route path="/message-dashboard"
+        <Route path="/dashboard"
           element={
             <MyRouteHandler isPrivate={true}>
-              <Sidebar/>
+              <Dashboard>
+                <Sidebar/>
+                <Outlet/>
+              </Dashboard>
             </MyRouteHandler>
           }
-        />
+        >
+          <Route path="home" element={<h1>Home</h1>}/>
+          <Route path="friends" element={<h1>Friends</h1>}/>
+          <Route path="messages" element={<h1>Messages</h1>}/>
+          <Route path="community" element={<h1>Community</h1>}/>
+          <Route path="notifications" element={<h1>Notifications</h1>}/>
+          <Route path="settings" element={<h1>Settings</h1>}/>
+        </Route>
+        
         <Route path="/Who_decided_that?"
           element={
             <Banner

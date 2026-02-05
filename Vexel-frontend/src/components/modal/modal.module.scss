@@ -1,4 +1,4 @@
-.modal {
+.modalWrapper {
     position: fixed;
     z-index: 9999;
     inset: 0;
@@ -19,52 +19,60 @@
         cursor: auto;
     }
 
-    img {
-        height: 1.5rem;
-        transition: transform .5s ease;
-    }
-
-    img:hover {
-        transform: rotateZ(-180deg) scale(1.1);
-    }
-
-    div, p {
-        width: 25vw;
-
+    .modal {
         display: flex;
+        flex-direction: column;
         gap: .5rem;
+
+        height: 30vh;
+        width: 25vw;
 
         padding: 1rem;
         border-radius: 1rem;
         background-color: var(--fg);
         border: 1px solid var(--secondary-fg);
-        box-shadow: 0 0 100px -30px var(--secondary-fg);
+        box-shadow: 0 0 100px -10px var(--secondary-fg);
         scrollbar-color: var(--bg) var(--fg);
-        overflow-wrap: break-word;
-    }
-
-    > div {
-        height: 30vh;
-        flex-direction: column;
         overflow-x: visible;
-    }
 
-    > div > div {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
+        > * {
+            display: flex;
+            padding: 1rem;
+            width: 25vw;
+            border-radius: 1rem;
+            border: 1px solid var(--secondary-fg);
+            background-color: var(--fg);
+            box-shadow: 0 0 100px 0 var(--secondary-fg);
+        }
 
-    > div > p {
-        overflow-y: auto;
-        display: block;
-        height: 100%;
+        > div {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+            img {
+                height: 1.5rem;
+                transition: transform .5s ease;
+            }
+
+            img:hover {
+                transform: rotateZ(-180deg) scale(1.1);
+            }
+        }
+
+        > p {
+            overflow-wrap: break-word;
+            overflow-y: auto;
+            display: block;
+            height: 100%;
+            scrollbar-color: var(--bg) var(--fg);
+        }
     }
     
     &.active {
         opacity: 1;
         pointer-events: auto;
         cursor: pointer;
+        backdrop-filter: blur(1px);
     }
 }
-

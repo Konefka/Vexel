@@ -28,8 +28,8 @@ export default function Modal ({ active = false, onClose, message }) {
   }, [active]);
 
   return (
-    <section className={`${styles.modal} ${active ? styles.active : ""}`}>
-      <div ref={modalRef}>
+    <section className={`${styles.modalWrapper} ${active ? styles.active : ""}`}>
+      <div ref={modalRef} className={styles.modal}>
         <div>
           <h1>ERROR:</h1>
           <img src={xSymbol} onClick={onClose} alt="return button" className="image cursor-pointer"/>

@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./sidebar.module.scss";
 
 import hashSymbol from "/src/assets/svg/hash.svg";
@@ -66,6 +67,8 @@ export default function Sidebar() {
     document.removeEventListener("mouseup", stopDrag);
   };
 
+  const navigate = useNavigate();
+
   return (
     <section ref={sidebarRef} className={`${styles.sidebar} no-select`}>
       <div className={`${styles.profile} cursor-pointer`}>
@@ -77,29 +80,29 @@ export default function Sidebar() {
       </div>
       <nav>
         <div>
-          <div>
+          <div onClick={() => navigate("home")}>
             <img src={homeSymbol}/>
             <h4>home</h4>
           </div>
-          <div>
+          <div onClick={() => navigate("friends")}>
             <img src={friendsSymbol}/>
             <h4>friends</h4>
           </div>
-          <div>
+          <div onClick={() => navigate("messages")}>
             <img src={messagesSymbol}/>
             <h4>messages</h4>
           </div>
-          <div>
+          <div onClick={() => navigate("community")}>
             <img src={communitySymbol}/>
             <h4>community</h4>
           </div>
         </div>
         <div>
-          <div>
+          <div onClick={() => navigate("notifications")}>
             <img src={bellSymbol}/>
             <h4>notifications</h4>
           </div>
-          <div>
+          <div onClick={() => navigate("settings")}>
             <img src={settingsSymbol}/>
             <h4>settings</h4>
           </div>
