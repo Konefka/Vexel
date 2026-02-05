@@ -15,9 +15,11 @@ export default function Sidebar() {
   const grabRef = useRef(null);
   const nameRef = useRef(null);
   const isDragging = useRef(false);
+  let nickNameWidth;
 
   useEffect (() => {
-    const width = (parseInt(localStorage.getItem("sidebarWidth"), 10) + "px") || "fit-content";
+    const width = (parseInt(localStorage.getItem("sidebarWidth"), 10) + "px") ||  "fit-content";
+    nickNameWidth = nameRef.current.getBoundingClientRect().right;
     sidebarRef.current.style.width = width;
     if (nameRef.current.scrollWidth > nameRef.current.clientWidth) sidebarRef.current.classList.add(styles.thin);
 
@@ -27,21 +29,12 @@ export default function Sidebar() {
     };
   }, []);
 
+
   const moveHandler = (e) => {
-
-    // const availableWidth = e.clientX - nameRef.current.getBoundingClientRect().left;
-
-    // if (nameRef.current.scrollWidth >= availableWidth) {
-    //   sidebarRef.current.classList.add(styles.thin);
-    // } else {
-    //   sidebarRef.current.classList.remove(styles.thin);
-    // }
-
-    if (e.clientX <= 206) {
+    //                |margin|
+    if (nickNameWidth + 22.4 >= e.clientX || e.clientX < 168.4) // The second one is for when the nickname is shorter than the buttons (it sets a hard limit)
       sidebarRef.current.classList.add(styles.thin);
-    } else {
-      sidebarRef.current.classList.remove(styles.thin);
-    }
+    else sidebarRef.current.classList.remove(styles.thin);
 
     if (!isDragging.current) return;
     
@@ -100,7 +93,7 @@ export default function Sidebar() {
         <div>
           <div onClick={() => navigate("notifications")}>
             <img src={bellSymbol}/>
-            <h4>notifications</h4>
+            <h4>notifs</h4>
           </div>
           <div onClick={() => navigate("settings")}>
             <img src={settingsSymbol}/>

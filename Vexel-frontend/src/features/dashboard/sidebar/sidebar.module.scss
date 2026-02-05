@@ -26,7 +26,6 @@
 
         margin: 1rem;
         padding: .2rem .4rem;
-        padding-right: .8rem;
         border-radius: var(--border-radius-m);
 
         img {
@@ -133,9 +132,7 @@
     &.thin {
         max-width: calc(2rem + 1.6rem + .8rem + .5rem);
         .profile {
-            gap: 0;
             padding: 0;
-            padding-right: .8rem;
 
             img {
                 width: 2rem;

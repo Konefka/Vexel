@@ -12,7 +12,7 @@
 
     transition: opacity .1s ease;
 
-    background-color: hsla(var(--brand-000), .25);
+    background-color: hsla(var(--brand-000-raw), .25);
 
     * {
         color: var(--bg);
@@ -20,6 +20,7 @@
     }
 
     .modal {
+        position: absolute;
         display: flex;
         flex-direction: column;
         gap: .5rem;
@@ -35,14 +36,24 @@
         scrollbar-color: var(--bg) var(--fg);
         overflow-x: visible;
 
+        &::before{
+            content: '';
+            position: absolute;
+            inset: 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 0 150px -10px var(--secondary-fg);
+            background-color: hsla(var(--secondary-fg-raw), .36);
+            pointer-events: none;
+        }
+
         > * {
+            position: relative;
             display: flex;
             padding: 1rem;
             width: 25vw;
             border-radius: 1rem;
             border: 1px solid var(--secondary-fg);
             background-color: var(--fg);
-            box-shadow: 0 0 100px 0 var(--secondary-fg);
         }
 
         > div {
@@ -53,16 +64,15 @@
             img {
                 height: 1.5rem;
                 transition: transform .5s ease;
-            }
 
-            img:hover {
-                transform: rotateZ(-180deg) scale(1.1);
+                &:hover {
+                    transform: rotateZ(-180deg) scale(1.1);
+                }
             }
         }
 
         > p {
             overflow-wrap: break-word;
-            overflow-y: auto;
             display: block;
             height: 100%;
             scrollbar-color: var(--bg) var(--fg);
@@ -73,6 +83,6 @@
         opacity: 1;
         pointer-events: auto;
         cursor: pointer;
-        backdrop-filter: blur(1px);
+        backdrop-filter: blur(1.5px);
     }
 }
