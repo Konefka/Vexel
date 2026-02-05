@@ -82,7 +82,6 @@
             flex-direction: column;
 
             padding-block: .8rem;
-
             border-top: 2px solid var(--border);
 
             > * {
@@ -95,6 +94,7 @@
                 padding: .5rem;
                 margin: .3rem .9rem;
                 border-radius: var(--border-radius-m);
+                cursor:pointer;
 
                 height: 24px; // This blocks the height change but also ensures that the hover animation is good
 
@@ -131,6 +131,7 @@
     &.thin {
         max-width: calc(2rem + 1.6rem + .8rem + .5rem);
         .profile {
+            gap: 0;
             padding: 0;
             padding-right: .8rem;
 
@@ -140,7 +141,7 @@
             }
 
             > div {
-                visibility: hidden;
+                opacity: 0;
             }
 
             &:hover {
@@ -149,15 +150,14 @@
         }
 
         > nav {
-
             img {
                 width: 1.6rem;
             }
 
             > div {
+                align-items: center;
 
                 > * {
-
                     height: 27.2px;
                     width: min-content;
 

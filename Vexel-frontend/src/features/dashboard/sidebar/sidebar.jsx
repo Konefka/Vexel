@@ -28,9 +28,15 @@ export default function Sidebar() {
 
   const moveHandler = (e) => {
 
-    const availableWidth = e.clientX - nameRef.current.getBoundingClientRect().left;
+    // const availableWidth = e.clientX - nameRef.current.getBoundingClientRect().left;
 
-    if (nameRef.current.scrollWidth >= availableWidth) {
+    // if (nameRef.current.scrollWidth >= availableWidth) {
+    //   sidebarRef.current.classList.add(styles.thin);
+    // } else {
+    //   sidebarRef.current.classList.remove(styles.thin);
+    // }
+
+    if (e.clientX <= 206) {
       sidebarRef.current.classList.add(styles.thin);
     } else {
       sidebarRef.current.classList.remove(styles.thin);
@@ -44,6 +50,7 @@ export default function Sidebar() {
 
   const startDrag = () => {
     isDragging.current = true;
+    document.documentElement.style.cursor = "grabbing";
     grabRef.current.style.cursor = "grabbing";
 
     document.addEventListener("mousemove", moveHandler);
@@ -52,6 +59,7 @@ export default function Sidebar() {
 
   const stopDrag = () => {
     isDragging.current = false;
+    document.documentElement.style.cursor = "default";
     grabRef.current.style.cursor = "grab";
 
     document.removeEventListener("mousemove", moveHandler);
@@ -71,29 +79,29 @@ export default function Sidebar() {
         <div>
           <div>
             <img src={homeSymbol}/>
-            <h4 className="cursor-pointer">home</h4>
+            <h4>home</h4>
           </div>
           <div>
             <img src={friendsSymbol}/>
-            <h4 className="cursor-pointer">friends</h4>
+            <h4>friends</h4>
           </div>
           <div>
             <img src={messagesSymbol}/>
-            <h4 className="cursor-pointer">messages</h4>
+            <h4>messages</h4>
           </div>
           <div>
             <img src={communitySymbol}/>
-            <h4 className="cursor-pointer">community</h4>
+            <h4>community</h4>
           </div>
         </div>
         <div>
           <div>
             <img src={bellSymbol}/>
-            <h4 className="cursor-pointer">notifications</h4>
+            <h4>notifications</h4>
           </div>
           <div>
             <img src={settingsSymbol}/>
-            <h4 className="cursor-pointer">settings</h4>
+            <h4>settings</h4>
           </div>
         </div>
       </nav>

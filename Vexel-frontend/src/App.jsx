@@ -61,7 +61,7 @@ export default function App () {
             </MyRouteHandler>
           }
         />
-        <Route path="/Who decided that?"
+        <Route path="/Who_decided_that?"
           element={
             <Banner
               bigText={"My attacks have no effect on you?\nWho decided that?"}
