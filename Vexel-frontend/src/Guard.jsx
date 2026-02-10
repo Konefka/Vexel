@@ -7,17 +7,17 @@ import Loader from "/src/components/loader/loader.jsx";
 
 export function MyRouteHandler({isPrivate, redirectTo, children}) {
 
-  const [isLogged, setIsLogged] = useState(null); // The switch that turns on when you are logged in and off if you are not
+  const [isLogged, setIsLogged] = useState(true); // The switch that turns on when you are logged in and off if you are not
   const location = useLocation(); // Takes the current subwebsite location
 
   // If location changes then check if the user is still logged in
-  useEffect(() => {
-    let mounted = true;
-    checkAuth().then(logged => {
-      if (mounted) setIsLogged(logged);
-    });
-    return () => { mounted = false; };
-  }, [location.pathname]);
+  // useEffect(() => {
+  //   let mounted = true;
+  //   checkAuth().then(logged => {
+  //     if (mounted) setIsLogged(logged);
+  //   });
+  //   return () => { mounted = false; };
+  // }, [location.pathname]);
 
   if (isLogged == null) return <Loader/>;
 

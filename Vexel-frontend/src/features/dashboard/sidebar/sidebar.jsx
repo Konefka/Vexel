@@ -15,11 +15,12 @@ export default function Sidebar() {
   const grabRef = useRef(null);
   const nameRef = useRef(null);
   const isDragging = useRef(false);
-  let nickNameWidth;
+  const sidebarWidthToOpenNameRef = useRef(0);
+  const SIDEBAR_MIN_WIDTH = 168.4;
+
 
   useEffect (() => {
-    const width = (parseInt(localStorage.getItem("sidebarWidth"), 10) + "px") ||  "fit-content";
-    nickNameWidth = nameRef.current.getBoundingClientRect().right;
+    const width = parseInt(localStorage.getItem("sidebarWidth"), 10) + "px";
     sidebarRef.current.style.width = width;
     if (nameRef.current.scrollWidth > nameRef.current.clientWidth) sidebarRef.current.classList.add(styles.thin);
 
@@ -29,12 +30,16 @@ export default function Sidebar() {
     };
   }, []);
 
-
   const moveHandler = (e) => {
-    //                |margin|
-    if (nickNameWidth + 22.4 >= e.clientX || e.clientX < 168.4) // The second one is for when the nickname is shorter than the buttons (it sets a hard limit)
+    if (sidebarWidthToOpenNameRef.current === 0 && (nameRef.current.clientWidth < nameRef.current.scrollWidth || e.clientX < SIDEBAR_MIN_WIDTH)) {
+      sidebarWidthToOpenNameRef.current = sidebarRef.current.clientWidth;
       sidebarRef.current.classList.add(styles.thin);
-    else sidebarRef.current.classList.remove(styles.thin);
+      console.log("add");
+    } else if (sidebarWidthToOpenNameRef.current !== 0 && e.clientX >= sidebarWidthToOpenNameRef.current) {
+      sidebarWidthToOpenNameRef.current = 0;
+      sidebarRef.current.classList.remove(styles.thin);
+      console.log("del");
+    }
 
     if (!isDragging.current) return;
     
