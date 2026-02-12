@@ -13,6 +13,7 @@ import Banner from "/src/components/banner/banner.jsx";
 
 import Dashboard from "./features/dashboard/dashboard.jsx";
 import Sidebar from "/src/features/dashboard/sidebar/sidebar.jsx";
+import Messages from "/src/features/dashboard/messages/messages.jsx";
 
 import Spotify from "/src/components/spotify/spotify.jsx";
 import Box from "/src/components/test-box.jsx";
@@ -71,7 +72,7 @@ export default function App () {
           <Route index element={<Navigate to="home" replace/>}/>
           <Route path="home" element={<h1>Home</h1>}/>
           <Route path="friends" element={<h1>Friends</h1>}/>
-          <Route path="messages" element={<h1>Messages</h1>}/>
+          <Route path="messages" element={<Messages/>}/>
           <Route path="community" element={<h1>Community</h1>}/>
           <Route path="notifications" element={<h1>Notifications</h1>}/>
           <Route path="settings" element={<h1>Settings</h1>}/>

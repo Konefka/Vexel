@@ -1,9 +1,10 @@
 .sidebar {
-    position:relative;
+    position: relative;
     height: 100%;
     width: fit-content;
     min-width: calc(2rem + 1.6rem + .8rem + .5rem);
     max-width: 300px;
+    flex-shrink: 0;
 
     height: 100vh;
 
@@ -29,9 +30,6 @@
         border-radius: var(--border-radius-m);
 
         img {
-            width: 1.6rem;
-            height: 1.6rem;
-            padding: .4rem;
             background-color: var(--border);
             border-radius: var(--border-radius-m);
         }

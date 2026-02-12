@@ -71,13 +71,17 @@ export default function Sidebar() {
     if (sidebarRef.current.classList.contains(styles.thin)) {
       sidebarRef.current.classList.remove(styles.thin);
       sidebarRef.current.style.width = "fit-content";
-    } else sidebarRef.current.classList.add(styles.thin);
+      sidebarWidthToOpenNameRef.current = 0;
+    } else {
+      sidebarWidthToOpenNameRef.current = sidebarRef.current.clientWidth;
+      sidebarRef.current.classList.add(styles.thin);
+    }
   }
 
   const navigate = useNavigate();
 
   return (
-    <section ref={sidebarRef} className={`${styles.sidebar} no-select`}>
+    <aside ref={sidebarRef} className={`${styles.sidebar} no-select`}>
       <div className={`${styles.profile} cursor-pointer`}>
         <img src={hashSymbol} alt="logo"/>
         <div>
@@ -116,6 +120,6 @@ export default function Sidebar() {
         </div>
       </nav>
       <div ref={grabRef} className={styles.grabTool} onMouseDown={startDrag} onDoubleClick={dblClickHandler}></div>
-    </section>
+    </aside>
   )
 }
