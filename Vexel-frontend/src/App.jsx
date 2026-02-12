@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route, Outlet, Navigate, useNavigate } from "react-router-dom";
 // import { getToken, setErrorHandler, logout } from "./api/SignalR.jsx";
 import { setErrorHandler, logout } from "./api/Auth.jsx";
@@ -37,7 +37,7 @@ export default function App () {
     <>
       <Modal active={!!error} message={error} onClose={() => setError(null)} />
       <Routes>
-        <Route path="/" element={<Navigate to="/home"/>}/>
+        <Route path="/" element={<Navigate to="/home" replace/>}/>
         <Route path="/home"
           element={
             <MyRouteHandler isPrivate={false}>
@@ -46,11 +46,13 @@ export default function App () {
                 bigText={"All your private messages\nIn one place"}
                 message={"Secure, fast and reliable messages\nSo that you don't have to worry about anyone stealing your data"}
                 buttons={["Join us", "About us"]}
-                whatToDoOnClick = {[() => setAuthOpen(true), () => navigate("about")]}
+                whatToDoOnClick = {[() => setAuthOpen(true), () => navigate("/about")]}
               />
               <Cover active={authOpen} onClose={() => setAuthOpen(false)} isModalOn={!!error}
                 show={
-                  authCard === 0 ? <Login register={() => setAuthCard(1)} then={() => navigate("/message-dashboard")}/> : <Register login={() => setAuthCard(0)} then={() => navigate("/message-dashboard")}/>
+                  authCard === 0
+                  ? <Login register={() => setAuthCard(1)} then={() => navigate("/dashboard", { replace: true })}/>
+                  : <Register login={() => setAuthCard(0)} then={() => navigate("/dashboard", { replace: true })}/>
                 }
               />
             </MyRouteHandler>
@@ -66,6 +68,7 @@ export default function App () {
             </MyRouteHandler>
           }
         >
+          <Route index element={<Navigate to="home" replace/>}/>
           <Route path="home" element={<h1>Home</h1>}/>
           <Route path="friends" element={<h1>Friends</h1>}/>
           <Route path="messages" element={<h1>Messages</h1>}/>

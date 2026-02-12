@@ -12,7 +12,7 @@ export default function Header ({nav = [], buttonText, onButtonClick}) {
         <a href="/home" className={styles.logo}><h2 className="cursor-pointer">Vexel</h2></a>
         <div>
           {nav.map((navHeader, index) => (
-            <button onClick={() => navigate(navHeader.toLowerCase())} className="cursor-pointer" key={index}>{navHeader}</button>
+            <button onClick={() => navigate('/' + navHeader.toLowerCase())} className="cursor-pointer" key={index}>{navHeader}</button>
           ))}
         </div>
       </nav>
