@@ -42,12 +42,6 @@
             
             overflow: hidden;
 
-            > * {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
             > *:first-child {
                 max-width: fit-content;
                 margin-block: -.4rem;
@@ -55,6 +49,9 @@
 
             > *:last-child {
                 color: var(--secondary-fg);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
 

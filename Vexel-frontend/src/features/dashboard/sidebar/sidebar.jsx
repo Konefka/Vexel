@@ -24,7 +24,9 @@ export default function Sidebar() {
     sidebarRef.current.style.width = width;
     if (nameRef.current.scrollWidth > nameRef.current.clientWidth) sidebarRef.current.classList.add(styles.thin);
 
+    window.addEventListener("resize", moveHandler);
     return () => {
+      window.removeEventListener("resize", moveHandler);
       document.removeEventListener("mousemove", moveHandler);
       document.removeEventListener("mouseup", stopDrag);
     };
@@ -64,6 +66,13 @@ export default function Sidebar() {
     document.removeEventListener("mousemove", moveHandler);
     document.removeEventListener("mouseup", stopDrag);
   };
+
+  const dblClickHandler = () => {
+    if (sidebarRef.current.classList.contains(styles.thin)) {
+      sidebarRef.current.classList.remove(styles.thin);
+      sidebarRef.current.style.width = "fit-content";
+    } else sidebarRef.current.classList.add(styles.thin);
+  }
 
   const navigate = useNavigate();
 
@@ -106,7 +115,7 @@ export default function Sidebar() {
           </div>
         </div>
       </nav>
-      <div ref={grabRef} className={styles.grabTool} onMouseDown={startDrag}></div>
+      <div ref={grabRef} className={styles.grabTool} onMouseDown={startDrag} onDoubleClick={dblClickHandler}></div>
     </section>
   )
 }
