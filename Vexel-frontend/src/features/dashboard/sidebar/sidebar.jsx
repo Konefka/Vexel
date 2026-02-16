@@ -20,6 +20,7 @@ export default function Sidebar() {
 
 
   useEffect (() => {
+    sidebarWidthToOpenNameRef.current = sidebarRef.current.clientWidth;
     const width = parseInt(localStorage.getItem("sidebarWidth"), 10) + "px";
     sidebarRef.current.style.width = width;
     if (nameRef.current.scrollWidth > nameRef.current.clientWidth) sidebarRef.current.classList.add(styles.thin);
@@ -36,11 +37,9 @@ export default function Sidebar() {
     if (sidebarWidthToOpenNameRef.current === 0 && (nameRef.current.clientWidth < nameRef.current.scrollWidth || e.clientX < SIDEBAR_MIN_WIDTH)) {
       sidebarWidthToOpenNameRef.current = sidebarRef.current.clientWidth;
       sidebarRef.current.classList.add(styles.thin);
-      console.log("add");
-    } else if (sidebarWidthToOpenNameRef.current !== 0 && e.clientX >= sidebarWidthToOpenNameRef.current) {
+    } else if (sidebarWidthToOpenNameRef.current !== 0 && e.clientX > sidebarWidthToOpenNameRef.current) {
       sidebarWidthToOpenNameRef.current = 0;
       sidebarRef.current.classList.remove(styles.thin);
-      console.log("del");
     }
 
     if (!isDragging.current) return;
@@ -73,6 +72,7 @@ export default function Sidebar() {
       sidebarRef.current.style.width = "fit-content";
       sidebarWidthToOpenNameRef.current = 0;
     } else {
+      sidebarRef.current.style.width = "fit-content";
       sidebarWidthToOpenNameRef.current = sidebarRef.current.clientWidth;
       sidebarRef.current.classList.add(styles.thin);
     }

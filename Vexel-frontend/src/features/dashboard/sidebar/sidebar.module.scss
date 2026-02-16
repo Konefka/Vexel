@@ -1,15 +1,12 @@
 .sidebar {
     position: relative;
-    height: 100%;
     width: fit-content;
-    min-width: calc(2rem + 1.6rem + .8rem + .5rem);
     max-width: 300px;
-    flex-shrink: 0;
-
-    height: 100vh;
 
     display: flex;
     flex-direction: column;
+    align-content: center;
+    flex-shrink: 0;
     
     background-color: var(--bg);
     border-right: 2px solid var(--border);
@@ -25,11 +22,13 @@
         align-content: center;
         gap: 1rem;
 
-        margin: 1rem;
+        margin: 1rem .8rem;
         padding: .2rem .4rem;
         border-radius: var(--border-radius-m);
 
         img {
+            width: 2.7rem;
+            height: auto;
             background-color: var(--border);
             border-radius: var(--border-radius-m);
         }
@@ -37,12 +36,11 @@
         > div {
             display: flex;
             flex-direction: column;
-            
             overflow: hidden;
 
             > *:first-child {
                 max-width: fit-content;
-                margin-block: -.4rem;
+                margin-block: -.3rem;
             }
 
             > *:last-child {
@@ -66,16 +64,19 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        align-content: center;
         height: 100%;
+        width: 100%;
 
         img {
-            width: 1.4rem;
+            width: 2.4rem;
+            height: auto;
         }
 
         > div {
             display: flex;
             flex-direction: column;
+            align-content: center;
+            gap: .4rem;
 
             padding-block: .8rem;
             border-top: 2px solid var(--border);
@@ -87,24 +88,23 @@
                 align-content: center;
                 gap: .5rem;
 
-                padding: .5rem;
-                margin: .3rem .9rem;
+                padding: .2rem .4rem;
+                margin-inline: .8rem;
                 border-radius: var(--border-radius-m);
+                text-align: center;
                 cursor:pointer;
-
-                height: 24px; // This blocks the height change but also ensures that the hover animation is good
 
                 &:hover {
                     background-color: var(--border);
 
                     img {
-                        width: 1.7rem;
+                        width: 2.7rem;
                     }
                 }
 
                 &:hover:active {
                     img {
-                        width: 1.5rem;
+                        width: 2.5rem;
                     }
                 }
             }
@@ -125,17 +125,18 @@
     }
 
     &.thin {
-        max-width: calc(2rem + 1.6rem + .8rem + .5rem);
+        min-width: calc(3.5rem + 2 * .4rem + 2 * .8rem);
+        max-width: calc(3.5rem + 2 * .4rem + 2 * .8rem);
         .profile {
+            justify-content: center;
             padding: 0;
 
             img {
-                width: 2rem;
-                height: 2rem;
+                width: 3rem;
             }
 
             > div {
-                opacity: 0;
+                display: none;
             }
 
             &:hover {
@@ -145,31 +146,30 @@
 
         > nav {
             img {
-                width: 1.6rem;
+                width: 2.7rem;
             }
 
             > div {
                 align-items: center;
 
                 > * {
-                    height: 27.2px;
-                    width: min-content;
+                    justify-content: center;
 
                     &:hover {
                         img {
-                            width: 1.9rem;
+                            width: 3rem;
                         }
                     }
 
                     &:hover:active {
                         img {
-                            width: 1.7rem;
+                            width: 2.8rem;
                         }
                     }
-                }
 
-                h4 {
-                    display: none;
+                    h4 {
+                        display: none;
+                    }
                 }
             }
         }

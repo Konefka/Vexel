@@ -21,8 +21,8 @@ createRoot(document.getElementById("root")).render(
       
       color="hsl(0, 0%, 98%)"
       snowflakeCount={150}
-      speed={[0.5, 2]}
-      wind={[-1, 1.1]}/>
+      speed={[0.5, 1]}
+      wind={[-1, 1.2]}/>
     <BrowserRouter>
       <App/>
     </BrowserRouter>

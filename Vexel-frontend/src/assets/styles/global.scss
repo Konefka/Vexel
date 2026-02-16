@@ -4,6 +4,7 @@
   color: var(--fg);
   line-height: 1.5;
 
+  box-sizing: border-box;
   text-decoration: none;
   list-style: none;
 
@@ -56,6 +57,7 @@ img, .image {
   @extend .no-select;
   object-fit: cover;
   object-position: center;
+  display: block;
 }
 
 .linked-text {
@@ -74,11 +76,13 @@ hr {
   border: 1px solid var(--border);
 }
 
-input, button {
+input, textarea, button {
   border: none;
   background: none;
   outline: none;
   appearance: none; // Safari
+  resize: none;
+  caret-color: var(--fg);
   
   padding: 0;
 }
