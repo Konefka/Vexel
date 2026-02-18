@@ -71,10 +71,12 @@ export default function Sidebar() {
       sidebarRef.current.classList.remove(styles.thin);
       sidebarRef.current.style.width = "fit-content";
       sidebarWidthToOpenNameRef.current = 0;
+      localStorage.setItem("sidebarWidth", sidebarRef.current.clientWidth);
     } else {
       sidebarRef.current.style.width = "fit-content";
       sidebarWidthToOpenNameRef.current = sidebarRef.current.clientWidth;
       sidebarRef.current.classList.add(styles.thin);
+      localStorage.setItem("sidebarWidth", sidebarRef.current.clientWidth);
     }
   }
 

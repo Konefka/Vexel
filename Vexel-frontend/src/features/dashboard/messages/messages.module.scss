@@ -10,11 +10,11 @@
     }
 
     img {
-        width: 2.4rem;
+        width: 2.6rem;
         height: auto;
 
         &:hover {
-            width: 2.7rem;
+            width: 2.8rem;
         }
     }
 
@@ -23,13 +23,99 @@
     }
 
     > div {
+        flex: 1;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        flex: 1;
-        padding: 1rem;
+        scroll-behavior: smooth;
+
+        padding: .5rem;
         backdrop-filter: blur(2.5px);
-        box-sizing: border-box;
+        overflow-y: auto;
+
+        div {
+            width: 100%;
+        }
+
+        .messagesBlock {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+
+            .messageSelectBlock {
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: center;
+                align-content: center;
+
+                .message {
+                    width: auto;
+                    height: auto;
+                    padding: .4rem .7rem;
+                    background-color: var(--border);
+
+                    p {
+                        text-align: left;
+                        font-size: .9rem;
+                        line-height: 1.4;
+                        cursor: text;
+                    }
+                }
+
+                &.right {
+                    justify-content: flex-end;
+                    
+                    .message {
+                        background-color: var(--brand-default);
+                        
+                        p {
+                            color: var(--brand-000);
+                        }
+                    }
+                }
+            }
+
+            > * {
+                > * {
+                    border-radius: var(--border-radius-s) var(--border-radius-l) var(--border-radius-l) var(--border-radius-s);
+                }
+
+                &.right {
+                    > * {
+                        border-radius: var(--border-radius-l) var(--border-radius-s) var(--border-radius-s) var(--border-radius-l);
+                    }
+                }
+            }
+
+            > *:first-child {
+                > * {
+                    border-radius: var(--border-radius-l) var(--border-radius-l) var(--border-radius-l) var(--border-radius-s);
+                }
+
+                &.right {
+                    > * {
+                        border-radius: var(--border-radius-l) var(--border-radius-l) var(--border-radius-s) var(--border-radius-l);
+                    }
+                    
+                }
+            }
+
+            > *:last-child {
+                > * {
+                    border-radius: var(--border-radius-s) var(--border-radius-l) var(--border-radius-l) var(--border-radius-l);
+                }
+
+                &.right {
+                    > * {
+                        border-radius: var(--border-radius-l) var(--border-radius-s) var(--border-radius-l) var(--border-radius-l);
+                    }
+                }
+            }
+
+            > *:only-child > * {
+                border-radius: var(--border-radius-l);
+            }
+        }
     }
 
     footer {
@@ -37,19 +123,21 @@
         flex-direction: row;
         align-items: center;
         align-content: center;
-        gap: 1rem;
+        gap: .5rem;
 
         padding: 1rem;
         background-color: var(--bg);
+        border-top: 2px solid var(--border);
         
         textarea {
             width: 100%;
             height: auto;
             padding: .8rem;
             background-color: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: var(--border-radius-m);
-            box-sizing: border-box;
+            border: 2px solid var(--border);
+            border-radius: var(--border-radius-l);
+            font-size: .9rem;
+            // box-sizing: border-box;
         }
 
         &.multipleLines {
