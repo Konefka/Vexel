@@ -9,6 +9,8 @@ import messagesSymbol from "/src/assets/svg/messages.svg";
 import communitySymbol from "/src/assets/svg/community.svg";
 import bellSymbol from "/src/assets/svg/bell.svg";
 import settingsSymbol from "/src/assets/svg/settings.svg";
+import arrowSymbol from "/src/assets/svg/arrow-down.svg";
+import userSymbol from "/src/assets/svg/user-outline.svg";
 
 export default function Sidebar() {
   const sidebarRef = useRef(null);
@@ -16,7 +18,10 @@ export default function Sidebar() {
   const nameRef = useRef(null);
   const isDragging = useRef(false);
   const sidebarWidthToOpenNameRef = useRef(0);
-  const SIDEBAR_MIN_WIDTH = 168.4;
+  const SIDEBAR_MIN_WIDTH = 197;
+
+  const chatsRef = useRef(null);
+  const areChatsShown = useRef(false);
 
 
   useEffect (() => {
@@ -68,16 +73,30 @@ export default function Sidebar() {
 
   const dblClickHandler = () => {
     if (sidebarRef.current.classList.contains(styles.thin)) {
-      sidebarRef.current.classList.remove(styles.thin);
-      sidebarRef.current.style.width = "fit-content";
-      sidebarWidthToOpenNameRef.current = 0;
-      localStorage.setItem("sidebarWidth", sidebarRef.current.clientWidth);
+      resetWidth();
     } else {
       sidebarRef.current.style.width = "fit-content";
       sidebarWidthToOpenNameRef.current = sidebarRef.current.clientWidth;
       sidebarRef.current.classList.add(styles.thin);
       localStorage.setItem("sidebarWidth", sidebarRef.current.clientWidth);
     }
+  }
+
+  const resetWidth = () => {
+    sidebarRef.current.classList.remove(styles.thin);
+    sidebarRef.current.style.width = "fit-content";
+    sidebarWidthToOpenNameRef.current = 0;
+    localStorage.setItem("sidebarWidth", sidebarRef.current.clientWidth);
+  }
+
+  const showChats = () => {
+    chatsRef.current.classList.add(styles.show);
+    areChatsShown.current = true;
+  }
+
+  const hideChats = () => {
+    chatsRef.current.classList.remove(styles.show);
+    areChatsShown.current = false;
   }
 
   const navigate = useNavigate();
@@ -87,35 +106,50 @@ export default function Sidebar() {
       <div className={`${styles.profile} cursor-pointer`}>
         <img src={hashSymbol} alt="logo"/>
         <div>
-          <h2 ref={nameRef}>Konefka</h2>
+          <h2 ref={nameRef}>Kone</h2>
           <h5>Tymoteusz Konefał</h5>
         </div>
       </div>
       <nav>
         <div>
-          <div onClick={() => navigate("home")}>
+          <div onMouseEnter={hideChats} onClick={() => navigate("home")}>
             <img src={homeSymbol}/>
             <h4>home</h4>
           </div>
-          <div onClick={() => navigate("friends")}>
+          <div onMouseEnter={hideChats} onClick={() => navigate("friends")}>
             <img src={friendsSymbol}/>
             <h4>friends</h4>
           </div>
-          <div onClick={() => navigate("messages")}>
-            <img src={messagesSymbol}/>
-            <h4>messages</h4>
+          <div onMouseEnter={showChats} className={styles.messages}>
+            <div onClick={() => navigate("messages")}>
+              <div>
+                <img src={messagesSymbol}/>
+                <h4>messages</h4>
+              </div>
+              <img src={arrowSymbol}/>
+            </div>
+            <div ref={chatsRef} className={styles.userChats}>
+              <div>
+                <img src={userSymbol}/>
+                <h5>Person 1</h5>
+              </div>
+              <div>
+                <img src={userSymbol}/>
+                <h5>Person 2</h5>
+              </div>
+            </div>
           </div>
-          <div onClick={() => navigate("community")}>
+          <div onClick={() => {navigate("community"); hideChats()}}>
             <img src={communitySymbol}/>
             <h4>community</h4>
           </div>
         </div>
         <div>
-          <div onClick={() => navigate("notifications")}>
+          <div onMouseEnter={hideChats} onClick={() => navigate("notifications")}>
             <img src={bellSymbol}/>
             <h4>notifs</h4>
           </div>
-          <div onClick={() => navigate("settings")}>
+          <div onMouseEnter={hideChats} onClick={() => navigate("settings")}>
             <img src={settingsSymbol}/>
             <h4>settings</h4>
           </div>
