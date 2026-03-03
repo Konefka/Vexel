@@ -22,7 +22,7 @@ export default function Sidebar() {
 
   const chatsRef = useRef(null);
   const areChatsShown = useRef(false);
-
+  const chatsArrowRef = useRef(null);
 
   useEffect (() => {
     sidebarWidthToOpenNameRef.current = sidebarRef.current.clientWidth;
@@ -91,12 +91,22 @@ export default function Sidebar() {
 
   const showChats = () => {
     chatsRef.current.classList.add(styles.show);
+    chatsArrowRef.current.style.transform = "rotate(0deg)";
     areChatsShown.current = true;
   }
 
   const hideChats = () => {
     chatsRef.current.classList.remove(styles.show);
+    chatsArrowRef.current.style.transform = "rotate(-90deg)";
     areChatsShown.current = false;
+  }
+
+  const changeStateOfChats = () => {
+    if (areChatsShown.current) {
+      hideChats()
+    } else {
+      showChats()
+    }
   }
 
   const navigate = useNavigate();
@@ -121,12 +131,12 @@ export default function Sidebar() {
             <h4>friends</h4>
           </div>
           <div onMouseEnter={showChats} className={styles.messages}>
-            <div onClick={() => navigate("messages")}>
+            <div onClick={() => {navigate("messages"); changeStateOfChats()}}>
               <div>
                 <img src={messagesSymbol}/>
                 <h4>messages</h4>
               </div>
-              <img src={arrowSymbol}/>
+              <img ref={chatsArrowRef} src={arrowSymbol}/>
             </div>
             <div ref={chatsRef} className={styles.userChats}>
               <div>

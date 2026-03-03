@@ -11,6 +11,7 @@
     
     background-color: var(--bg);
     border-right: 2px solid var(--border);
+    overflow-y: auto;
 
     * {
         transition: all .125s ease;
@@ -167,10 +168,6 @@
 
                 &:hover {
                     background-color: var(--border);
-
-                    > div:not(.userChats) > img:last-child {
-                        transform: rotate(0deg);
-                    }
                 }
             }
         }
