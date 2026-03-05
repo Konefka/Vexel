@@ -27,6 +27,7 @@
 
         height: 30vh;
         width: 25vw;
+        min-width: 300px;
 
         padding: 1rem;
         border-radius: 1rem;
@@ -51,6 +52,7 @@
             display: flex;
             padding: 1rem;
             width: 25vw;
+            min-width: 300px;
             border-radius: 1rem;
             border: 1px solid var(--secondary-fg);
             background-color: var(--fg);

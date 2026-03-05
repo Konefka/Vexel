@@ -39,6 +39,7 @@ internal class Program
     {
         builder.Services.AddSingleton<AccountService>();
         builder.Services.AddSingleton<ConversationService>();
+        builder.Services.AddSingleton<MessageService>();
         builder.Services.AddControllers();
         //builder.Services.AddSignalR();
 

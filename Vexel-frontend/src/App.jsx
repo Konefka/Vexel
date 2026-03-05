@@ -31,6 +31,12 @@ export default function App () {
   const [authOpen, setAuthOpen] = useState(false);
   const [authCard, setAuthCard] = useState(0); // 0 = login, 1 = register
 
+  // Dashboard -> Messages + Sidebar -> Choose conversation
+  const [selectedConversation, setSelectedConversation] = useState(null);
+  const handleSelectConversation = (conversation) => {
+    setSelectedConversation(conversation);
+  };
+
   // Set usable navigation buttons
   const navigate = useNavigate();
 
@@ -63,7 +69,10 @@ export default function App () {
           element={
             <MyRouteHandler isPrivate={true}>
               <Dashboard>
-                <Sidebar/>
+                <Sidebar
+                  selectedConversationId={selectedConversation?.id}
+                  onSelectConversation={handleSelectConversation}
+                />
                 <Outlet/>
               </Dashboard>
             </MyRouteHandler>
@@ -72,7 +81,14 @@ export default function App () {
           <Route index element={<Navigate to="home" replace/>}/>
           <Route path="home" element={<h1>Home</h1>}/>
           <Route path="friends" element={<h1>Friends</h1>}/>
-          <Route path="messages" element={<Messages/>}/>
+          <Route path="messages"
+            element={
+              <Messages
+                conversationId={selectedConversation?.id}
+                conversationName={selectedConversation?.name}
+              />
+            }
+          />
           <Route path="community" element={<h1>Community</h1>}/>
           <Route path="notifications" element={<h1>Notifications</h1>}/>
           <Route path="settings" element={<h1>Settings</h1>}/>

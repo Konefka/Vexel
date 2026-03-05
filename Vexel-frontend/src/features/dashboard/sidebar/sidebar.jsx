@@ -13,7 +13,7 @@ import settingsSymbol from "/src/assets/svg/settings.svg";
 import arrowSymbol from "/src/assets/svg/arrow-down.svg";
 import userSymbol from "/src/assets/svg/user-outline.svg";
 
-export default function Sidebar() {
+export default function Sidebar({ selectedConversationId, onSelectConversation }) {
   const sidebarRef = useRef(null);
   const grabRef = useRef(null);
   const nameRef = useRef(null);
@@ -115,6 +115,10 @@ export default function Sidebar() {
     }
   }
 
+  const handleConversationClick = (conversation) => {
+    onSelectConversation(conversation);
+  };
+
   // Functions for navigation
 
   const navigate = useNavigate();
@@ -147,14 +151,6 @@ export default function Sidebar() {
               <img ref={chatsArrowRef} src={arrowSymbol}/>
             </div>
             <div ref={chatsRef} className={styles.userChats}>
-              {/* <div>
-                <img src={userSymbol}/>
-                <h5>Person 1</h5>
-              </div>
-              <div>
-                <img src={userSymbol}/>
-                <h5>Person 2</h5>
-              </div> */}
               { loading ? (
                 <div>
                   <div className={styles.spinner}/>
@@ -173,7 +169,8 @@ export default function Sidebar() {
                 conversations.map((conversation) => (
                   <div
                     key={conversation.id}
-                    onClick={() => navigate("messages")}
+                    className={selectedConversationId === conversation.id ? styles.active : ''}
+                    onClick={() => {navigate("messages"); handleConversationClick(conversation)}}
                   >
                     <img src={userSymbol}/>
                     <h5>{conversation.name}</h5>

@@ -51,7 +51,7 @@ namespace Vexel.Controllers
             [FromQuery] int take = 20, 
             [FromQuery] DateTime? before = null)
         {
-            var userIdClaim = User.FindFirst("sub")?.Value;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null)
                 return Unauthorized("Unauthorized");
 

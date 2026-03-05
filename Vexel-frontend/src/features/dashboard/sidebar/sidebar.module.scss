@@ -154,6 +154,10 @@
                             background-color: var(--bg);
                         }
 
+                        &.active {
+                            background-color: var(--border);
+                        }
+
                     }
 
                     .spinner {
