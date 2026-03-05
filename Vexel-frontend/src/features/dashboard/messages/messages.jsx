@@ -1,8 +1,7 @@
-import { use, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import styles from "./messages.module.scss";
 
 import sendSymbol from "/src/assets/svg/send.svg";
-
 import infoSymbol from "/src/assets/svg/info-circle.svg";
 
 export default function Messages() {

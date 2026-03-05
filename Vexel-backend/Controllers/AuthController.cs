@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Vexel.tables;
-using static Vexel.Account.AccountService;
+using Vexel.Services;
+using Vexel.Models;
+using static Vexel.Services.AccountService;
 
-namespace Vexel.Account
+namespace Vexel.Controllers
 {
     [ApiController]
     [Route("/auth")]
@@ -34,8 +34,8 @@ namespace Vexel.Account
             }
 
             return HandleAuthResult(
-                await _accountService.SignUp(
-                    new AccountDto { Email = request.Email, Password = request.Password }
+                await _accountService.SignUpDB(
+                    new AccountDto(request.Email, request.Password)
                 )
             );
         }
@@ -49,8 +49,8 @@ namespace Vexel.Account
             }
 
             return HandleAuthResult(
-                await _accountService.SignIn(
-                    new AccountDto { Email = request.Email, Password = request.Password }
+                await _accountService.SignInDB(
+                    new AccountDto(request.Email, request.Password)
                 )
             );
         }
@@ -60,7 +60,7 @@ namespace Vexel.Account
         public object Logout()
         {
             return HandleAuthResult(
-                _accountService.SignOut()
+                _accountService.SignOutDB()
             );
         }
 

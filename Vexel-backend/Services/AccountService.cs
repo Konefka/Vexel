@@ -1,8 +1,7 @@
 ﻿using Supabase.Gotrue;
-using Supabase.Gotrue.Interfaces;
-using Vexel.tables;
+using Vexel.Models;
 
-namespace Vexel.Account
+namespace Vexel.Services
 {
     public class AccountService
     {
@@ -15,7 +14,7 @@ namespace Vexel.Account
 
         public record AuthResult(bool Success, string? Token, string? Error);
 
-        public async Task<AuthResult> SignUp(AccountDto dto)
+        public async Task<AuthResult> SignUpDB(AccountDto dto)
         {
             try
             {
@@ -23,9 +22,9 @@ namespace Vexel.Account
 
                 await _client.Auth.SetSession(signUpResponse!.AccessToken!, signUpResponse.AccessToken!);
 
-                await _client.From<tables.Account>().Upsert(new tables.Account { Id = Guid.Parse(_client.Auth.CurrentSession!.User!.Id!)});
+                await _client.From<Accounts>().Upsert(new Accounts { Id = Guid.Parse(_client.Auth.CurrentSession!.User!.Id!)});
 
-                await UpdateLastSeenAt(Guid.Parse(signUpResponse!.User!.Id!));
+                await UpdateLastSeenAtDB(Guid.Parse(signUpResponse!.User!.Id!));
 
                 return new AuthResult(true, _client.Auth.CurrentSession!.AccessToken!, null);
             }
@@ -39,13 +38,13 @@ namespace Vexel.Account
             }
         }
 
-        public async Task<AuthResult> SignIn(AccountDto dto)
+        public async Task<AuthResult> SignInDB(AccountDto dto)
         {
             try
             {
                 Session? signInResponse = await _client.Auth.SignInWithPassword(dto.Email, dto.Password);
 
-                await UpdateLastSeenAt(Guid.Parse(signInResponse!.User!.Id!));
+                await UpdateLastSeenAtDB(Guid.Parse(signInResponse!.User!.Id!));
 
                 return new AuthResult(true, _client.Auth.CurrentSession!.AccessToken!, null);
             }
@@ -59,7 +58,7 @@ namespace Vexel.Account
             }
         }
 
-        public AuthResult SignOut()
+        public AuthResult SignOutDB()
         {
             try
             {
@@ -77,10 +76,10 @@ namespace Vexel.Account
             }
         }
 
-        async Task UpdateLastSeenAt(Guid userId)
+        async Task UpdateLastSeenAtDB(Guid userId)
         {
             await _client
-                .From<tables.Account>()
+                .From<Accounts>()
                 .Where(x => x.Id == userId)
                 .Set(x => x.LastSeenAt, DateTimeOffset.UtcNow)
                 .Update();

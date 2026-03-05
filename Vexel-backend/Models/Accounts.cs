@@ -1,28 +1,25 @@
 ﻿using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Reactive;
 
-namespace Vexel.tables
+namespace Vexel.Models
 {
     [Table("Accounts")]
-    internal class Account : BaseModel
+    internal class Accounts : BaseModel
     {
-        [Column("id")]
+        [PrimaryKey("id")]
         public Guid Id { get; set; }
 
         [Column("username")]
-        public string Name { get; set; } = null!;
+        public string Name { get; set; } = string.Empty;
 
         [Column("display_name")]
-        public string? Display_name { get; set; }
+        public string? DisplayName { get; set; }
 
         [Column("bio")]
         public string? Bio { get; set; }
 
         [Column("profile_avatar_url")]
-        public string? Avatar_url { get; set; }
+        public string? AvatarUrl { get; set; }
 
         [Column("status")]
         public string Status { get; set; } = "offline";
@@ -37,9 +34,5 @@ namespace Vexel.tables
         public DateTimeOffset? UpdatedAt { get; set; }
     }
 
-    public class AccountDto // Data Transfer Object
-    {
-        public string Email { get; set; } = null!;
-        public string Password { get; set; } = null!;
-    }
+    public record AccountDto(string Email, string Password);
 }

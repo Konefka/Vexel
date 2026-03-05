@@ -11,7 +11,6 @@
     
     background-color: var(--bg);
     border-right: 2px solid var(--border);
-    overflow-y: auto;
 
     * {
         transition: all .125s ease;
@@ -108,12 +107,6 @@
                 &:hover {
                     background-color: var(--border);
                 }
-
-                &:hover:active {
-                    img:first-child {
-                        // width: 2.55rem;
-                    }
-                }
             }
 
             > .messages {
@@ -137,17 +130,13 @@
                 > .userChats {
                     height: 0;
                     overflow-y: hidden;
-                }
 
-                > .userChats.show {
                     display: flex;
                     flex-direction: column;
                     gap: .3rem;
 
-                    overflow-y: auto;
-                    
-                    height: 300px;
                     margin-inline: .3rem;
+                    overflow-y: auto;
 
                     > div {
                         display: flex;
@@ -156,12 +145,37 @@
                         align-content: center;
                         gap: .3rem;
 
+                        transform: translateY(-100px);
                         border-radius: var(--border-radius-m);
                         padding: .2rem .3rem;
                         cursor: pointer;
 
                         &:hover {
                             background-color: var(--bg);
+                        }
+
+                    }
+
+                    .spinner {
+                        width: 1.5rem;
+                        height: 1.5rem;
+                        border: 7px solid #ccc;
+                        border-top-color: #1d72b8;
+                        border-radius: 50%;
+                        animation: spin 0.5s linear infinite;
+                        margin: .5rem;
+                    }
+
+                    @keyframes spin {
+                        to { transform: rotate(360deg); }
+                    }
+
+                    &.show {
+                        height: 100%;
+                        margin-bottom: .5rem;
+
+                        > div {
+                            transform: translateY(0);
                         }
                     }
                 }
@@ -170,6 +184,10 @@
                     background-color: var(--border);
                 }
             }
+        }
+        
+        > div:first-child {
+            height: 100%;
         }
     }
 
@@ -212,12 +230,6 @@
 
                 > * {
                     justify-content: center;
-
-                    &:hover:active {
-                        img {
-                            // width: 2.8rem;
-                        }
-                    }
 
                     h4 {
                         display: none;

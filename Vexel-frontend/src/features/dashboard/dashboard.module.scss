@@ -5,9 +5,8 @@
     display: flex;
     flex-direction: row;
 
-    img {
-        width: 1.6rem;
-        height: 1.6rem;
-        padding: .4rem;
+    img, h4, h5 {
+        margin: .1rem;
+        padding: .3rem;
     }
 }

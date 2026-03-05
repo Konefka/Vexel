@@ -4,7 +4,7 @@ export default function Loader() {
 
   return (
     <div className={styles.loader}>
-      <div className={styles.spinner}></div>
+      <div className={styles.spinner}/>
       <h1>Loading...</h1>
     </div>
   );

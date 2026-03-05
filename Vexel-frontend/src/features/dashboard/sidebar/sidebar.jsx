@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useConversations } from "/src/api/useConversations";
 import styles from "./sidebar.module.scss";
 
 import hashSymbol from "/src/assets/svg/hash.svg";
@@ -23,6 +24,7 @@ export default function Sidebar() {
   const chatsRef = useRef(null);
   const areChatsShown = useRef(false);
   const chatsArrowRef = useRef(null);
+  const { conversations, loading, error } = useConversations();
 
   useEffect (() => {
     sidebarWidthToOpenNameRef.current = sidebarRef.current.clientWidth;
@@ -37,6 +39,8 @@ export default function Sidebar() {
       document.removeEventListener("mouseup", stopDrag);
     };
   }, []);
+
+  // Functions for moving the sidebar
 
   const moveHandler = (e) => {
     if (sidebarWidthToOpenNameRef.current === 0 && (nameRef.current.clientWidth < nameRef.current.scrollWidth || e.clientX < SIDEBAR_MIN_WIDTH)) {
@@ -89,6 +93,8 @@ export default function Sidebar() {
     localStorage.setItem("sidebarWidth", sidebarRef.current.clientWidth);
   }
 
+  // Functions for handling Chats
+
   const showChats = () => {
     chatsRef.current.classList.add(styles.show);
     chatsArrowRef.current.style.transform = "rotate(0deg)";
@@ -108,6 +114,8 @@ export default function Sidebar() {
       showChats()
     }
   }
+
+  // Functions for navigation
 
   const navigate = useNavigate();
 
@@ -131,7 +139,7 @@ export default function Sidebar() {
             <h4>friends</h4>
           </div>
           <div onMouseEnter={showChats} className={styles.messages}>
-            <div onClick={() => {navigate("messages"); changeStateOfChats()}}>
+            <div onClick={changeStateOfChats}>
               <div>
                 <img src={messagesSymbol}/>
                 <h4>messages</h4>
@@ -139,14 +147,39 @@ export default function Sidebar() {
               <img ref={chatsArrowRef} src={arrowSymbol}/>
             </div>
             <div ref={chatsRef} className={styles.userChats}>
-              <div>
+              {/* <div>
                 <img src={userSymbol}/>
                 <h5>Person 1</h5>
               </div>
               <div>
                 <img src={userSymbol}/>
                 <h5>Person 2</h5>
-              </div>
+              </div> */}
+              { loading ? (
+                <div>
+                  <div className={styles.spinner}/>
+                  <h5>Ładowanie konwersacji...</h5>
+                </div>
+              ) : error ? (
+                  <div>
+                    <h5>Błąd: {error}</h5>
+                  </div>
+              ) : conversations.length === 0 ? (
+                  <div>
+                    <img src={userSymbol}/>
+                    <h5>Brak konwersacji</h5>
+                  </div>
+              ) : (
+                conversations.map((conversation) => (
+                  <div
+                    key={conversation.id}
+                    onClick={() => navigate("messages")}
+                  >
+                    <img src={userSymbol}/>
+                    <h5>{conversation.name}</h5>
+                  </div>
+                ))
+              )}
             </div>
           </div>
           <div onClick={() => {navigate("community"); hideChats()}}>

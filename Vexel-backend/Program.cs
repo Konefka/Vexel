@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Vexel.Account;
+using Vexel.Services;
 internal class Program
 {
     static WebApplicationBuilder builder = null!;
@@ -15,7 +16,7 @@ internal class Program
             .AddUserSecrets<Program>()
             .AddEnvironmentVariables();
 
-        InitializeClient(await InitializeSupabase());
+        InitializeServices(await InitializeSupabase());
     }
 
     static async Task<Supabase.Client> InitializeSupabase()
@@ -34,11 +35,12 @@ internal class Program
 
         return client;
     }
-    static void InitializeClient(Supabase.Client client)
+    static void InitializeServices(Supabase.Client client)
     {
         builder.Services.AddSingleton<AccountService>();
+        builder.Services.AddSingleton<ConversationService>();
         builder.Services.AddControllers();
-        builder.Services.AddSignalR();
+        //builder.Services.AddSignalR();
 
         builder.Services.AddCors(options =>
         {
@@ -51,7 +53,7 @@ internal class Program
             });
         });
 
-        //IdentityModelEventSource.ShowPII = true;
+        IdentityModelEventSource.ShowPII = true;
 
         builder.Services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
