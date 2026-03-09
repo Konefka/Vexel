@@ -82,7 +82,7 @@
             padding-block: .8rem;
             border-top: 2px solid var(--border);
 
-            > *:not(.messages), > .messages > div:not(.userChats) {
+            > *:not(.conversations), > .conversations > div:not(.userChats) {
                 display: flex;
                 flex-direction: row;
                 align-items: center;
@@ -101,12 +101,20 @@
                     align-content: center;
                 }
 
-                &:hover:not(.messages > div:not(.userChats)) {
+                &.logout {
+                    background-color: hsl(0, 68%, 44%);
+
+                    &:hover {
+                        background-color: hsl(0, 70%, 48%);
+                    }
+                }
+
+                &:hover:not(.conversations > div:not(.userChats), .logout) {
                     background-color: var(--border);
                 }
             }
 
-            > .messages {
+            > .conversations {
                 display: flex;
                 flex-direction: column;
 
@@ -127,6 +135,7 @@
 
                 > .userChats {
                     height: 0;
+                    max-height: 427.5px;
                     overflow-y: hidden;
 
                     display: flex;
@@ -252,7 +261,7 @@
                     }
                 }
 
-                > .messages {
+                > .conversations {
                     > div:not(.userChats) > img:last-child {
                         display: none;
                     }

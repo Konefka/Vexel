@@ -1,4 +1,5 @@
 let errorHandler = null;
+const domain = "https://localhost:7159";
 
 export function setErrorHandler(functions) {
   errorHandler = functions;
@@ -6,7 +7,7 @@ export function setErrorHandler(functions) {
 
 export async function checkAuth() {
   try {
-      const response = await fetch("https://localhost:7159/auth/status", {
+      const response = await fetch(`${domain}/auth/status`, {
       method: "POST",
       credentials: "include"
     });
@@ -26,7 +27,7 @@ export async function checkAuth() {
 
 export async function register(email, password) {
   try {
-    const response = await fetch("https://localhost:7159/auth/register", {
+    const response = await fetch(`${domain}/auth/register`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -48,12 +49,14 @@ export async function register(email, password) {
 
 export async function login(email, password) {
   try {
-    const response = await fetch("https://localhost:7159/auth/login", {
+    const response = await fetch(`${domain}/auth/login`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })
     })
+
+    console.log("tried")
 
     const data = await response.json();
 
@@ -70,7 +73,7 @@ export async function login(email, password) {
 }
 
 export async function logout() {
-  await fetch("https://localhost:7159/auth/logout", {
+  await fetch(`${domain}/auth/logout`, {
     method: "POST",
     credentials: "include"
   })

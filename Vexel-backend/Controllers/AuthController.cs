@@ -59,18 +59,24 @@ namespace Vexel.Controllers
         [HttpPost("logout")]
         public object Logout()
         {
-            return HandleAuthResult(
-                _accountService.SignOutDB()
-            );
+            Response.Cookies.Delete("access_token", new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Path = "/"
+            });
+
+            return new { success = true };
         }
 
         private bool CheckForEmptyValues(string email, string password)
         {
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password) || email.Contains(' ') || password.Contains(' '))
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password) ||
+                email.Contains(' ') || password.Contains(' '))
             {
                 return true;
             }
-
             return false;
         }
 
@@ -87,17 +93,16 @@ namespace Vexel.Controllers
 
         private object SetAuthCookie(string token)
         {
-            Response.Cookies.Append(
-                "access_token",
-                token,
-                new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.None,
-                    Expires = DateTimeOffset.UtcNow.AddMinutes(30)
-                }
-            );
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTimeOffset.UtcNow.AddMinutes(30),
+                Path = "/"
+            };
+
+            Response.Cookies.Append("access_token", token, cookieOptions);
 
             return new { success = true };
         }

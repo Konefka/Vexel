@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useConversations } from "/src/api/useConversations";
+import { logout } from "/src/api/Auth";
 import styles from "./sidebar.module.scss";
 
 import hashSymbol from "/src/assets/svg/hash.svg";
@@ -12,6 +13,7 @@ import bellSymbol from "/src/assets/svg/bell.svg";
 import settingsSymbol from "/src/assets/svg/settings.svg";
 import arrowSymbol from "/src/assets/svg/arrow-down.svg";
 import userSymbol from "/src/assets/svg/user-outline.svg";
+import exitSymbol from "/src/assets/svg/exit.svg";
 
 export default function Sidebar({ onSelectConversation }) {
   const sidebarRef = useRef(null);
@@ -150,7 +152,7 @@ export default function Sidebar({ onSelectConversation }) {
             <img src={friendsSymbol}/>
             <h4>friends</h4>
           </div>
-          <div onMouseEnter={showChats} className={styles.messages}>
+          <div onMouseEnter={showChats} className={styles.conversations}>
             <div onClick={changeStateOfChats}>
               <div>
                 <img src={messagesSymbol}/>
@@ -200,6 +202,10 @@ export default function Sidebar({ onSelectConversation }) {
           <div onClick={() => {navigate("/dashboard/settings"); hideChats()}}>
             <img src={settingsSymbol}/>
             <h4>settings</h4>
+          </div>
+          <div className={styles.logout} onClick={() => logout().then(navigate("/home"))}>
+            <img src={exitSymbol} alt="logout"/>
+            <h4>logout</h4>
           </div>
         </div>
       </nav>
