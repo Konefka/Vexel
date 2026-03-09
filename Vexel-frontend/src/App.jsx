@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Routes, Route, Outlet, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, Outlet, Navigate, useNavigate, useParams } from "react-router-dom";
 // import { getToken, setErrorHandler, logout } from "./api/SignalR.jsx";
 import { setErrorHandler, logout } from "./api/Auth.jsx";
 import { MyRouteHandler } from "./Guard.jsx";
@@ -17,7 +17,6 @@ import Messages from "/src/features/dashboard/messages/messages.jsx";
 
 import Spotify from "/src/components/spotify/spotify.jsx";
 import Box from "/src/components/test-box.jsx";
-
 
 export default function App () {
   // ERROR -> modal
@@ -70,7 +69,6 @@ export default function App () {
             <MyRouteHandler isPrivate={true}>
               <Dashboard>
                 <Sidebar
-                  selectedConversationId={selectedConversation?.id}
                   onSelectConversation={handleSelectConversation}
                 />
                 <Outlet/>
@@ -81,12 +79,10 @@ export default function App () {
           <Route index element={<Navigate to="home" replace/>}/>
           <Route path="home" element={<h1>Home</h1>}/>
           <Route path="friends" element={<h1>Friends</h1>}/>
-          <Route path="messages"
+          <Route path="messages" element={<Navigate to="/dashboard" replace/>}/>
+          <Route path="messages/:conversationId"
             element={
-              <Messages
-                conversationId={selectedConversation?.id}
-                conversationName={selectedConversation?.name}
-              />
+              <Messages onSelectConversation={handleSelectConversation} />
             }
           />
           <Route path="community" element={<h1>Community</h1>}/>

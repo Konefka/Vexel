@@ -21,7 +21,7 @@
         flex-direction: row;
         align-items: center;
         align-content: center;
-        gap: 1rem;
+        gap: .6rem;
         transition: padding 0s;
 
         margin: .8rem .6rem;
@@ -78,7 +78,6 @@
             display: flex;
             flex-direction: column;
             align-content: center;
-            gap: .4rem;
 
             padding-block: .8rem;
             border-top: 2px solid var(--border);
@@ -88,7 +87,6 @@
                 flex-direction: row;
                 align-items: center;
                 align-content: center;
-                gap: .3rem;
 
                 padding: .2rem .3rem;
                 margin-inline: .6rem;
@@ -101,10 +99,9 @@
                     flex-direction: row;
                     align-items: center;
                     align-content: center;
-                    gap: .3rem;
                 }
 
-                &:hover {
+                &:hover:not(.messages > div:not(.userChats)) {
                     background-color: var(--border);
                 }
             }
@@ -123,6 +120,7 @@
                     margin: 0;
 
                     > img:last-child {
+                        transform-origin: center;
                         transform: rotate(-90deg);
                     }
                 }
@@ -133,7 +131,6 @@
 
                     display: flex;
                     flex-direction: column;
-                    gap: .3rem;
 
                     margin-inline: .3rem;
                     overflow-y: auto;
@@ -143,19 +140,34 @@
                         flex-direction: row;
                         align-items: center;
                         align-content: center;
-                        gap: .3rem;
 
                         transform: translateY(-100px);
                         border-radius: var(--border-radius-m);
                         padding: .2rem .3rem;
                         cursor: pointer;
 
+                        > h5 {
+                            width: 100%;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+
                         &:hover {
                             background-color: var(--bg);
                         }
 
                         &.active {
-                            background-color: var(--border);
+                            padding-left: .8rem;
+                            &::before {
+                                content: '';
+                                position: absolute;
+                                background-color: var(--fg);
+                                left: var(--border-radius-s);
+                                width: 4px;
+                                height: 80%;
+                                border-radius: var(--border-radius-s);
+                            }
                         }
 
                     }

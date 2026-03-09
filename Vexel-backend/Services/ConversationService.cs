@@ -20,7 +20,7 @@ namespace Vexel.Services
                 // Get user chats
                 var participations = await _client
                     .From<ConversationParticipants>()
-                    .Filter("account_id", Constants.Operator.Equals, userId.ToString())
+                    .Filter(p => p.AccountId, Constants.Operator.Equals, userId.ToString())
                     .Get();
 
                 if (!participations.Models.Any())
@@ -28,13 +28,14 @@ namespace Vexel.Services
 
                 // Mapping for Constants.Operator.In
                 var conversationIds = participations.Models
-                    .Select(p => p.ConversationId.ToString())
+                    .Select(cId => cId.ConversationId.ToString())
                     .ToList();
 
                 // Get id's + names of chats
                 var conversations = await _client
                     .From<Conversations>()
-                    .Filter("id", Constants.Operator.In, conversationIds)
+                    .Filter(c => c.Id, Constants.Operator.In, conversationIds)
+                    .Order(c => c.CreatedAt, Constants.Ordering.Descending)
                     .Get();
 
                 return conversations.Models

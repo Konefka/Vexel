@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useConversations } from "/src/api/useConversations";
 import styles from "./sidebar.module.scss";
 
@@ -13,7 +13,7 @@ import settingsSymbol from "/src/assets/svg/settings.svg";
 import arrowSymbol from "/src/assets/svg/arrow-down.svg";
 import userSymbol from "/src/assets/svg/user-outline.svg";
 
-export default function Sidebar({ selectedConversationId, onSelectConversation }) {
+export default function Sidebar({ onSelectConversation }) {
   const sidebarRef = useRef(null);
   const grabRef = useRef(null);
   const nameRef = useRef(null);
@@ -25,6 +25,9 @@ export default function Sidebar({ selectedConversationId, onSelectConversation }
   const areChatsShown = useRef(false);
   const chatsArrowRef = useRef(null);
   const { conversations, loading, error } = useConversations();
+
+  const { conversationId } = useParams();
+  const navigate = useNavigate();
 
   useEffect (() => {
     sidebarWidthToOpenNameRef.current = sidebarRef.current.clientWidth;
@@ -116,29 +119,34 @@ export default function Sidebar({ selectedConversationId, onSelectConversation }
   }
 
   const handleConversationClick = (conversation) => {
-    onSelectConversation(conversation);
+    navigate(`/dashboard/messages/${conversation.id}`);
+    
+    if (onSelectConversation) {
+      onSelectConversation(conversation);
+    }
   };
 
-  // Functions for navigation
-
-  const navigate = useNavigate();
+  const isConversationActive = (conversation) => {
+    if (!conversationId) return false;
+    return conversation.id === conversationId;
+  };
 
   return (
     <aside ref={sidebarRef} className={`${styles.sidebar} no-select`}>
       <div className={`${styles.profile} cursor-pointer`}>
         <img src={hashSymbol} alt="logo"/>
         <div>
-          <h2 ref={nameRef}>Kone</h2>
+          <h2 ref={nameRef}>Konefka</h2>
           <h5>Tymoteusz Konefał</h5>
         </div>
       </div>
       <nav>
         <div>
-          <div onMouseEnter={hideChats} onClick={() => navigate("home")}>
+          <div onClick={() => {navigate("/dashboard/home"); hideChats()}}>
             <img src={homeSymbol}/>
             <h4>home</h4>
           </div>
-          <div onMouseEnter={hideChats} onClick={() => navigate("friends")}>
+          <div onClick={() => {navigate("/dashboard/friends"); hideChats()}}>
             <img src={friendsSymbol}/>
             <h4>friends</h4>
           </div>
@@ -169,8 +177,8 @@ export default function Sidebar({ selectedConversationId, onSelectConversation }
                 conversations.map((conversation) => (
                   <div
                     key={conversation.id}
-                    className={selectedConversationId === conversation.id ? styles.active : ''}
-                    onClick={() => {navigate("messages"); handleConversationClick(conversation)}}
+                    className={isConversationActive(conversation) ? styles.active : ''}
+                    onClick={() => handleConversationClick(conversation)}
                   >
                     <img src={userSymbol}/>
                     <h5>{conversation.name}</h5>
@@ -179,17 +187,17 @@ export default function Sidebar({ selectedConversationId, onSelectConversation }
               )}
             </div>
           </div>
-          <div onClick={() => {navigate("community"); hideChats()}}>
+          <div onClick={() => {navigate("/dashboard/community"); hideChats()}}>
             <img src={communitySymbol}/>
             <h4>community</h4>
           </div>
         </div>
         <div>
-          <div onMouseEnter={hideChats} onClick={() => navigate("notifications")}>
+          <div onClick={() => {navigate("/dashboard/notifications"); hideChats()}}>
             <img src={bellSymbol}/>
             <h4>notifs</h4>
           </div>
-          <div onMouseEnter={hideChats} onClick={() => navigate("settings")}>
+          <div onClick={() => {navigate("/dashboard/settings"); hideChats()}}>
             <img src={settingsSymbol}/>
             <h4>settings</h4>
           </div>

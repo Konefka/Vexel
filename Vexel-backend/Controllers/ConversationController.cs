@@ -47,8 +47,8 @@ namespace Vexel.Controllers
 
         [HttpPost("{conversationId}/messages")]
         public async Task<ActionResult<MessageBatch>> GetMessages(
-            Guid conversationId, 
-            [FromQuery] int take = 20, 
+            Guid conversationId,
+            [FromQuery] int take = 30,
             [FromQuery] DateTime? before = null)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -61,7 +61,7 @@ namespace Vexel.Controllers
             if (!isParticipant)
                 return Forbid("Forbid");
 
-            MessageBatch result = await _messageService.GetMessagesDB(conversationId, take, before);
+            MessageBatch result = await _messageService.GetMessagesDB(userId, conversationId, take, before);
 
             return Ok(result);
         }

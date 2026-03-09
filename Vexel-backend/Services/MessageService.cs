@@ -1,5 +1,6 @@
 ﻿using Vexel.Models;
 using Supabase.Postgrest;
+using Supabase.Postgrest.Responses;
 
 namespace Vexel.Services
 {
@@ -12,7 +13,7 @@ namespace Vexel.Services
             _client = client;
         }
 
-        public record MessageResult(Guid Id, string Text, string? SenderID, DateTime DateStamp);
+        public record MessageResult(Guid Id, string Text, string? SenderName, DateTime DateStamp);
         public record MessageBatch(Guid ConversationId, List<MessageResult> Messages, bool hasMore);
 
         public async Task<bool> IsUserInConversation(Guid userId, Guid conversationId)
@@ -25,30 +26,39 @@ namespace Vexel.Services
             return response.Models.Any();
         }
 
-        public async Task<MessageBatch> GetMessagesDB(Guid conversationId, int take = 20, DateTimeOffset? before = null)
+        public async Task<MessageBatch> GetMessagesDB(Guid userId, Guid conversationId, int take, DateTimeOffset? before = null)
         {
-            if (!before.HasValue)
-            {
-                before = DateTimeOffset.Now;
-            }
+            before ??= DateTimeOffset.Now;
 
-            var query = await _client.From<Messages>()
+            ModeledResponse<Messages> query = await _client.From<Messages>()
                 .Select(x => new object[] { x.Id, x.Value, x.SenderId!, x.CreatedAt })
                 .Where(x => x.ConversationId == conversationId && x.CreatedAt < before)
                 .Order(x => x.CreatedAt, Constants.Ordering.Descending)
                 .Limit(take + 1)
                 .Get();
 
+            var senderIds = query.Models
+                .Select(m => m.SenderId)
+                .Distinct()
+                .ToList();
+
+            ModeledResponse<Accounts> names = await _client.From<Accounts>()
+                .Select(x => new object[] { x.Id, x.Name })
+                .Filter(x => x.Id, Constants.Operator.In, senderIds)
+                .Get();
+
+            var nameDict = names.Models.ToDictionary(a => a.Id, a => a.Name);
+
             var allMessages = query.Models
                 .Select(m => new MessageResult(
                     m.Id,
                     m.Value,
-                    m.SenderId.ToString() ?? "deleted user",
+                    m.SenderId == null ? "deleted user" : (m.SenderId == userId? "me" : (nameDict.TryGetValue(m.SenderId.Value, out var name) ? name : "unknown user")),
                     m.CreatedAt.DateTime))
+                .Reverse()
                 .ToList();
 
             bool hasMore = allMessages.Count > take;
-
             var messages = allMessages.Take(take).ToList();
 
             return new MessageBatch(conversationId, messages, hasMore);

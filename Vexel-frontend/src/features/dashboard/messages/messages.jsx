@@ -1,19 +1,41 @@
 import { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useMessages } from "/src/api/useMessages";
+import { useConversations } from "/src/api/useConversations";
 import styles from "./messages.module.scss";
 
 import sendSymbol from "/src/assets/svg/send.svg";
 import infoSymbol from "/src/assets/svg/info-circle.svg";
 
-export default function Messages({ conversationId, conversationName }) {
+export default function Messages({ onSelectConversation }) {
+  const { conversationId } = useParams();
   const messagesRef = useRef(null);
   const footerRef = useRef(null);
   const messageBoxRef = useRef(null);
-  const [currentUserId, setCurrentUserId] = useState("cd3ce425-fbec-4dd1-85da-4067bd67cc87");
+  const [displayName, setDisplayName] = useState("");
+
+  const { conversations, loading: conversationsLoading } = useConversations();
+
+  useEffect(() => {
+    if (conversationId && conversations.length > 0) {
+      
+      const conversation = conversations.find(
+        conv => conv.id === conversationId
+      );
+
+      if (conversation) {
+        setDisplayName(conversation.name);
+        
+        if (onSelectConversation) {
+          onSelectConversation(conversation);
+        }
+      }
+    }
+  }, [conversationId, conversations, onSelectConversation]);
 
   const { messages, loadMore, loading, hasMore, error } = useMessages({ 
-    conversationId, 
-    howMuch: 20 
+    conversationId,
+    howMuch: 30
   });
 
   const messagesScrollHandler = () => {
@@ -25,21 +47,25 @@ export default function Messages({ conversationId, conversationName }) {
     }
   }
 
-  const handleScroll = () => {
-    const container = messagesRef.current;
-    if (!container) return;
+const handleScroll = () => {
+  const container = messagesRef.current;
+  if (!container) return;
 
-    if (container.scrollTop < 100 && hasMore && !loading) {
-      const previousScrollHeight = container.scrollHeight;
-      
-      loadMore().then(() => {
-        setTimeout(() => {
-          const newScrollHeight = container.scrollHeight;
-          container.scrollTop = newScrollHeight - previousScrollHeight;
-        }, 0);
+  if (container.scrollTop === 0 && hasMore && !loading) {
+    const previousScrollHeight = container.scrollHeight;
+    
+    loadMore().then(() => {
+      requestAnimationFrame(() => {
+        if (messagesRef.current) {
+            container.scrollTo({
+            top: container.scrollHeight - previousScrollHeight,
+            behavior: 'instant',
+          });
+        }
       });
-    }
-  };
+    });
+  }
+};
 
   const newMessageHandler = async () => {
     const value = messageBoxRef.current.value;
@@ -106,11 +132,11 @@ export default function Messages({ conversationId, conversationName }) {
     let currentGroup = null;
 
     messages.forEach(msg => {
-      const senderId = msg.senderID || msg.senderId;
+      const senderName = msg.senderName;
       
-      if (!currentGroup || currentGroup.sender !== senderId) {
+      if (!currentGroup || currentGroup.sender !== senderName) {
         currentGroup = {
-          sender: senderId,
+          sender: senderName,
           messages: [msg]
         };
         grouped.push(currentGroup);
@@ -123,72 +149,28 @@ export default function Messages({ conversationId, conversationName }) {
   };
 
   useEffect(() => {
-    if (messages.length > 0) {
-      messagesScrollHandler()
+    if (!loading && hasMore) {
+      messagesScrollHandler();
     }
-  }, [conversationId]);
-
-  useEffect(() => {
-    if (messages.length > 0 && !loading) {
-      setTimeout(() => messagesScrollHandler(), 100);
-    }
-  }, [messages.length, loading]);
+  }, [loading]);
 
   const groupedMessages = groupMessagesBySender(messages);
 
   return (
     <section className={styles.messages}>
       <header>
-        <h3 className="cursor-pointer">{conversationName || "Konwersacja"}</h3>
+        <h3 className="cursor-pointer">{displayName || "Loading..."}</h3>
         <img src={infoSymbol} className="cursor-pointer" alt="info"/>
       </header>
       <div ref={messagesRef} onScroll={handleScroll}>
-        {/* <div className={styles.messagesBlock} data-sender="me">
-          <div className={`${styles.messageSelectBlock} ${styles.right}`}><div className={styles.message}><p>Hej</p></div></div>
-        </div>
-        <div className={styles.messagesBlock} data-sender="Michał">
-          <div className={styles.messageSelectBlock}><div className={styles.message}><p>Eloo</p></div></div>
-        </div>
-        <div className={styles.messagesBlock} data-sender="me">
-          <div className={`${styles.messageSelectBlock} ${styles.right}`}><div className={styles.message}><p>Co tam u Ciebie?</p></div></div>
-        </div>
-        <div className={styles.messagesBlock} data-sender="Michał">
-          <div className={styles.messageSelectBlock}><div className={styles.message}><p>A nic nic</p></div></div>
-          <div className={styles.messageSelectBlock}><div className={styles.message}><p>Robię projekt</p></div></div>
-        </div>
-        <div className={styles.messagesBlock} data-sender="me">
-          <div className={`${styles.messageSelectBlock} ${styles.right}`}><div className={styles.message}><p>Vexel?</p></div></div>
-        </div>
-        <div className={styles.messagesBlock} data-sender="Michał">
-          <div className={styles.messageSelectBlock}><div className={styles.message}><p>Dokładnie</p></div></div>
-          <div className={styles.messageSelectBlock}><div className={styles.message}><p>a ty?</p></div></div>
-          <div className={styles.messageSelectBlock}><div className={styles.message}><p>Co tam porabasz?</p></div></div>
-        </div>
-        <div className={styles.messagesBlock} data-sender="me">
-          <div className={`${styles.messageSelectBlock} ${styles.right}`}><div className={styles.message}><p>Idę na siłkę</p></div></div>
-        </div>
-        <div className={styles.messagesBlock} data-sender="Michał">
-          <div className={styles.messageSelectBlock}><div className={styles.message}><p>ooo</p></div></div>
-          <div className={styles.messageSelectBlock}><div className={styles.message}><p>Co dziś robisz?</p></div></div>
-        </div>
-        <div className={styles.messagesBlock} data-sender="me">
-          <div className={`${styles.messageSelectBlock} ${styles.right}`}><div className={styles.message}><p>klatę i plecy</p></div></div>
-        </div>
-        <div className={styles.messagesBlock} data-sender="Michał">
-          <div className={styles.messageSelectBlock}><div className={styles.message}><p>nicee</p></div></div>
-          <div className={styles.messageSelectBlock}><div className={styles.message}><p>Musimy niedługo razem pójść</p></div></div>
-        </div>
-        <div className={styles.messagesBlock} data-sender="me">
-          <div className={`${styles.messageSelectBlock} ${styles.right}`}><div className={styles.message}><p>dosło</p></div></div>
-          <div className={`${styles.messageSelectBlock} ${styles.right}`}><div className={styles.message}><p>dawno razem nie byliśmy</p></div></div>
-          <div className={`${styles.messageSelectBlock} ${styles.right}`}><div className={styles.message}><p>dobra, muszę lecieć</p></div></div>
-        </div>
-        <div className={styles.messagesBlock} data-sender="Michał">
-          <div className={styles.messageSelectBlock}><div className={styles.message}><p>byee</p></div></div>
-        </div> */}
         { !conversationId ? (
           <div className={styles.info}>
-            <p>Wybierz konwersację, aby zobaczyć wiadomości</p>
+            <p>
+              {conversationsLoading 
+                ? "Ładowanie konwersacji..." 
+                : "Wybierz konwersację, aby zobaczyć wiadomości"
+              }
+            </p>
           </div>
         ) : error ? (
           <div className={styles.info}>
@@ -196,13 +178,7 @@ export default function Messages({ conversationId, conversationName }) {
           </div>
         ) : (
           <>
-            {loading && messages.length > 0 && (
-              <div className={styles.info}>
-                <p>Ładowanie starszych wiadomości...</p>
-              </div>
-            )}
-
-            {!hasMore && messages.length > 0 && !loading && (
+            {!hasMore && !loading && (
               <div className={styles.info}>
                 <p>Początek konwersacji</p>
               </div>
@@ -214,12 +190,12 @@ export default function Messages({ conversationId, conversationName }) {
               </div>
             ) : (
               groupedMessages.map((group, groupIndex) => {
-                const isMe = group.sender === currentUserId;
+                const isMe = group.sender === "me";
                 
                 return (
                   <div 
                     key={`group-${groupIndex}`}
-                    className={styles.messagesBlock} 
+                    className={styles.messagesBlock}
                     data-sender={isMe ? "me" : group.sender}
                   >
                     {group.messages.map((msg, msgIndex) => (
