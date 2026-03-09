@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { replace, useNavigate, useParams } from "react-router-dom";
 import { useConversations } from "/src/api/useConversations";
 import { logout } from "/src/api/Auth";
 import styles from "./sidebar.module.scss";
@@ -203,7 +203,7 @@ export default function Sidebar({ onSelectConversation }) {
             <img src={settingsSymbol}/>
             <h4>settings</h4>
           </div>
-          <div className={styles.logout} onClick={() => logout().then(navigate("/home"))}>
+          <div className={styles.logout} onClick={() => logout().then(navigate("/home"), { replace: true })}>
             <img src={exitSymbol} alt="logout"/>
             <h4>logout</h4>
           </div>

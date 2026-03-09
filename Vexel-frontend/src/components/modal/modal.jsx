@@ -17,6 +17,7 @@ export default function Modal ({ active = false, onClose, message }) {
     if (active) {
       document.addEventListener("mouseup", handleClickOutside);
       document.documentElement.classList.add("no-scroll");
+      modalRef.current.focus({ focusVisible: false });
     }
     
     return () => {
@@ -27,9 +28,15 @@ export default function Modal ({ active = false, onClose, message }) {
     };
   }, [active]);
 
+  const deactivateKeyHandler = (e) => {
+    if (e.key === "Enter" || e.key === "Escape") {
+      onClose();
+    }
+  }
+
   return (
     <section className={`${styles.modalWrapper} ${active ? styles.active : ""}`}>
-      <div ref={modalRef} className={styles.modal}>
+      <div ref={modalRef} className={styles.modal} onKeyDown={deactivateKeyHandler} tabIndex="1">
         <div>
           <h1>ERROR:</h1>
           <img src={xSymbol} onClick={onClose} alt="return button" className="image cursor-pointer"/>

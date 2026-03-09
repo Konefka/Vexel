@@ -56,8 +56,6 @@ export async function login(email, password) {
       body: JSON.stringify({ email, password })
     })
 
-    console.log("tried")
-
     const data = await response.json();
 
     if (!!data.error) {

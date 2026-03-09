@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Routes, Route, Outlet, Navigate, useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Routes, Route, Outlet, Navigate, useNavigate } from "react-router-dom";
 // import { getToken, setErrorHandler, logout } from "./api/SignalR.jsx";
 import { setErrorHandler, logout } from "./api/Auth.jsx";
 import { MyRouteHandler } from "./Guard.jsx";
@@ -30,6 +30,16 @@ export default function App () {
   const [authOpen, setAuthOpen] = useState(false);
   const [authCard, setAuthCard] = useState(0); // 0 = login, 1 = register
 
+  const focusedRef = useRef(null);
+
+  const setFocusedRef = useCallback((e) => {
+    focusedRef.current = e.target;
+  }, []);
+
+  const setFocus = useCallback(() => {
+    focusedRef.current?.focus();
+  }, []);
+
   // Dashboard -> Messages + Sidebar -> Choose conversation
   const [selectedConversation, setSelectedConversation] = useState(null);
   const handleSelectConversation = (conversation) => {
@@ -54,11 +64,11 @@ export default function App () {
                 buttons={["Join us", "About us"]}
                 whatToDoOnClick = {[() => setAuthOpen(true), () => navigate("/about")]}
               />
-              <Cover active={authOpen} onClose={() => setAuthOpen(false)} isModalOn={!!error}
+              <Cover active={authOpen} onClose={() => setAuthOpen(false)} isModalOn={!!error} resetFocus={setFocus}
                 show={
                   authCard === 0
-                  ? <Login register={() => setAuthCard(1)} then={() => navigate("/dashboard", { replace: true })}/>
-                  : <Register login={() => setAuthCard(0)} then={() => navigate("/dashboard", { replace: true })}/>
+                  ? <Login register={() => setAuthCard(1)} then={() => navigate("/dashboard", { replace: true })} onFocus={setFocusedRef}/>
+                  : <Register login={() => setAuthCard(0)} then={() => navigate("/dashboard", { replace: true })} onFocus={setFocusedRef}/>
                 }
               />
             </MyRouteHandler>
