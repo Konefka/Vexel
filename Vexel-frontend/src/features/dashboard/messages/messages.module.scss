@@ -5,6 +5,8 @@
     flex-direction: column;
     justify-content: space-between;
 
+    backdrop-filter: blur(2.5px);
+
     * {
         transition: all .125s ease;
     }
@@ -28,8 +30,8 @@
         flex-direction: column;
         scroll-behavior: smooth;
 
-        padding: .5rem;
-        backdrop-filter: blur(2.5px);
+        padding-inline: .5rem;
+        padding-top: .5rem;
         overflow-y: auto;
 
         div {
@@ -122,9 +124,7 @@
         align-content: center;
         gap: .5rem;
 
-        padding: 1rem;
-        background-color: var(--bg);
-        border-top: 2px solid var(--border);
+        padding: .5rem;
         
         textarea {
             width: 100%;
@@ -134,7 +134,6 @@
             border: 2px solid var(--border);
             border-radius: var(--border-radius-l);
             font-size: .9rem;
-            // box-sizing: border-box;
         }
 
         &.multipleLines {

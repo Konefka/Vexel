@@ -6,7 +6,7 @@
     flex-direction: row;
 
     img, h4, h5:not(div[class*="profile"] > div > h5) {
-        margin: .1rem;
+        margin-inline: .1rem;
         padding: .3rem;
     }
 }
