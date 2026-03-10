@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import styles from "./header.module.scss";
 import githubIcon from "/src/assets/svg/github-mark-white.svg";
@@ -12,7 +12,7 @@ export default function Header ({nav = [], buttonText, onButtonClick}) {
         <a href="/home" className={styles.logo}><h2 className="cursor-pointer">Vexel</h2></a>
         <div>
           {nav.map((navHeader, index) => (
-            <button onClick={() => navigate('/' + navHeader.toLowerCase())} className="cursor-pointer" key={index}>{navHeader}</button>
+            <Link to={'/' + navHeader.toLowerCase()} className="cursor-pointer" key={index}>{navHeader}</Link>
           ))}
         </div>
       </nav>

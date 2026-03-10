@@ -145,7 +145,7 @@
                     margin-inline: .3rem;
                     overflow-y: auto;
 
-                    > div {
+                    > * {
                         display: flex;
                         flex-direction: row;
                         align-items: center;
@@ -200,7 +200,7 @@
                         height: 100%;
                         margin-bottom: .5rem;
 
-                        > div {
+                        > * {
                             transform: translateY(0);
                         }
                     }
@@ -220,7 +220,7 @@
     .grabTool {
         position: absolute;
         right: -1px;
-        width: 8px;
+        width: 10px;
         height: 100%;
         transform: translateX(50%);
         cursor: grab;

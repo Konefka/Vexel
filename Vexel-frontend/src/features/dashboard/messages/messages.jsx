@@ -33,7 +33,7 @@ export default function Messages({ onSelectConversation }) {
     }
   }, [conversationId, conversations, onSelectConversation]);
 
-  const { messages, loadMore, loading, hasMore, error } = useMessages({ 
+  const { messages, setMessages, loadMore, loading, hasMore, error } = useMessages({ 
     conversationId,
     howMuch: 30
   });
@@ -72,31 +72,12 @@ const handleScroll = () => {
 
     if (!value.trim()) return;
 
-    const lastChild = messagesRef.current.lastElementChild;
-    const lastSender = lastChild ? lastChild.getAttribute('data-sender') : null;
-
-
-    if (lastSender == "me") {
-      lastChild.innerHTML +=
-        `
-          <div class="${styles.messageSelectBlock} ${styles.right}">
-            <div class="${styles.message}">
-              <p>${value}</p>
-            </div>
-          </div>
-        `;
-    } else {
-      messagesRef.current.innerHTML += 
-        `
-          <div class="${styles.messagesBlock}" data-sender="me">
-            <div class="${styles.messageSelectBlock} ${styles.right}">
-              <div class="${styles.message}">
-                <p>${value}</p>
-              </div>
-            </div>
-          </div>
-        `;
-    }
+    const newMessage = {
+      senderName: "me",
+      text: value,
+    };
+    
+    setMessages(prev => [...prev, newMessage])
     
     messageBoxRef.current.value = "";
     textAreaSizeHandler()
@@ -191,6 +172,7 @@ const handleScroll = () => {
             ) : (
               groupedMessages.map((group, groupIndex) => {
                 const isMe = group.sender === "me";
+                console.log("again")
                 
                 return (
                   <div 

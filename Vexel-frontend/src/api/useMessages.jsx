@@ -78,10 +78,11 @@ export function useMessages({ conversationId, howMuch = 20 }) {
   };
 
   return { 
-    messages, 
-    loadMore, 
-    loading, 
-    hasMore, 
+    messages,
+    setMessages,
+    loadMore,
+    loading,
+    hasMore,
     error
   };
 }

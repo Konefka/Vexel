@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { replace, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useConversations } from "/src/api/useConversations";
 import { logout } from "/src/api/Auth";
 import styles from "./sidebar.module.scss";
@@ -144,14 +144,14 @@ export default function Sidebar({ onSelectConversation }) {
       </div>
       <nav>
         <div>
-          <div onClick={() => {navigate("/dashboard/home"); hideChats()}}>
+          <Link to="/dashboard/home" onClick={hideChats}>
             <img src={homeSymbol}/>
             <h4>home</h4>
-          </div>
-          <div onClick={() => {navigate("/dashboard/friends"); hideChats()}}>
+          </Link>
+          <Link to="/dashboard/friends" onClick={hideChats}>
             <img src={friendsSymbol}/>
             <h4>friends</h4>
-          </div>
+          </Link>
           <div onMouseEnter={showChats} className={styles.conversations}>
             <div onClick={changeStateOfChats}>
               <div>
@@ -177,33 +177,33 @@ export default function Sidebar({ onSelectConversation }) {
                   </div>
               ) : (
                 conversations.map((conversation) => (
-                  <div
+                  <Link to={`messages/${conversation.id}`}
                     key={conversation.id}
                     className={isConversationActive(conversation) ? styles.active : ''}
                     onClick={() => handleConversationClick(conversation)}
                   >
                     <img src={userSymbol}/>
                     <h5>{conversation.name}</h5>
-                  </div>
+                  </Link>
                 ))
               )}
             </div>
           </div>
-          <div onClick={() => {navigate("/dashboard/community"); hideChats()}}>
+          <Link to="/dashboard/community" onClick={hideChats}>
             <img src={communitySymbol}/>
             <h4>community</h4>
-          </div>
+          </Link>
         </div>
         <div>
-          <div onClick={() => {navigate("/dashboard/notifications"); hideChats()}}>
+          <Link to="/dashboard/notifications" onClick={hideChats}>
             <img src={bellSymbol}/>
             <h4>notifs</h4>
-          </div>
-          <div onClick={() => {navigate("/dashboard/settings"); hideChats()}}>
+          </Link>
+          <Link to="/dashboard/settings" onClick={hideChats}>
             <img src={settingsSymbol}/>
             <h4>settings</h4>
-          </div>
-          <div className={styles.logout} onClick={() => logout().then(navigate("/home"), { replace: true })}>
+          </Link>
+          <div className={styles.logout} onClick={async () => await logout().then(navigate("/home"), { replace: true })}>
             <img src={exitSymbol} alt="logout"/>
             <h4>logout</h4>
           </div>
