@@ -4,9 +4,9 @@ using Supabase.Postgrest.Models;
 namespace Vexel.Models
 {
     [Table("Accounts")]
-    internal class Accounts : BaseModel
+    public class Accounts : BaseModel
     {
-        [PrimaryKey("id")]
+        [PrimaryKey("id", shouldInsert: false)]
         public Guid Id { get; set; }
 
         [Column("username")]
@@ -24,13 +24,13 @@ namespace Vexel.Models
         [Column("status")]
         public string Status { get; set; } = "offline";
 
-        [Column("last_seen_at")]
+        [Column("last_seen_at", ignoreOnInsert: true)]
         public DateTimeOffset LastSeenAt { get; set; }
 
-        [Column("created_at")]
-        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
+        [Column("created_at", ignoreOnInsert: true, ignoreOnUpdate: true)]
+        public DateTimeOffset CreatedAt { get; set; }
 
-        [Column("updated_at")]
+        [Column("updated_at", ignoreOnInsert: true)]
         public DateTimeOffset? UpdatedAt { get; set; }
     }
 

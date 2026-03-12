@@ -8,22 +8,22 @@ If you find any errors, please open a new `Issue`, describe the error, and expla
 Thank you :)
 
 ### Planned Features
-- Real-time messaging
-- Group chats
-- Message persistence
+- Creating and modifying chats
+- Editing messages
 - Images as messages
+- Mobile version
 
 ### Requirements
-- Node.js 18+
+- Node.js 18
 - npm (comes with Node.js)
-- .NET 9.0+ (for backend development)
+- .NET 9.0 (for backend development)
 
 # Installation
 
 ### Frontend
 - IDE: Visual Studio Code
 - Stack: React + Vite + JavaSript + SCSS
-- Requirements: Node.js 18+, npm
+- Requirements: Node.js 18, npm
 
 1. Install dependencies
 ``` bash
@@ -40,10 +40,4 @@ npm run dev
 ### Backend
 - IDE: Visual Studio 2022
 - Stack: C# + SignalR + Supabase
-- Requirements: .NET 9.0+
-
-Backend features:
-- Connects with the frontend
-- Login and registration implemented
-- Messaging features in development
-- Frontend can run independently without the backend
+- Requirements: .NET 9.0

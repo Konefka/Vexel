@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Vexel.Hubs;
 using System.Text;
 using Vexel.Services;
 internal class Program
@@ -41,7 +42,7 @@ internal class Program
         builder.Services.AddSingleton<ConversationService>();
         builder.Services.AddSingleton<MessageService>();
         builder.Services.AddControllers();
-        //builder.Services.AddSignalR();
+        builder.Services.AddSignalR();
 
         builder.Services.AddCors(options =>
         {
@@ -97,12 +98,11 @@ internal class Program
         var app = builder.Build();
 
         app.UseCors("cors");
-
         app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
-        //app.MapHub<AuthHub>("/AuthHub");
+        app.MapHub<MessageHub>("/messageHub");
 
         app.Run();
     }

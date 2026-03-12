@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useConversations } from "/src/api/useConversations";
+import { useNotifications } from "../../../api/useNotifications";
+import { useCurrentUser } from "/src/api/UserContext";
 import { logout } from "/src/api/Auth";
 import styles from "./sidebar.module.scss";
 
@@ -26,7 +28,9 @@ export default function Sidebar({ onSelectConversation }) {
   const chatsRef = useRef(null);
   const areChatsShown = useRef(false);
   const chatsArrowRef = useRef(null);
-  const { conversations, loading, error } = useConversations();
+  const { conversations, convLoading, error } = useConversations();
+  useNotifications(conversations);
+  const { currentUser, userLoading } = useCurrentUser();
 
   const { conversationId } = useParams();
   const navigate = useNavigate();
@@ -35,7 +39,7 @@ export default function Sidebar({ onSelectConversation }) {
     sidebarWidthToOpenNameRef.current = sidebarRef.current.clientWidth;
     const width = parseInt(localStorage.getItem("sidebarWidth"), 10) + "px";
     sidebarRef.current.style.width = width;
-    if (nameRef.current.scrollWidth > nameRef.current.clientWidth) sidebarRef.current.classList.add(styles.thin);
+    if (nameRef.current) if (nameRef.current.scrollWidth > nameRef.current.clientWidth) sidebarRef.current.classList.add(styles.thin);
 
     window.addEventListener("resize", moveHandler);
     return () => {
@@ -48,7 +52,15 @@ export default function Sidebar({ onSelectConversation }) {
   // Functions for moving the sidebar
 
   const moveHandler = (e) => {
-    if (sidebarWidthToOpenNameRef.current === 0 && (nameRef.current.clientWidth < nameRef.current.scrollWidth || e.clientX < SIDEBAR_MIN_WIDTH)) {
+    if (nameRef.current) {
+      if (sidebarWidthToOpenNameRef.current === 0 && (nameRef.current.clientWidth < nameRef.current.scrollWidth || e.clientX < SIDEBAR_MIN_WIDTH)) {
+        sidebarWidthToOpenNameRef.current = sidebarRef.current.clientWidth;
+        sidebarRef.current.classList.add(styles.thin);
+      } else if (sidebarWidthToOpenNameRef.current !== 0 && e.clientX > sidebarWidthToOpenNameRef.current) {
+        sidebarWidthToOpenNameRef.current = 0;
+        sidebarRef.current.classList.remove(styles.thin);
+      }
+    } else if (sidebarWidthToOpenNameRef.current === 0 && e.clientX < SIDEBAR_MIN_WIDTH) {
       sidebarWidthToOpenNameRef.current = sidebarRef.current.clientWidth;
       sidebarRef.current.classList.add(styles.thin);
     } else if (sidebarWidthToOpenNameRef.current !== 0 && e.clientX > sidebarWidthToOpenNameRef.current) {
@@ -138,8 +150,16 @@ export default function Sidebar({ onSelectConversation }) {
       <div className={`${styles.profile} cursor-pointer`}>
         <img src={hashSymbol} alt="logo"/>
         <div>
-          <h2 ref={nameRef}>Konefka</h2>
-          <h5>Tymoteusz Konefał</h5>
+          {userLoading ? (
+            <h2 ref={nameRef}>Ładowanie...</h2>
+          ) : currentUser.displayName ? (
+            <>
+              <h2 ref={nameRef}>{currentUser.displayName}</h2>
+              <h5>{currentUser.name}</h5>
+            </>
+          ) : (
+            <h5>{currentUser.name}</h5>
+          )}
         </div>
       </div>
       <nav>
@@ -161,7 +181,7 @@ export default function Sidebar({ onSelectConversation }) {
               <img ref={chatsArrowRef} src={arrowSymbol}/>
             </div>
             <div ref={chatsRef} className={styles.userChats}>
-              { loading ? (
+              { convLoading ? (
                 <div>
                   <div className={styles.spinner}/>
                   <h5>Ładowanie konwersacji...</h5>

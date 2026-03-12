@@ -76,6 +76,17 @@ namespace Vexel.Services
             }
         }
 
+        public async Task<Accounts?> GetUserByIdDB(Guid userId)
+        {
+            var response = await _client
+                .From<Accounts>()
+                .Select(x => new object[] { x.Id, x.Name, x.DisplayName })
+                .Where(x => x.Id == userId)
+                .Get();
+
+            return response.Models.FirstOrDefault();
+        }
+
         async Task UpdateLastSeenAtDB(Guid userId)
         {
             await _client

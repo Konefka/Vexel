@@ -39,17 +39,18 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-
-            > *:first-child {
-                max-width: fit-content;
-                line-height: .9;
-            }
-
+            
             > *:last-child {
                 color: var(--secondary-fg);
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+            }
+
+            > *:first-child {
+                color: var(--fg);
+                max-width: fit-content;
+                line-height: .9;
             }
         }
 

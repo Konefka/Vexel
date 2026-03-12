@@ -1,13 +1,19 @@
 import { useState, useEffect } from 'react';
+import { useSignalR } from './SignalRContext';
 
-export function useMessages({ conversationId, howMuch = 20 }) {
+export function useMessages({ conversationId, howMuch = 20, onNewMessage }) {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(null);
 
+  const signalR = useSignalR();
+
   useEffect(() => {
     if (!conversationId) return;
+
+    setMessages([]);
+    setHasMore(true);
 
     async function fetchMessages() {
       setLoading(true);
@@ -21,14 +27,11 @@ export function useMessages({ conversationId, howMuch = 20 }) {
           body: JSON.stringify({ conversationId, take: howMuch })
         });
 
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
-          const data = await res.json();
-          
-          setMessages(data.messages || []);
-          setHasMore(data.hasMore ?? true);
+        const data = await res.json();
+        setMessages(data.messages || []);
+        setHasMore(data.hasMore ?? true);
       } catch (err) {
         console.error('Error fetching messages:', err);
         setError(err.message);
@@ -39,6 +42,26 @@ export function useMessages({ conversationId, howMuch = 20 }) {
 
     fetchMessages();
   }, [conversationId, howMuch]);
+
+  useEffect(() => {
+    if (!conversationId || !signalR) return;
+
+    const unsubscribe = signalR.subscribe((incomingConversationId, message) => {
+      if (incomingConversationId?.toString() !== conversationId?.toString()) return;
+
+      setMessages(prev => {
+        const isDuplicate = prev.some(m => m.id === message.id);
+        if (isDuplicate) return prev;
+
+        onNewMessage?.(message);
+
+        return [...prev, message];
+      });
+    });
+
+    return () => unsubscribe();
+
+  }, [conversationId, signalR]);
 
   const loadMore = async () => {
     if (!hasMore || loading || messages.length === 0) return;
@@ -57,12 +80,10 @@ export function useMessages({ conversationId, howMuch = 20 }) {
         body: JSON.stringify({ conversationId, take: howMuch, before: oldestDate })
       });
 
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
       const data = await res.json();
-      
+
       if (data.messages && data.messages.length > 0) {
         setMessages(prev => [...data.messages, ...prev]);
         setHasMore(data.hasMore ?? false);
@@ -77,12 +98,5 @@ export function useMessages({ conversationId, howMuch = 20 }) {
     }
   };
 
-  return { 
-    messages,
-    setMessages,
-    loadMore,
-    loading,
-    hasMore,
-    error
-  };
+  return { messages, setMessages, loadMore, loading, hasMore, error };
 }

@@ -116,6 +116,21 @@
         .info {
             text-align: center;
         }
+
+        .scrollArrow {
+            position: absolute;
+            
+            opacity: 0;
+            background-color: var(--border);
+            border-radius: var(--border-radius-m);
+            bottom: 10%;
+            left: 50%;
+            transform: translate(-50%, 50%);
+
+            &.show {
+                opacity: 1;
+            }
+        }
     }
 
     footer {

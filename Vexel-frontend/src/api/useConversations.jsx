@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 export function useConversations() {
   const [conversations, setConversations] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [convLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -34,5 +34,5 @@ export function useConversations() {
     fetchConversations();
   }, []);
 
-  return { conversations, loading, error };
+  return { conversations, convLoading, error };
 }

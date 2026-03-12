@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Routes, Route, Outlet, Navigate, useNavigate } from "react-router-dom";
-// import { getToken, setErrorHandler, logout } from "./api/SignalR.jsx";
-import { setErrorHandler, logout } from "./api/Auth.jsx";
+import { setErrorHandler } from "./api/Auth.jsx";
 import { MyRouteHandler } from "./Guard.jsx";
+import { SignalRProvider } from "/src/api/SignalRContext";
+import { UserProvider } from "./api/UserContext.jsx";
 import Register from "/src/features/auth/Register.jsx";
 import Login from "/src/features/auth/Login.jsx";
 
@@ -77,12 +78,16 @@ export default function App () {
         <Route path="/dashboard"
           element={
             <MyRouteHandler isPrivate={true}>
-              <Dashboard>
-                <Sidebar
-                  onSelectConversation={handleSelectConversation}
-                />
-                <Outlet/>
-              </Dashboard>
+              <UserProvider>
+                <SignalRProvider>
+                  <Dashboard>
+                    <Sidebar
+                      onSelectConversation={handleSelectConversation}
+                    />
+                    <Outlet/>
+                  </Dashboard>
+                </SignalRProvider>
+              </UserProvider>
             </MyRouteHandler>
           }
         >

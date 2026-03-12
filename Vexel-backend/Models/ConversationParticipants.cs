@@ -12,8 +12,5 @@ namespace Vexel.Models
 
         [Column("account_id")]
         public Guid AccountId { get; set; }
-
-        [JsonPropertyName("Conversations")]
-        public Conversations? Conversation { get; set; }
     }
 }

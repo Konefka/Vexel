@@ -13,7 +13,7 @@ namespace Vexel.Services
             _client = client;
         }
 
-        public record MessageResult(Guid Id, string Text, string? SenderName, DateTime DateStamp);
+        public record MessageResult(Guid Id, string Text, string? SenderName, DateTimeOffset DateStamp);
         public record MessageBatch(Guid ConversationId, List<MessageResult> Messages, bool hasMore);
 
         public async Task<bool> IsUserInConversation(Guid userId, Guid conversationId)
@@ -53,7 +53,7 @@ namespace Vexel.Services
                 .Select(m => new MessageResult(
                     m.Id,
                     m.Value,
-                    m.SenderId == null ? "deleted user" : (m.SenderId == userId? "me" : (nameDict.TryGetValue(m.SenderId.Value, out var name) ? name : "unknown user")),
+                    m.SenderId == null ? "deleted user" : (nameDict.TryGetValue(m.SenderId.Value, out var name) ? name : "unknown user"),
                     m.CreatedAt.DateTime))
                 .Reverse()
                 .ToList();
@@ -62,6 +62,37 @@ namespace Vexel.Services
             var messages = allMessages.Take(take).ToList();
 
             return new MessageBatch(conversationId, messages, hasMore);
+        }
+
+        public async Task<MessageResult> SaveMessageDB(Guid senderId, Guid conversationId, string text)
+        {
+            Messages newMessage = new Messages
+            {
+                ConversationId = conversationId,
+                SenderId = senderId,
+                Value = text,
+            };
+
+            ModeledResponse<Messages> response = await _client
+                .From<Messages>()
+                .Insert(newMessage, new QueryOptions { Returning = QueryOptions.ReturnType.Representation });
+
+            var saved = response.Models.First();
+
+            var accountResponse = await _client
+                .From<Accounts>()
+                .Select(x => new object[] { x.Id, x.Name })
+                .Where(x => x.Id == senderId)
+                .Get();
+
+            var senderName = accountResponse.Models.FirstOrDefault()?.Name ?? "unknown user";
+
+            return new MessageResult(
+                saved.Id,
+                saved.Value,
+                senderName,
+                saved.CreatedAt
+            );
         }
     }
 }

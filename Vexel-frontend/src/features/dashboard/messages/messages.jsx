@@ -1,11 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useCurrentUser } from "/src/api/UserContext";
 import { useParams } from "react-router-dom";
 import { useMessages } from "/src/api/useMessages";
 import { useConversations } from "/src/api/useConversations";
+import { useSignalR } from "/src/api/SignalRContext";
 import styles from "./messages.module.scss";
 
 import sendSymbol from "/src/assets/svg/send.svg";
 import infoSymbol from "/src/assets/svg/info-circle.svg";
+import arrowSymbol from "/src/assets/svg/arrow-down.svg";
 
 export default function Messages({ onSelectConversation }) {
   const { conversationId } = useParams();
@@ -13,29 +16,43 @@ export default function Messages({ onSelectConversation }) {
   const footerRef = useRef(null);
   const messageBoxRef = useRef(null);
   const [displayName, setDisplayName] = useState("");
+  const [showScrollArrow, setShowScrollArrow] = useState(false);
 
+  const { currentUser, userLoading } = useCurrentUser();
   const { conversations, loading: conversationsLoading } = useConversations();
+  const { sendMessage, setActiveConversation } = useSignalR();
 
   useEffect(() => {
     if (conversationId && conversations.length > 0) {
-      
-      const conversation = conversations.find(
-        conv => conv.id === conversationId
-      );
+      const conversation = conversations.find(conv => conv.id === conversationId);
 
       if (conversation) {
         setDisplayName(conversation.name);
-        
-        if (onSelectConversation) {
-          onSelectConversation(conversation);
-        }
+        if (onSelectConversation) onSelectConversation(conversation);
       }
     }
-  }, [conversationId, conversations, onSelectConversation]);
 
-  const { messages, setMessages, loadMore, loading, hasMore, error } = useMessages({ 
+    setActiveConversation(conversationId ?? null);
+    
+    return () => setActiveConversation(null);
+  }, [conversationId, conversations, onSelectConversation, setActiveConversation]);
+
+  const isScrolledToBottom = () => {
+    const container = messagesRef.current;
+    if (!container) return true;
+    return container.scrollHeight - container.scrollTop - container.clientHeight < 50;
+  };
+
+  const handleNewMessage = useCallback(() => {
+    if (!isScrolledToBottom()) {
+      setShowScrollArrow(true);
+    }
+  }, []);
+
+  const { messages, loadMore, loading, hasMore, error } = useMessages({
     conversationId,
-    howMuch: 30
+    howMuch: 30,
+    onNewMessage: handleNewMessage
   });
 
   const messagesScrollHandler = () => {
@@ -47,50 +64,47 @@ export default function Messages({ onSelectConversation }) {
     }
   }
 
-const handleScroll = () => {
-  const container = messagesRef.current;
-  if (!container) return;
+  const handleScroll = () => {
+    const container = messagesRef.current;
+    if (!container) return;
 
-  if (container.scrollTop === 0 && hasMore && !loading) {
-    const previousScrollHeight = container.scrollHeight;
-    
-    loadMore().then(() => {
-      requestAnimationFrame(() => {
-        if (messagesRef.current) {
+    if (isScrolledToBottom()) {
+      setShowScrollArrow(false);
+    }
+
+    if (container.scrollTop === 0 && hasMore && !loading) {
+      const previousScrollHeight = container.scrollHeight;
+
+      loadMore().then(() => {
+        requestAnimationFrame(() => {
+          if (messagesRef.current) {
             container.scrollTo({
-            top: container.scrollHeight - previousScrollHeight,
-            behavior: 'instant',
-          });
-        }
+              top: container.scrollHeight - previousScrollHeight,
+              behavior: 'instant',
+            });
+          }
+        });
       });
-    });
-  }
-};
+    }
+  };
 
   const newMessageHandler = async () => {
     const value = messageBoxRef.current.value;
-
     if (!value.trim()) return;
 
-    const newMessage = {
-      senderName: "me",
-      text: value,
-    };
-    
-    setMessages(prev => [...prev, newMessage])
-    
     messageBoxRef.current.value = "";
-    textAreaSizeHandler()
+    textAreaSizeHandler();
 
+    await sendMessage(conversationId, value);
     setTimeout(() => messagesScrollHandler(), 100);
   }
 
   const inputHandler = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault()
-      newMessageHandler()
+      e.preventDefault();
+      newMessageHandler();
     }
-    textAreaSizeHandler()
+    textAreaSizeHandler();
   }
 
   const textAreaSizeHandler = () => {
@@ -99,8 +113,8 @@ const handleScroll = () => {
     messageBoxRef.current.style.height = "auto";
     messageBoxRef.current.style.height = messageBoxRef.current.scrollHeight + 4 + "px";
 
-    if (messagesRef.current.scrollTop = messagesRef.current.scrollHeight) {
-      messagesScrollHandler()
+    if (messagesRef.current.scrollTop === messagesRef.current.scrollHeight) {
+      messagesScrollHandler();
     }
 
     footerRef.current.classList.remove(styles.multipleLines);
@@ -114,12 +128,8 @@ const handleScroll = () => {
 
     messages.forEach(msg => {
       const senderName = msg.senderName;
-      
       if (!currentGroup || currentGroup.sender !== senderName) {
-        currentGroup = {
-          sender: senderName,
-          messages: [msg]
-        };
+        currentGroup = { sender: senderName, messages: [msg] };
         grouped.push(currentGroup);
       } else {
         currentGroup.messages.push(msg);
@@ -130,21 +140,30 @@ const handleScroll = () => {
   };
 
   useEffect(() => {
-    if (!loading && hasMore) {
+    if (!loading) {
       messagesScrollHandler();
     }
   }, [loading]);
 
-  const groupedMessages = groupMessagesBySender(messages);
+  const groupedMessages = useMemo(() => {if (!messages || messages.length === 0) return []; return groupMessagesBySender(messages);}, [messages]);
 
   return (
     <section className={styles.messages}>
       <header>
         <h3 className="cursor-pointer">{displayName || "Loading..."}</h3>
-        <img src={infoSymbol} className="cursor-pointer" alt="info"/>
+        {/* <img src={infoSymbol} className="cursor-pointer" alt="info"/> */}
       </header>
       <div ref={messagesRef} onScroll={handleScroll}>
-        { !conversationId ? (
+        <button
+          className={`${styles.scrollArrow} ${showScrollArrow ? styles.show : ''}`}
+          onClick={() => {
+            messagesScrollHandler();
+            setShowScrollArrow(false);
+          }}
+        >
+          <img src={arrowSymbol}/>
+        </button>
+        {!conversationId ? (
           <div className={styles.info}>
             <p>
               {conversationsLoading 
@@ -164,24 +183,22 @@ const handleScroll = () => {
                 <p>Początek konwersacji</p>
               </div>
             )}
-
+            
             {messages.length === 0 && loading ? (
               <div className={styles.info}>
                 <p>Ładowanie wiadomości...</p>
               </div>
             ) : (
               groupedMessages.map((group, groupIndex) => {
-                const isMe = group.sender === "me";
-                console.log("again")
-                
+                const isMe = group.sender === currentUser.name;
                 return (
-                  <div 
+                  <div
                     key={`group-${groupIndex}`}
                     className={styles.messagesBlock}
-                    data-sender={isMe ? "me" : group.sender}
+                    data-sender={isMe ? currentUser.name : group.sender}
                   >
                     {group.messages.map((msg, msgIndex) => (
-                      <div 
+                      <div
                         key={msg.id || `msg-${groupIndex}-${msgIndex}`}
                         className={`${styles.messageSelectBlock} ${isMe ? styles.right : ''}`}
                       >

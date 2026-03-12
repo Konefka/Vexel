@@ -6,7 +6,7 @@ namespace Vexel.Models
     [Table("Messages")]
     internal class Messages : BaseModel
     {
-        [Column("id")]
+        [PrimaryKey("id", shouldInsert: false)]
         public Guid Id { get; set; }
 
         [Column("conversation_id")]
@@ -15,7 +15,7 @@ namespace Vexel.Models
         [Column("sender_account_id")]
         public Guid? SenderId { get; set; }
 
-        [Column("created_at")]
+        [Column("created_at", ignoreOnInsert: true, ignoreOnUpdate: true)]
         public DateTimeOffset CreatedAt { get; set; }
 
         [Column("value")]
