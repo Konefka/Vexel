@@ -20,7 +20,7 @@ export default function Register(functions) {
       <p>Please register to your account.</p>
       <input name="email" type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} onClick={functions.onFocus} autoComplete="email"/>
       <input name="password" type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} onClick={functions.onFocus} autoComplete="off"/>
-      <input ref={buttonRef} type="submit" className="cursor-pointer" onClick={async () => await register(email, password).then(logged => {if (logged) functions.then()})} value="Register"/>
+      <input ref={buttonRef} type="submit" className="cursor-pointer" onClick={async () => {const logged = await register(email, password); if (logged) functions.then()}} value="Register"/>
       <hr/>
       <p>If you already have an account, please <span className="linked-text" onClick={functions.login}>login</span>.</p>
     </div>
