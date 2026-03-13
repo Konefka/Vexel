@@ -80,7 +80,7 @@ namespace Vexel.Services
         {
             var response = await _client
                 .From<Accounts>()
-                .Select(x => new object[] { x.Id, x.Name, x.DisplayName })
+                .Select(x => new object[] { x.Id, x.Name, x.DisplayName! })
                 .Where(x => x.Id == userId)
                 .Get();
 

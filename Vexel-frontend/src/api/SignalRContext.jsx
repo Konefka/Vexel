@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef } from "react";
 import * as signalR from "@microsoft/signalr";
 
+const domain = import.meta.env.VITE_BACKEND_API_URL;
 const SignalRContext = createContext(null);
 
 export function SignalRProvider({ children }) {
@@ -12,7 +13,7 @@ export function SignalRProvider({ children }) {
   useEffect(() => {
 
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl("https://localhost:7159/messageHub", {
+      .withUrl(`${domain}/messageHub`, {
         withCredentials: true
       })
       .withAutomaticReconnect()

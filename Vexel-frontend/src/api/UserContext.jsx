@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
+const domain = import.meta.env.VITE_BACKEND_API_URL;
 const UserContext = createContext(null);
 
 export function UserProvider({ children }) {
@@ -9,7 +10,7 @@ export function UserProvider({ children }) {
   useEffect(() => {
     async function fetchCurrentUser() {
       try {
-        const res = await fetch("https://localhost:7159/account/me", {
+        const res = await fetch(`${domain}/account/me`, {
           method: "POST",
           credentials: "include"
         });

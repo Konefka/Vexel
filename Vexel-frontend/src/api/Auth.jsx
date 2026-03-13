@@ -1,5 +1,5 @@
 let errorHandler = null;
-const domain = "https://localhost:7159";
+const domain = import.meta.env.VITE_BACKEND_API_URL;
 
 export function setErrorHandler(functions) {
   errorHandler = functions;

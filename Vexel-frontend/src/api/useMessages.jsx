@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useSignalR } from './SignalRContext';
 
+const domain = import.meta.env.VITE_BACKEND_API_URL;
+
 export function useMessages({ conversationId, howMuch = 20, onNewMessage }) {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -20,7 +22,7 @@ export function useMessages({ conversationId, howMuch = 20, onNewMessage }) {
       setError(null);
 
       try {
-        const res = await fetch(`https://localhost:7159/conversation/${conversationId}/messages`, {
+        const res = await fetch(`${domain}/conversation/${conversationId}/messages`, {
           method: "POST",
           credentials: 'include',
           headers: { "Content-Type": "application/json" },
@@ -73,7 +75,7 @@ export function useMessages({ conversationId, howMuch = 20, onNewMessage }) {
       const oldestMessage = messages[0];
       const oldestDate = new Date(oldestMessage.dateStamp).toISOString();
 
-      const res = await fetch(`https://localhost:7159/conversation/${conversationId}/messages?take=${howMuch}&before=${oldestDate}`, {
+      const res = await fetch(`${domain}/conversation/${conversationId}/messages`, {
         method: "POST",
         credentials: 'include',
         headers: { "Content-Type": "application/json" },

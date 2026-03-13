@@ -22,8 +22,11 @@ internal class Program
 
     static async Task<Supabase.Client> InitializeSupabase()
     {
-        string url = builder.Configuration["Supabase:Url"] ?? throw new Exception("Supabase URL is missing");
-        string key = builder.Configuration["Supabase:Key"] ?? throw new Exception("Supabase Key is missing");
+        string? url = builder.Configuration["Supabase:Url"];
+        if (string.IsNullOrEmpty(url)) throw new Exception("Supabase URL is missing");
+
+        string? key = builder.Configuration["Supabase:Key"];
+        if (string.IsNullOrEmpty(key)) throw new Exception("Supabase Key is missing");
 
         Supabase.SupabaseOptions options = new Supabase.SupabaseOptions { AutoConnectRealtime = true };
 
@@ -44,11 +47,13 @@ internal class Program
         builder.Services.AddControllers();
         builder.Services.AddSignalR();
 
+        var frontendUrl = builder.Configuration["Frontend_Url"] ?? throw new Exception("Frontend URL is missing");
+
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("cors", policy =>
             {
-                policy.WithOrigins("http://localhost:5173")
+                policy.WithOrigins(frontendUrl)
                       .AllowAnyHeader()
                       .AllowAnyMethod()
                       .AllowCredentials();

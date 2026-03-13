@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+const domain = import.meta.env.VITE_BACKEND_API_URL;
+
 export function useConversations() {
   const [conversations, setConversations] = useState([]);
   const [convLoading, setLoading] = useState(false);
@@ -11,7 +13,7 @@ export function useConversations() {
       setError(null);
 
       try {
-        const res = await fetch('https://localhost:7159/conversation/list', {
+        const res = await fetch(`${domain}/conversation/list`, {
           method: "POST",
           credentials: 'include',
           headers: { "Content-Type": "application/json" }
