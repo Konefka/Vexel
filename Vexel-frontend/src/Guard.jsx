@@ -21,7 +21,6 @@ export function MyRouteHandler({isPrivate, children}) {
 
   if (isLogged == null) return <Loader/>;
 
-
   // Redirects you from a site that you can not enter to the one that's perfect for you :)
   if (isPrivate && !isLogged) return <Navigate to="/home" replace />;
   if (!isPrivate && isLogged) return <Navigate to="/dashboard" replace />;

@@ -4,6 +4,9 @@
   color: var(--fg);
   line-height: 1.5;
 
+  margin: 0;
+  padding: 0;
+
   box-sizing: border-box;
   text-decoration: none;
   list-style: none;
@@ -131,4 +134,13 @@ abbr:hover::after {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.logout {
+  background-color: var(--logout);
+  @extend .cursor-pointer;
+
+  &:hover {
+    background-color: var(--logout-hover);
+  }
 }

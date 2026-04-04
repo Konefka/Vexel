@@ -16,8 +16,11 @@ import Dashboard from "./features/dashboard/dashboard.jsx";
 import Sidebar from "/src/features/dashboard/sidebar/sidebar.jsx";
 import Messages from "/src/features/dashboard/messages/messages.jsx";
 
+import setUsername from "/src/features/account/userSetup/setUsername.jsx";
+
 import Spotify from "/src/components/spotify/spotify.jsx";
 import Box from "/src/components/test-box.jsx";
+import SetUsername from "./features/account/userSetup/setUsername.jsx";
 
 export default function App () {
   // ERROR -> modal
@@ -69,7 +72,7 @@ export default function App () {
                 show={
                   authCard === 0
                   ? <Login register={() => setAuthCard(1)} then={() => navigate("/dashboard", { replace: true })} onFocus={setFocusedRef}/>
-                  : <Register login={() => setAuthCard(0)} then={() => navigate("/dashboard", { replace: true })} onFocus={setFocusedRef}/>
+                  : <Register login={() => setAuthCard(0)} then={() => navigate("/set-username", { replace: true })} onFocus={setFocusedRef}/>
                 }
               />
             </MyRouteHandler>
@@ -104,6 +107,13 @@ export default function App () {
           <Route path="notifications" element={<h1>Notifications</h1>}/>
           <Route path="settings" element={<h1>Settings</h1>}/>
         </Route>
+        <Route path="/set-username"
+          element={
+            <MyRouteHandler isPrivate={true}>
+              <SetUsername/>
+            </MyRouteHandler>
+          }
+        />
         
         <Route path="/Who_decided_that?"
           element={

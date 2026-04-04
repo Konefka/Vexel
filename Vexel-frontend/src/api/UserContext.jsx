@@ -1,11 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 const domain = import.meta.env.VITE_BACKEND_API_URL;
 const UserContext = createContext(null);
 
 export function UserProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userLoading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchCurrentUser() {
@@ -15,14 +18,24 @@ export function UserProvider({ children }) {
           credentials: "include"
         });
 
-        if (!res.ok) throw new Error("Nie udało się pobrać danych użytkownika");
-
-        const data = await res.json();
-        setCurrentUser(data);
+        if (!res.ok) {
+          if (res.status == 404) {
+            console.log("No user found");
+            logout();
+          } else if (res.status == 409) {
+            console.log("No username found");
+            navigate("/set-username");
+          } else {
+            console.log("Unexpected error");
+            logout();
+          }
+        } else {
+          const data = await res.json();
+          setCurrentUser(data);
+          setLoading(false);
+        }
       } catch (err) {
         console.error("Błąd pobierania użytkownika:", err);
-      } finally {
-        setLoading(false);
       }
     }
 

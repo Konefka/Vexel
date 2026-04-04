@@ -1,10 +1,9 @@
 .cover {
   position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
+  inset: 0 0 0 auto;
   width: 33%;
-  min-width: min-content;
+  min-width: fit-content;
+  z-index: 2;
 
   display: flex;
   flex-direction: column;

@@ -18,16 +18,16 @@ export default function Banner ({bigText, message, buttons = null, whatToDoOnCli
   }
 
   return (
-    <section className={styles.banner}>
-      <fieldset>
+    <section className={styles.bannerWrapper}>
+      <fieldset className={styles.banner}>
         <legend>banner</legend>
           <h1>
-            { bigText.split("\n").map((line, index) => (
+            {bigText.split("\n").map((line, index) => (
               <span key={index}>{line}<br/></span>
             ))}
           </h1>
           <p>
-            { message.split("\n").map((sentence, index) => (
+            {message.split("\n").map((sentence, index) => (
               <span key={index}>{sentence}<br/></span>
             ))}
           </p>

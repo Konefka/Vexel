@@ -25,7 +25,7 @@ namespace Vexel.Models
         public string Status { get; set; } = "offline";
 
         [Column("last_seen_at", ignoreOnInsert: true)]
-        public DateTimeOffset LastSeenAt { get; set; }
+        public DateTimeOffset? LastSeenAt { get; set; }
 
         [Column("created_at", ignoreOnInsert: true, ignoreOnUpdate: true)]
         public DateTimeOffset CreatedAt { get; set; }
