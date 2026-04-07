@@ -7,7 +7,7 @@ using Vexel.Services;
 internal class Program
 {
     static WebApplicationBuilder builder = null!;
-    static async Task Main(string[] args)
+    static void Main(string[] args)
     {
         builder = WebApplication.CreateBuilder(args);
 
@@ -17,10 +17,11 @@ internal class Program
             .AddUserSecrets<Program>()
             .AddEnvironmentVariables();
 
-        InitializeServices(await InitializeSupabase());
+        InitializeSupabase();
+        InitializeServices();
     }
 
-    static async Task<Supabase.Client> InitializeSupabase()
+    static void InitializeSupabase()
     {
         string? url = builder.Configuration["Supabase:Url"];
         if (string.IsNullOrEmpty(url)) throw new Exception("Supabase URL is missing");
@@ -28,22 +29,28 @@ internal class Program
         string? key = builder.Configuration["Supabase:Key"];
         if (string.IsNullOrEmpty(key)) throw new Exception("Supabase Key is missing");
 
-        Supabase.SupabaseOptions options = new Supabase.SupabaseOptions { AutoConnectRealtime = true };
+        builder.Services.AddScoped(provider =>
+        {
+            Supabase.SupabaseOptions options = new Supabase.SupabaseOptions
+            {
+                AutoConnectRealtime = false
+            };
+            var client = new Supabase.Client(url, key, options);
 
-        Supabase.Client client = new Supabase.Client(url, key, options);
-        await client.InitializeAsync();
+            client.InitializeAsync().GetAwaiter().GetResult();
 
-        builder.Services.AddSingleton(client);
+            return client;
+        });
+
+        //builder.Services.AddSingleton(client);
 
         //await client.AdminAuth("service key").DeleteUser("user id");
-
-        return client;
     }
-    static void InitializeServices(Supabase.Client client)
+    static void InitializeServices()
     {
-        builder.Services.AddSingleton<AccountService>();
-        builder.Services.AddSingleton<ConversationService>();
-        builder.Services.AddSingleton<MessageService>();
+        builder.Services.AddScoped<AccountService>();
+        builder.Services.AddScoped<ConversationService>();
+        builder.Services.AddScoped<MessageService>();
         builder.Services.AddControllers();
         builder.Services.AddSignalR();
 
@@ -83,16 +90,21 @@ internal class Program
 
                 options.Events = new JwtBearerEvents
                 {
-                    OnMessageReceived = context =>
+                    OnMessageReceived = async context =>
                     {
                         if (context.Request.Cookies.TryGetValue("access_token", out var token))
+                        {
                             context.Token = token;
 
-                        return Task.CompletedTask;
+                            var client = context.HttpContext.RequestServices
+                                .GetRequiredService<Supabase.Client>();
+
+                            await client.Auth.SetSession(token, "not-needed");
+                        }
                     },
                     OnAuthenticationFailed = context =>
                     {
-                        Console.WriteLine("JWT walidacja nie przesz³a: " + context.Exception.Message);
+                        Console.WriteLine("JWT walidacja nie przeszï¿½a: " + context.Exception.Message);
                         return Task.CompletedTask;
                     }
                 };

@@ -103,14 +103,6 @@
                     align-content: center;
                 }
 
-                &.logout {
-                    background-color: hsl(0, 68%, 44%);
-
-                    &:hover {
-                        background-color: hsl(0, 70%, 48%);
-                    }
-                }
-
                 &:hover:not(.conversations > div:not(.userChats), .logout) {
                     background-color: var(--border);
                 }

@@ -1,0 +1,68 @@
+.userSetup {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    > .username {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        width: max-content;
+
+        padding: 1.5rem 2rem;
+        border-radius: var(--border-radius-m);
+        border: 2px solid var(--border);
+        background-color: var(--bg);
+
+        legend {
+            padding-inline: 5px;
+        }
+
+        .requirements {
+            display: flex;
+            flex-direction: column;
+
+            > div {
+                display: flex;
+                flex-direction: row;
+                img {
+                    width: 1rem;
+                }
+            }
+        }
+
+        > input {
+            width: 100%;
+
+            padding: .5rem;
+            background-color: var(--border);
+            border-radius: var(--border-radius-s);
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            margin-inline: 2rem;
+            margin-top: .5rem;
+
+            > button {
+                width: fit-content;
+                
+                padding: .4rem 1rem;
+                border-radius: var(--border-radius-s);
+            }
+
+            .submit {
+                border: 2px solid var(--border);
+            }
+        }
+    }
+}

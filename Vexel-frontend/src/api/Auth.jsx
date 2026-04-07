@@ -71,12 +71,17 @@ export async function login(email, password) {
 }
 
 export async function logout() {
-  await fetch(`${domain}/auth/logout`, {
-    method: "POST",
-    credentials: "include"
-  })
-  .catch(err => {
-    console.error("Unexpected logout error:", err);
-    if (errorHandler) errorHandler(err.toString());
-  });
+  try {
+    await fetch(`${domain}/auth/logout`, {
+      method: "POST",
+      credentials: "include"
+    })
+
+    location.reload();
+  } catch {
+    (err => {
+      console.error("Unexpected logout error:", err);
+      if (errorHandler) errorHandler(err.toString());
+    })
+  }
 }

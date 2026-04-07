@@ -1,11 +1,11 @@
-.banner {
+.bannerWrapper {
     left: 0;
     right: 0;
 
     display: flex;
     justify-content: center;
 
-    > * {
+    > .banner {
         display: flex;
         flex-direction: column;
         text-align: center;
@@ -15,34 +15,37 @@
 
         margin: 8rem;
         padding: 2rem 2.5rem;
+        padding-top: 1rem;
         border-radius: var(--border-radius-m);
         background-color: var(--bg);
         border: 1px solid var(--border);
-    }
 
-    h1 {
-        font-size: 3.5rem;
-        letter-spacing: -1px;
-        word-spacing: -5px;
-    }
+        legend {
+            text-align: left;
+        }
 
-    h1 span:last-child {
-        position: relative;
-        top: -.7rem;
-        color: var(--brand-default);
-    }
+        h1 {
+            font-size: 3.5rem;
+            letter-spacing: -1px;
+            word-spacing: -5px;
 
-    h1 span:only-child {
-        color: var(--fg);
-    }
+            span {
+                &:last-child {
+                    position: relative;
+                    top: -.7rem;
+                    color: var(--brand-default);
+                }
 
-    p * {
-        font-size: 1.1rem;
-        color: var(--secondary-fg);
-    }
+                &:only-child {
+                    color: var(--fg);
+                }
+            }
+        }
 
-    legend {
-        text-align: left;
+        p * {
+            font-size: 1.1rem;
+            color: var(--secondary-fg);
+        }
     }
 }
 

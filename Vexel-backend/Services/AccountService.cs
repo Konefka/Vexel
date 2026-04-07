@@ -1,4 +1,7 @@
-﻿using Supabase.Gotrue;
+﻿using Newtonsoft.Json.Linq;
+using Supabase.Gotrue;
+using Supabase.Postgrest;
+using Supabase.Postgrest.Responses;
 using Vexel.Models;
 
 namespace Vexel.Services
@@ -13,6 +16,7 @@ namespace Vexel.Services
         }
 
         public record AuthResult(bool Success, string? Token, string? Error);
+        public record UpdateResult(bool Success, string? Error);
 
         public async Task<AuthResult> SignUpDB(AccountDto dto)
         {
@@ -20,13 +24,7 @@ namespace Vexel.Services
             {
                 Session? signUpResponse = await _client.Auth.SignUp(dto.Email, dto.Password);
 
-                await _client.Auth.SetSession(signUpResponse!.AccessToken!, signUpResponse.AccessToken!);
-
-                await _client.From<Accounts>().Upsert(new Accounts { Id = Guid.Parse(_client.Auth.CurrentSession!.User!.Id!)});
-
-                await UpdateLastSeenAtDB(Guid.Parse(signUpResponse!.User!.Id!));
-
-                return new AuthResult(true, _client.Auth.CurrentSession!.AccessToken!, null);
+                return new AuthResult(true, signUpResponse!.AccessToken, null);
             }
             catch (Supabase.Gotrue.Exceptions.GotrueException ex)
             {
@@ -44,9 +42,7 @@ namespace Vexel.Services
             {
                 Session? signInResponse = await _client.Auth.SignInWithPassword(dto.Email, dto.Password);
 
-                await UpdateLastSeenAtDB(Guid.Parse(signInResponse!.User!.Id!));
-
-                return new AuthResult(true, _client.Auth.CurrentSession!.AccessToken!, null);
+                return new AuthResult(true, signInResponse!.AccessToken, null);
             }
             catch (Supabase.Gotrue.Exceptions.GotrueException ex)
             {
@@ -78,7 +74,7 @@ namespace Vexel.Services
 
         public async Task<Accounts?> GetUserByIdDB(Guid userId)
         {
-            var response = await _client
+            ModeledResponse<Accounts> response = await _client
                 .From<Accounts>()
                 .Select(x => new object[] { x.Id, x.Name, x.DisplayName! })
                 .Where(x => x.Id == userId)
@@ -87,13 +83,22 @@ namespace Vexel.Services
             return response.Models.FirstOrDefault();
         }
 
-        async Task UpdateLastSeenAtDB(Guid userId)
+        public async Task<UpdateResult> SetUsernameDB(Guid userId, string username)
         {
-            await _client
-                .From<Accounts>()
-                .Where(x => x.Id == userId)
-                .Set(x => x.LastSeenAt, DateTimeOffset.UtcNow)
-                .Update();
+            try
+            {
+                await _client
+                    .From<Accounts>()
+                    .Where(x => x.Id == userId)
+                    .Set(x => x.Name, username)
+                    .Update();
+
+                return new UpdateResult(true, null);
+            }
+            catch (Exception)
+            {
+                return new UpdateResult(false, "This username is taken");
+            }
         }
 
         string CheckTypeOfAuthException(Supabase.Gotrue.Exceptions.GotrueException ex)

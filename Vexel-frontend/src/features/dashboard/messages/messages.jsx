@@ -64,7 +64,7 @@ export default function Messages({ onSelectConversation }) {
     }
   }
 
-  const handleScroll = () => {
+  const scrollHandler = () => {
     const container = messagesRef.current;
     if (!container) return;
 
@@ -153,7 +153,7 @@ export default function Messages({ onSelectConversation }) {
         <h3 className="cursor-pointer">{displayName || "Loading..."}</h3>
         {/* <img src={infoSymbol} className="cursor-pointer" alt="info"/> */}
       </header>
-      <div ref={messagesRef} onScroll={handleScroll}>
+      <div ref={messagesRef} onScroll={scrollHandler}>
         <button
           className={`${styles.scrollArrow} ${showScrollArrow ? styles.show : ''}`}
           onClick={() => {

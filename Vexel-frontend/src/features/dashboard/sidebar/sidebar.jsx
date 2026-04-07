@@ -212,7 +212,7 @@ export default function Sidebar({ onSelectConversation }) {
             <img src={settingsSymbol}/>
             <h4>settings</h4>
           </Link>
-          <div className={styles.logout} onClick={async () => {await logout(); navigate("/home", { replace: true });}}>
+          <div className="logout" onClick={async () => await logout()}>
             <img src={exitSymbol} alt="logout"/>
             <h4>logout</h4>
           </div>
