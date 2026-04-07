@@ -1,6 +1,6 @@
 .sidebar {
     position: relative;
-    width: fit-content;
+    width: min-content;
     max-width: 300px;
     z-index: 1;
 
@@ -188,8 +188,15 @@
                     @keyframes spin {
                         to { transform: rotate(360deg); }
                     }
+                }
 
-                    &.show {
+                &:hover {
+                    background-color: var(--border);
+                }
+
+                &.show {
+                    background-color: var(--border);
+                    > .userChats {
                         height: 100%;
                         margin-bottom: .5rem;
 
@@ -197,10 +204,6 @@
                             transform: translateY(0);
                         }
                     }
-                }
-
-                &:hover {
-                    background-color: var(--border);
                 }
             }
         }

@@ -18,119 +18,108 @@ import userSymbol from "/src/assets/svg/user-outline.svg";
 import exitSymbol from "/src/assets/svg/exit.svg";
 
 export default function Sidebar({ onSelectConversation }) {
-  const sidebarRef = useRef(null);
-  const grabRef = useRef(null);
-  const nameRef = useRef(null);
-  const isDragging = useRef(false);
-  const sidebarWidthToOpenNameRef = useRef(0);
-  const SIDEBAR_MIN_WIDTH = 197;
+  const { currentUser, userLoading } = useCurrentUser();
 
-  const chatsRef = useRef(null);
+  const sidebarRef = useRef(null); // THE ONE AND ONLY SIDEBAR
+  const minWidthToOpenSidebar = useRef(0); // Minimum sidebar width where system makes it not thin
+  const SIDEBAR_MIN_WIDTH = 197;
+  const saveSidebarWidth = (width) => localStorage.setItem("sidebarWidth", width);
+  const nameRef = useRef(null); // Ref for when username starts overflowing -> sidebar closes
+  const isSidebarThin = useRef(false);
+  const isDragging = useRef(false);
+
+  const { conversations, convLoading, error } = useConversations();
+  const messagesRef = useRef(null);
   const areChatsShown = useRef(false);
   const chatsArrowRef = useRef(null);
-  const { conversations, convLoading, error } = useConversations();
   useNotifications(conversations);
-  const { currentUser, userLoading } = useCurrentUser();
 
   const { conversationId } = useParams();
   const navigate = useNavigate();
 
   useEffect (() => {
-    sidebarWidthToOpenNameRef.current = sidebarRef.current.clientWidth;
-    const width = parseInt(localStorage.getItem("sidebarWidth"), 10) + "px";
-    sidebarRef.current.style.width = width;
-    if (nameRef.current) if (nameRef.current.scrollWidth > nameRef.current.clientWidth) sidebarRef.current.classList.add(styles.thin);
+    if (!sidebarRef.current) return;
+    minWidthToOpenSidebar.current = sidebarRef.current.clientWidth; // Right now it has min-content
+    const width = parseInt(localStorage.getItem("sidebarWidth"), 10);
+    if (!isNaN(width)) sidebarRef.current.style.width = width + "px"; // Set previous sidebar width
+    const username = nameRef.current;
+    if (username && username.scrollWidth > username.clientWidth) sidebarRef.current.classList.add(styles.thin);
 
     window.addEventListener("resize", moveHandler);
     return () => {
       window.removeEventListener("resize", moveHandler);
-      document.removeEventListener("mousemove", moveHandler);
-      document.removeEventListener("mouseup", stopDrag);
+      // document.removeEventListener("mousemove", moveHandler);
+      // document.removeEventListener("mouseup", stopDrag);
     };
   }, []);
 
   // Functions for moving the sidebar
 
   const moveHandler = (e) => {
-    if (nameRef.current) {
-      if (sidebarWidthToOpenNameRef.current === 0 && (nameRef.current.clientWidth < nameRef.current.scrollWidth || e.clientX < SIDEBAR_MIN_WIDTH)) {
-        sidebarWidthToOpenNameRef.current = sidebarRef.current.clientWidth;
-        sidebarRef.current.classList.add(styles.thin);
-      } else if (sidebarWidthToOpenNameRef.current !== 0 && e.clientX > sidebarWidthToOpenNameRef.current) {
-        sidebarWidthToOpenNameRef.current = 0;
-        sidebarRef.current.classList.remove(styles.thin);
-      }
-    } else if (sidebarWidthToOpenNameRef.current === 0 && e.clientX < SIDEBAR_MIN_WIDTH) {
-      sidebarWidthToOpenNameRef.current = sidebarRef.current.clientWidth;
+    if (!sidebarRef.current) return;
+    const newWidth = e.clientX;
+
+    const isOverflowing = (nameRef.current?.scrollWidth ?? 0) > (nameRef.current?.clientWidth ?? 0);
+    const isTooNarrow = newWidth < SIDEBAR_MIN_WIDTH;
+
+    if (!isSidebarThin.current && (isOverflowing || isTooNarrow)) {
       sidebarRef.current.classList.add(styles.thin);
-    } else if (sidebarWidthToOpenNameRef.current !== 0 && e.clientX > sidebarWidthToOpenNameRef.current) {
-      sidebarWidthToOpenNameRef.current = 0;
+      isSidebarThin.current = true;
+    } else if (isSidebarThin.current && newWidth > minWidthToOpenSidebar.current) {
       sidebarRef.current.classList.remove(styles.thin);
+      isSidebarThin.current = false;
     }
 
-    if (!isDragging.current) return;
-    
-    sidebarRef.current.style.width = e.clientX + "px";
-    localStorage.setItem("sidebarWidth", e.clientX);
+    if (isDragging.current) sidebarRef.current.style.width = newWidth + "px";
   };
 
   const startDrag = () => {
+    if (isDragging.current) return;
     isDragging.current = true;
     document.documentElement.style.cursor = "grabbing";
-    grabRef.current.style.cursor = "grabbing";
 
     document.addEventListener("mousemove", moveHandler);
     document.addEventListener("mouseup", stopDrag);
   };
 
   const stopDrag = () => {
+    if (!isDragging.current) return;
     isDragging.current = false;
-    document.documentElement.style.cursor = "default";
-    grabRef.current.style.cursor = "grab";
+    saveSidebarWidth(sidebarRef.current.clientWidth);
 
+    document.documentElement.style.cursor = "default";
     document.removeEventListener("mousemove", moveHandler);
     document.removeEventListener("mouseup", stopDrag);
   };
 
   const dblClickHandler = () => {
-    if (sidebarRef.current.classList.contains(styles.thin)) {
-      resetWidth();
+    if (isSidebarThin.current) {
+      sidebarRef.current.classList.remove(styles.thin);
+      isSidebarThin.current = false;
+      sidebarRef.current.style.width = minWidthToOpenSidebar.current + "px";
     } else {
-      sidebarRef.current.style.width = "fit-content";
-      sidebarWidthToOpenNameRef.current = sidebarRef.current.clientWidth;
       sidebarRef.current.classList.add(styles.thin);
-      localStorage.setItem("sidebarWidth", sidebarRef.current.clientWidth);
+      isSidebarThin.current = true;
     }
-  }
-
-  const resetWidth = () => {
-    sidebarRef.current.classList.remove(styles.thin);
-    sidebarRef.current.style.width = "fit-content";
-    sidebarWidthToOpenNameRef.current = 0;
-    localStorage.setItem("sidebarWidth", sidebarRef.current.clientWidth);
+    
+    saveSidebarWidth(sidebarRef.current.clientWidth);
   }
 
   // Functions for handling Chats
 
   const showChats = () => {
-    chatsRef.current.classList.add(styles.show);
+    messagesRef.current.classList.add(styles.show);
     chatsArrowRef.current.style.transform = "rotate(0deg)";
     areChatsShown.current = true;
   }
 
   const hideChats = () => {
-    chatsRef.current.classList.remove(styles.show);
+    messagesRef.current.classList.remove(styles.show);
     chatsArrowRef.current.style.transform = "rotate(-90deg)";
     areChatsShown.current = false;
   }
 
-  const changeStateOfChats = () => {
-    if (areChatsShown.current) {
-      hideChats()
-    } else {
-      showChats()
-    }
-  }
+  const changeStateOfChats = () => {if (areChatsShown.current) hideChats(); else showChats();}
 
   const handleConversationClick = (conversation) => {
     navigate(`/dashboard/messages/${conversation.id}`);
@@ -151,7 +140,7 @@ export default function Sidebar({ onSelectConversation }) {
         <img src={hashSymbol} alt="logo"/>
         <div>
           {userLoading ? (
-            <h2 ref={nameRef}>Ładowanie...</h2>
+            <h2>Ładowanie...</h2>
           ) : currentUser.displayName ? (
             <>
               <h2 ref={nameRef}>{currentUser.displayName}</h2>
@@ -172,7 +161,7 @@ export default function Sidebar({ onSelectConversation }) {
             <img src={friendsSymbol}/>
             <h4>friends</h4>
           </Link>
-          <div onMouseEnter={showChats} className={styles.conversations}>
+          <div ref={messagesRef} onMouseEnter={showChats} className={styles.conversations}>
             <div onClick={changeStateOfChats}>
               <div>
                 <img src={messagesSymbol}/>
@@ -180,7 +169,7 @@ export default function Sidebar({ onSelectConversation }) {
               </div>
               <img ref={chatsArrowRef} src={arrowSymbol}/>
             </div>
-            <div ref={chatsRef} className={styles.userChats}>
+            <div className={styles.userChats}>
               { convLoading ? (
                 <div>
                   <div className={styles.spinner}/>
@@ -229,7 +218,7 @@ export default function Sidebar({ onSelectConversation }) {
           </div>
         </div>
       </nav>
-      <div ref={grabRef} className={styles.grabTool} onMouseDown={startDrag} onDoubleClick={dblClickHandler}></div>
+      <div className={styles.grabTool} onMouseDown={startDrag} onDoubleClick={dblClickHandler}></div>
     </aside>
   )
 }

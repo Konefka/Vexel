@@ -25,7 +25,6 @@ export function SignalRProvider({ children }) {
 
     connection
       .start()
-      .then(() => console.log("SignalR: połączono z hubem"))
       .catch(err => console.error("SignalR: błąd połączenia:", err));
 
     connectionRef.current = connection;
