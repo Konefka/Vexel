@@ -196,8 +196,15 @@
                     @keyframes spin {
                         to { transform: rotate(360deg); }
                     }
+                }
 
-                    &.show {
+                &:hover {
+                    background-color: var(--border);
+                }
+
+                &.show {
+                    background-color: var(--border);
+                    > .userChats {
                         height: 100%;
                         margin-bottom: .5rem;
 
@@ -205,10 +212,6 @@
                             transform: translateY(0);
                         }
                     }
-                }
-
-                &:hover {
-                    background-color: var(--border);
                 }
             }
         }

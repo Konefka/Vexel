@@ -15,10 +15,13 @@ namespace Vexel.Models
         [Column("sender_account_id")]
         public Guid? SenderId { get; set; }
 
+        [Column("content")]
+        public string Value { get; set; } = string.Empty;
+
         [Column("created_at", ignoreOnInsert: true, ignoreOnUpdate: true)]
         public DateTimeOffset CreatedAt { get; set; }
 
-        [Column("value")]
-        public string Value { get; set; } = string.Empty;
+        [Column("edited_at", ignoreOnInsert: true, ignoreOnUpdate: true)]
+        public DateTimeOffset EditedAt { get; set; }
     }
 }
