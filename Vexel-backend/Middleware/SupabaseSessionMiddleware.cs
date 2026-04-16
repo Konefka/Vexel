@@ -18,29 +18,52 @@ namespace Vexel.Middleware
 
             if (!string.IsNullOrEmpty(accessToken) && !string.IsNullOrEmpty(refreshToken))
             {
-                await supabase.Auth.SetSession(accessToken, refreshToken);
-                Session? newSession = await supabase.Auth.RefreshSession();
-
-                context.Response.Cookies.Delete("access_token");
-                context.Response.Cookies.Delete("refresh_token");
-
-                context.Response.Cookies.Append("access_token", newSession!.AccessToken!, new CookieOptions
+                try
                 {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.None,
-                    Expires = DateTimeOffset.UtcNow.AddHours(1),
-                    Path = "/"
-                });
+                    await supabase.Auth.SetSession(accessToken, refreshToken);
+                    //Session? newSession = await supabase.Auth.RefreshSession();
 
-                context.Response.Cookies.Append("refresh_token", newSession!.RefreshToken!, new CookieOptions
+                    //context.Response.Cookies.Delete("access_token");
+                    //context.Response.Cookies.Delete("refresh_token");
+
+                    //context.Response.Cookies.Append("access_token", newSession!.AccessToken!, new CookieOptions
+                    //{
+                    //    HttpOnly = true,
+                    //    Secure = true,
+                    //    SameSite = SameSiteMode.None,
+                    //    Expires = DateTimeOffset.UtcNow.AddHours(1),
+                    //    Path = "/"
+                    //});
+
+                    //context.Response.Cookies.Append("refresh_token", newSession!.RefreshToken!, new CookieOptions
+                    //{
+                    //    HttpOnly = true,
+                    //    Secure = true,
+                    //    SameSite = SameSiteMode.None,
+                    //    Expires = DateTimeOffset.UtcNow.AddDays(14),
+                    //    Path = "/"
+                    //});
+                }
+                catch (Supabase.Gotrue.Exceptions.GotrueException)
                 {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.None,
-                    Expires = DateTimeOffset.UtcNow.AddDays(14),
-                    Path = "/"
-                });
+                    context.Response.Cookies.Delete("access_token", new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.None,
+                        Expires = DateTimeOffset.UtcNow.AddHours(1),
+                        Path = "/"
+                    });
+
+                    context.Response.Cookies.Delete("refresh_token", new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.None,
+                        Expires = DateTimeOffset.UtcNow.AddDays(14),
+                        Path = "/"
+                    });
+                }
             }
 
             await _next(context);

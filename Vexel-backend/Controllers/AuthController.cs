@@ -59,8 +59,23 @@ namespace Vexel.Controllers
         [HttpPost("logout")]
         public object Logout()
         {
-            Response.Cookies.Delete("access_token");
-            Response.Cookies.Delete("refresh_token");
+            Response.Cookies.Delete("access_token", new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTimeOffset.UtcNow.AddHours(1),
+                Path = "/"
+            });
+
+            Response.Cookies.Delete("refresh_token", new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTimeOffset.UtcNow.AddDays(14),
+                Path = "/"
+            });
 
             return new { success = _accountService.SignOutDB()};
         }
@@ -79,7 +94,23 @@ namespace Vexel.Controllers
         {
             if (!tokenOrError.Success)
             {
-                Response.Cookies.Delete("access_token");
+                Response.Cookies.Delete("access_token", new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None,
+                    Expires = DateTimeOffset.UtcNow.AddHours(1),
+                    Path = "/"
+                });
+
+                Response.Cookies.Delete("refresh_token", new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None,
+                    Expires = DateTimeOffset.UtcNow.AddDays(14),
+                    Path = "/"
+                });
                 return new { error = tokenOrError.Error };
             }
             else return SetAuthCookies(tokenOrError.accessToken!, tokenOrError.refreshToken!);

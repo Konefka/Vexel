@@ -23,7 +23,7 @@ namespace Vexel.Services
 
         public async Task<MessageBatch> GetMessagesDB(Guid userId, Guid conversationId, int take, DateTimeOffset? before = null)
         {
-            before ??= DateTimeOffset.Now;
+            before ??= DateTimeOffset.Now.AddMinutes(5);
 
             ModeledResponse<Messages> query = await _client.From<Messages>()
                 .Select(x => new object[] { x.Id, x.Content, x.SenderAccountId!, x.CreatedAt })
@@ -50,11 +50,14 @@ namespace Vexel.Services
                     x.Content,
                     x.SenderAccountId == null ? "deleted user" : (nameDict.TryGetValue(x.SenderAccountId.Value, out var name) ? name : "unknown user"),
                     x.CreatedAt.DateTime))
-                .Reverse()
                 .ToList();
 
             bool hasMore = allMessages.Count > take;
-            List<MessageResult> messages = allMessages.Take(take).ToList();
+
+            List<MessageResult> messages = allMessages
+                .Take(take)
+                .Reverse()
+                .ToList();
 
             return new MessageBatch(conversationId, messages, hasMore);
         }

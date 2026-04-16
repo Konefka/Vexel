@@ -147,7 +147,7 @@ export default function Sidebar({ onSelectConversation }) {
               <h5>{currentUser.name}</h5>
             </>
           ) : (
-            <h5>{currentUser.name}</h5>
+            <h2>{currentUser.name}</h2>
           )}
         </div>
       </div>

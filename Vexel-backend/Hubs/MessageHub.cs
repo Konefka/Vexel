@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
+using Vexel.Models;
 using Vexel.Services;
 
 namespace Vexel.Hubs
@@ -25,6 +26,8 @@ namespace Vexel.Hubs
                 await base.OnConnectedAsync();
                 return;
             }
+
+            await EnsureSession();
 
             var conversations = await _conversationService.GetUserConversationsDB(userId.Value);
 
