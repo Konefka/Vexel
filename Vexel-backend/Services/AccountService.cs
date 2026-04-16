@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using Supabase.Gotrue;
-using Supabase.Postgrest;
+﻿using Supabase.Gotrue;
 using Supabase.Postgrest.Responses;
 using Vexel.Models;
 
@@ -15,7 +13,7 @@ namespace Vexel.Services
             _client = client;
         }
 
-        public record AuthResult(bool Success, string? Token, string? Error);
+        public record AuthResult(bool Success, string? accessToken, string? refreshToken, string? Error);
         public record UpdateResult(bool Success, string? Error);
 
         public async Task<AuthResult> SignUpDB(AccountDto dto)
@@ -24,15 +22,15 @@ namespace Vexel.Services
             {
                 Session? signUpResponse = await _client.Auth.SignUp(dto.Email, dto.Password);
 
-                return new AuthResult(true, signUpResponse!.AccessToken, null);
+                return new AuthResult(true, signUpResponse!.AccessToken, signUpResponse!.RefreshToken, null);
             }
             catch (Supabase.Gotrue.Exceptions.GotrueException ex)
             {
-                return new AuthResult(false, null, CheckTypeOfAuthException(ex));
+                return new AuthResult(false, null, null, CheckTypeOfAuthException(ex));
             }
             catch (Exception ex)
             {
-                return new AuthResult(false, null, ex.Message);
+                return new AuthResult(false, null, null, ex.Message);
             }
         }
 
@@ -42,15 +40,15 @@ namespace Vexel.Services
             {
                 Session? signInResponse = await _client.Auth.SignInWithPassword(dto.Email, dto.Password);
 
-                return new AuthResult(true, signInResponse!.AccessToken, null);
+                return new AuthResult(true, signInResponse!.AccessToken, signInResponse!.RefreshToken, null);
             }
             catch (Supabase.Gotrue.Exceptions.GotrueException ex)
             {
-                return new AuthResult(false, null, CheckTypeOfAuthException(ex));
+                return new AuthResult(false, null, null, CheckTypeOfAuthException(ex));
             }
             catch (Exception ex)
             {
-                return new AuthResult(false, null, ex.Message);
+                return new AuthResult(false, null, null, ex.Message);
             }
         }
 
@@ -60,15 +58,15 @@ namespace Vexel.Services
             {
                 _client.Auth.SignOut();
 
-                return new AuthResult(false, null, null);
+                return new AuthResult(true, null, null, null);
             }
             catch (Supabase.Gotrue.Exceptions.GotrueException ex)
             {
-                return new AuthResult(false, null, CheckTypeOfAuthException(ex));
+                return new AuthResult(false, null, null, CheckTypeOfAuthException(ex));
             }
             catch (Exception ex)
             {
-                return new AuthResult(false, null, ex.Message);
+                return new AuthResult(false, null, null, ex.Message);
             }
         }
 
@@ -76,7 +74,7 @@ namespace Vexel.Services
         {
             ModeledResponse<Accounts> response = await _client
                 .From<Accounts>()
-                .Select(x => new object[] { x.Id, x.Name, x.DisplayName! })
+                .Select(x => new object[] { x.Id, x.Name!, x.DisplayName! })
                 .Where(x => x.Id == userId)
                 .Get();
 
@@ -90,7 +88,7 @@ namespace Vexel.Services
                 await _client
                     .From<Accounts>()
                     .Where(x => x.Id == userId)
-                    .Set(x => x.Name, username)
+                    .Set(x => x.Name!, username)
                     .Update();
 
                 return new UpdateResult(true, null);
@@ -103,37 +101,25 @@ namespace Vexel.Services
 
         string CheckTypeOfAuthException(Supabase.Gotrue.Exceptions.GotrueException ex)
         {
-            switch (ex.StatusCode)
+            return (ex.StatusCode, ex.Message) switch
             {
-                case 400:
-                    if (ex.Message.Contains("validation_failed"))
-                    {
-                        return "Wpisz poprawny email.";
-                    }
-                    else if (ex.Message.Contains("invalid_credentials"))
-                    {
-                        return "Login lub hasło są nie poprawne.";
-                    }
+                (400, var msg) when msg.Contains("validation_failed")
+                    => "Please enter a valid email address.",
 
-                    break;
+                (400, var msg) when msg.Contains("invalid_credentials")
+                    => "Incorrect email or password.",
 
-                case 422:
-                    if (ex.Message.Contains("user_already_exists"))
-                    {
-                        return "Email już istnieje. Zaloguj się!";
-                    }
-                    else if (ex.Message.Contains("weak_password"))
-                    {
-                        return "Hasło musi mieć przynajmniej 6 znaków.";
-                    }
+                (422, var msg) when msg.Contains("user_already_exists")
+                    => "An account with this email already exists. Please log in instead.",
 
-                    break;
+                (422, var msg) when msg.Contains("weak_password")
+                    => "Password must be at least 6 characters long.",
 
-                case 521:
-                    return "Sorry, the providers' db servers are unavailable.";
-            }
+                (521, _)
+                    => "Sorry, the provider's database servers are currently unavailable.",
 
-            return ex.Message;
+                _ => ex.Message
+            };
         }
     }
 }

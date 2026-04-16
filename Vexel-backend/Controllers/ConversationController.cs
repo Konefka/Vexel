@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Vexel.Services;
-using static Vexel.Services.ConversationService;
 using static Vexel.Services.MessageService;
 
 namespace Vexel.Controllers
@@ -32,7 +31,7 @@ namespace Vexel.Controllers
 
                 Guid userId = Guid.Parse(userIdClaim);
 
-                var conversations = await _conversationService.GetUserConversations(userId);
+                var conversations = await _conversationService.GetUserConversationsDB(userId);
 
                 return Ok(new { conversations });
             }
@@ -46,7 +45,7 @@ namespace Vexel.Controllers
         }
 
         [HttpPost("{conversationId}/messages")]
-        public async Task<ActionResult<MessageBatch>> GetMessages(
+        public async Task<ActionResult<MessageBatch>> GetConversationMessages(
             Guid conversationId,
             [FromQuery] int take = 30,
             [FromQuery] DateTime? before = null)
@@ -56,10 +55,6 @@ namespace Vexel.Controllers
                 return Unauthorized("Unauthorized");
 
             Guid userId = Guid.Parse(userIdClaim);
-
-            bool isParticipant = await _messageService.IsUserInConversation(userId, conversationId);
-            if (!isParticipant)
-                return Forbid("Forbid");
 
             MessageBatch result = await _messageService.GetMessagesDB(userId, conversationId, take, before);
 

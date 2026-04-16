@@ -13,53 +13,48 @@ namespace Vexel.Services
             _client = client;
         }
 
+        public async Task EnsureSessionDB(string accessToken, string refreshToken)
+        {
+            await _client.Auth.SetSession(accessToken, refreshToken);
+        }
+
         public record MessageResult(Guid Id, string Text, string? SenderName, DateTimeOffset DateStamp);
         public record MessageBatch(Guid ConversationId, List<MessageResult> Messages, bool hasMore);
-
-        public async Task<bool> IsUserInConversation(Guid userId, Guid conversationId)
-        {
-            var response = await _client
-                .From<ConversationParticipants>()
-                .Where(x => x.ConversationId == conversationId && x.AccountId == userId)
-                .Get();
-
-            return response.Models.Any();
-        }
 
         public async Task<MessageBatch> GetMessagesDB(Guid userId, Guid conversationId, int take, DateTimeOffset? before = null)
         {
             before ??= DateTimeOffset.Now;
 
             ModeledResponse<Messages> query = await _client.From<Messages>()
-                .Select(x => new object[] { x.Id, x.Value, x.SenderId!, x.CreatedAt })
+                .Select(x => new object[] { x.Id, x.Content, x.SenderAccountId!, x.CreatedAt })
                 .Where(x => x.ConversationId == conversationId && x.CreatedAt < before)
                 .Order(x => x.CreatedAt, Constants.Ordering.Descending)
                 .Limit(take + 1)
                 .Get();
 
-            var senderIds = query.Models
-                .Select(m => m.SenderId)
+            List<Guid?> senderIds = query.Models
+                .Select(x => x.SenderAccountId)
                 .Distinct()
                 .ToList();
 
             ModeledResponse<Accounts> names = await _client.From<Accounts>()
-                .Select(x => new object[] { x.Id, x.Name })
+                .Select(x => new object[] { x.Id, x.Name! })
                 .Filter(x => x.Id, Constants.Operator.In, senderIds)
                 .Get();
 
-            var nameDict = names.Models.ToDictionary(a => a.Id, a => a.Name);
+            Dictionary<Guid, string?> nameDict = names.Models.ToDictionary(x => x.Id, x => x.Name);
 
-            var allMessages = query.Models
-                .Select(m => new MessageResult(
-                    m.Id,
-                    m.Value,
-                    m.SenderId == null ? "deleted user" : (nameDict.TryGetValue(m.SenderId.Value, out var name) ? name : "unknown user"),
-                    m.CreatedAt.DateTime))
+            List<MessageResult> allMessages = query.Models
+                .Select(x => new MessageResult(
+                    x.Id,
+                    x.Content,
+                    x.SenderAccountId == null ? "deleted user" : (nameDict.TryGetValue(x.SenderAccountId.Value, out var name) ? name : "unknown user"),
+                    x.CreatedAt.DateTime))
                 .Reverse()
                 .ToList();
 
             bool hasMore = allMessages.Count > take;
-            var messages = allMessages.Take(take).ToList();
+            List<MessageResult> messages = allMessages.Take(take).ToList();
 
             return new MessageBatch(conversationId, messages, hasMore);
         }
@@ -69,19 +64,19 @@ namespace Vexel.Services
             Messages newMessage = new Messages
             {
                 ConversationId = conversationId,
-                SenderId = senderId,
-                Value = text,
+                SenderAccountId = senderId,
+                Content = text,
             };
 
             ModeledResponse<Messages> response = await _client
                 .From<Messages>()
                 .Insert(newMessage, new QueryOptions { Returning = QueryOptions.ReturnType.Representation });
 
-            var saved = response.Models.First();
+            Messages? saved = response.Models.First();
 
-            var accountResponse = await _client
+            ModeledResponse<Accounts> accountResponse = await _client
                 .From<Accounts>()
-                .Select(x => new object[] { x.Id, x.Name })
+                .Select(x => new object[] { x.Id, x.Name! })
                 .Where(x => x.Id == senderId)
                 .Get();
 
@@ -89,7 +84,7 @@ namespace Vexel.Services
 
             return new MessageResult(
                 saved.Id,
-                saved.Value,
+                saved.Content,
                 senderName,
                 saved.CreatedAt
             );

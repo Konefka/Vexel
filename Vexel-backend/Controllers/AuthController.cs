@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using Vexel.Services;
 using Vexel.Models;
+using Vexel.Services;
 using static Vexel.Services.AccountService;
 
 namespace Vexel.Controllers
@@ -59,15 +59,10 @@ namespace Vexel.Controllers
         [HttpPost("logout")]
         public object Logout()
         {
-            Response.Cookies.Delete("access_token", new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.None,
-                Path = "/"
-            });
+            Response.Cookies.Delete("access_token");
+            Response.Cookies.Delete("refresh_token");
 
-            return new { success = true };
+            return new { success = _accountService.SignOutDB()};
         }
 
         private bool CheckForEmptyValues(string email, string password)
@@ -87,22 +82,28 @@ namespace Vexel.Controllers
                 Response.Cookies.Delete("access_token");
                 return new { error = tokenOrError.Error };
             }
-            else
-                return SetAuthCookie(tokenOrError.Token!);
+            else return SetAuthCookies(tokenOrError.accessToken!, tokenOrError.refreshToken!);
         }
 
-        private object SetAuthCookie(string token)
+        private object SetAuthCookies(string accessToken, string refreshToken)
         {
-            var cookieOptions = new CookieOptions
+            Response.Cookies.Append("access_token", accessToken, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
                 SameSite = SameSiteMode.None,
-                Expires = DateTimeOffset.UtcNow.AddMinutes(30),
+                Expires = DateTimeOffset.UtcNow.AddHours(1),
                 Path = "/"
-            };
+            });
 
-            Response.Cookies.Append("access_token", token, cookieOptions);
+            Response.Cookies.Append("refresh_token", refreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTimeOffset.UtcNow.AddDays(14),
+                Path = "/"
+            });
 
             return new { success = true };
         }

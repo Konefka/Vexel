@@ -26,7 +26,7 @@ namespace Vexel.Hubs
                 return;
             }
 
-            var conversations = await _conversationService.GetUserConversations(userId.Value);
+            var conversations = await _conversationService.GetUserConversationsDB(userId.Value);
 
             foreach (var conversation in conversations)
             {
@@ -36,26 +36,37 @@ namespace Vexel.Hubs
             await base.OnConnectedAsync();
         }
 
-        public async Task SendMessage(Guid conversationId, string text)
-        {
-            var userId = GetUserId();
-            if (userId == null) return;
-
-            bool isParticipant = await _messageService.IsUserInConversation(userId.Value, conversationId);
-            if (!isParticipant) return;
-
-            var savedMessage = await _messageService.SaveMessageDB(userId.Value, conversationId, text);
-
-            await Clients
-                .Group($"conv-{conversationId}")
-                .SendAsync("ReceiveMessage", conversationId, savedMessage);
-        }
-
         private Guid? GetUserId()
         {
             var claim = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (claim == null) return null;
             return Guid.Parse(claim);
+        }
+
+        private async Task EnsureSession()
+        {
+            var httpContext = Context.GetHttpContext();
+            string? accessToken = httpContext?.Request.Cookies["access_token"];
+            string? refreshToken = httpContext?.Request.Cookies["refresh_token"];
+
+            if (!string.IsNullOrEmpty(accessToken) && !string.IsNullOrEmpty(refreshToken))
+            {
+                await _messageService.EnsureSessionDB(accessToken, refreshToken);
+            }
+        }
+
+        public async Task SendMessage(Guid conversationId, string text)
+        {
+            var userId = GetUserId();
+            if (userId == null) return;
+
+            await EnsureSession();
+
+            MessageService.MessageResult? savedMessage = await _messageService.SaveMessageDB(userId.Value, conversationId, text);
+
+            await Clients
+                .Group($"conv-{conversationId}")
+                .SendAsync("ReceiveMessage", conversationId, savedMessage);
         }
     }
 }
