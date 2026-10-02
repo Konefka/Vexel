@@ -5,12 +5,18 @@ using System.Text.Json.Serialization;
 namespace Vexel.Models
 {
     [Table("ConversationParticipants")]
-    internal class ConversationParticipants : BaseModel
+    public class ConversationParticipants : BaseModel
     {
-        [Column("conversation_id")]
+        [PrimaryKey("conversation_id")]
         public Guid ConversationId { get; set; }
 
-        [Column("account_id")]
+        [PrimaryKey("account_id")]
         public Guid AccountId { get; set; }
+
+        [Column("role")]
+        public string Role { get; set; } = "member";
+
+        [Column("joined_at", ignoreOnInsert: true)]
+        public DateTimeOffset? JoinedAt { get; set; }
     }
 }

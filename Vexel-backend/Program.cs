@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Vexel.Hubs;
 using System.Text;
+using Vexel.Hubs;
+using Vexel.Middleware;
 using Vexel.Services;
 internal class Program
 {
@@ -33,19 +34,15 @@ internal class Program
         {
             Supabase.SupabaseOptions options = new Supabase.SupabaseOptions
             {
-                AutoConnectRealtime = false
+                AutoRefreshToken = false,
+                AutoConnectRealtime = false,
+                SessionHandler = null!
             };
-            var client = new Supabase.Client(url, key, options);
 
-            client.InitializeAsync().GetAwaiter().GetResult();
-
-            return client;
+            return new Supabase.Client(url, key, options);
         });
-
-        //builder.Services.AddSingleton(client);
-
-        //await client.AdminAuth("service key").DeleteUser("user id");
     }
+
     static void InitializeServices()
     {
         builder.Services.AddScoped<AccountService>();
@@ -90,21 +87,16 @@ internal class Program
 
                 options.Events = new JwtBearerEvents
                 {
-                    OnMessageReceived = async context =>
+                    OnMessageReceived = context =>
                     {
                         if (context.Request.Cookies.TryGetValue("access_token", out var token))
-                        {
                             context.Token = token;
 
-                            var client = context.HttpContext.RequestServices
-                                .GetRequiredService<Supabase.Client>();
-
-                            await client.Auth.SetSession(token, "not-needed");
-                        }
+                        return Task.CompletedTask;
                     },
                     OnAuthenticationFailed = context =>
                     {
-                        Console.WriteLine("JWT walidacja nie przesz�a: " + context.Exception.Message);
+                        Console.WriteLine("JWT walidation didn't go though: " + context.Exception.Message);
                         return Task.CompletedTask;
                     }
                 };
@@ -117,6 +109,8 @@ internal class Program
         app.UseCors("cors");
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.UseMiddleware<SupabaseSessionMiddleware>();
 
         app.MapControllers();
         app.MapHub<MessageHub>("/messageHub");

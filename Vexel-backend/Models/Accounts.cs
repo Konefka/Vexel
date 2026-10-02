@@ -10,16 +10,13 @@ namespace Vexel.Models
         public Guid Id { get; set; }
 
         [Column("username")]
-        public string Name { get; set; } = string.Empty;
+        public string? Name { get; set; }
 
         [Column("display_name")]
         public string? DisplayName { get; set; }
 
         [Column("bio")]
         public string? Bio { get; set; }
-
-        [Column("profile_avatar_url")]
-        public string? AvatarUrl { get; set; }
 
         [Column("status")]
         public string Status { get; set; } = "offline";

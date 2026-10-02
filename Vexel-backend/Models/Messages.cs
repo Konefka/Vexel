@@ -4,7 +4,7 @@ using Supabase.Postgrest.Models;
 namespace Vexel.Models
 {
     [Table("Messages")]
-    internal class Messages : BaseModel
+    public class Messages : BaseModel
     {
         [PrimaryKey("id", shouldInsert: false)]
         public Guid Id { get; set; }
@@ -13,15 +13,15 @@ namespace Vexel.Models
         public Guid ConversationId { get; set; }
 
         [Column("sender_account_id")]
-        public Guid? SenderId { get; set; }
+        public Guid? SenderAccountId { get; set; }
 
         [Column("content")]
-        public string Value { get; set; } = string.Empty;
+        public string Content { get; set; } = string.Empty;
 
         [Column("created_at", ignoreOnInsert: true, ignoreOnUpdate: true)]
         public DateTimeOffset CreatedAt { get; set; }
 
-        [Column("edited_at", ignoreOnInsert: true, ignoreOnUpdate: true)]
-        public DateTimeOffset EditedAt { get; set; }
+        [Column("edited_at")]
+        public DateTimeOffset? EditedAt { get; set; }
     }
 }
